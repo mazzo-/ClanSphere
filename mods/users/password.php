@@ -9,7 +9,7 @@ if(isset($_POST['submit'])) {
   $pwd['current'] = $_POST['pwd_current'];
   $pwd['new'] = $_POST['pwd_new'];
   $pwd['again'] = $_POST['pwd_again'];
-  $cs_user = cs_sql_select(__FILE__,'users','users_pwd',"users_id = '" . $account['users_id'] . "'");
+  $cs_user = cs_sql_select(__FILE__, 'users', 'users_pwd', "users_id = '" . $account['users_id'] . "'");
 
   global $cs_db;
   if($cs_db['hash'] == 'md5') { 
@@ -27,7 +27,7 @@ if(isset($_POST['submit'])) {
     $error .= $cs_lang['wrong_current_pwd'] . cs_html_br(1);
   }
 
-  $pwd2 = str_replace(' ','',$pwd['new']);
+  $pwd2 = str_replace(' ', '', $pwd['new']);
   $pwdchars = strlen($pwd2);
   if($pwdchars<4) {
     $error .= $cs_lang['short_pwd'] . cs_html_br(1);
@@ -38,7 +38,7 @@ if(isset($_POST['submit'])) {
   }
 }
 else {
-  $pwd = array('current' => '', 'new' => '', 'again' => '');
+  $pwd = ['current' => '', 'new' => '', 'again' => ''];
 }
 if(!isset($_POST['submit'])) {
   $data['head']['body'] = $cs_lang['change_password'];
@@ -60,13 +60,13 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $matches[2] .= $cs_lang['stage_4'] . $cs_lang['stage_4_text'];
   $data['users']['secure_clip'] = cs_abcode_clip($matches);
   
-  echo cs_subtemplate(__FILE__,$data,'users','password');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'password');
 }
 else {
 
-  $users_cells = array('users_pwd');
-  $users_save = array($new_pwd);
-  cs_sql_update(__FILE__,'users',$users_cells,$users_save,$account['users_id']);
+  $users_cells = ['users_pwd'];
+  $users_save = [$new_pwd];
+  cs_sql_update(__FILE__, 'users', $users_cells, $users_save, $account['users_id']);
 
-  cs_redirect($cs_lang['changes_done'],'users','home');
+  cs_redirect($cs_lang['changes_done'], 'users', 'home');
 }

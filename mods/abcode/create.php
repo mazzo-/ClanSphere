@@ -4,10 +4,10 @@
 
 $cs_lang = cs_translate('abcode');
 
-$data = array();
+$data = [];
 
-$op_abcode = cs_sql_option(__FILE__,'abcode');
-$img_filetypes = array('gif','jpg','png');
+$op_abcode = cs_sql_option(__FILE__, 'abcode');
+$img_filetypes = ['gif','jpg','png'];
 $files = cs_files();
 
 $cs_abcode['abcode_func'] = empty($_POST['abcode_func']) ? '' : $_POST['abcode_func'];
@@ -24,7 +24,7 @@ if(isset($_POST['submit'])) {
   if(!empty($files['picture']['tmp_name']))
     $img_size = getimagesize($files['picture']['tmp_name']);
   else
-    $img_size = array(1 => 0, 2 => 0);
+    $img_size = [1 => 0, 2 => 0];
 
   if(!empty($files['picture']['tmp_name']) AND empty($img_size) OR $img_size[2] > 3) {
     $message .= $cs_lang['ext_error'] . cs_html_br(1);
@@ -77,7 +77,7 @@ if(isset($_POST['submit'])) {
   }
   
   $where = "abcode_pattern = '" . cs_sql_escape($cs_abcode['abcode_pattern']) . "'";
-  $search = cs_sql_count(__FILE__,'abcode',$where);
+  $search = cs_sql_count(__FILE__, 'abcode', $where);
   
   if(!empty($search)) {
     $error++;
@@ -95,7 +95,7 @@ if(!empty($error)) {
 
 if(!empty($error) OR !isset($_POST['submit'])) {
 
-  $data['action']['form'] = cs_url('abcode','create');
+  $data['action']['form'] = cs_url('abcode', 'create');
 
   $sel = 'selected="selected"';
   $data['word']['cut'] = !empty($op_abcode['word_cut']) ? 'maxlength="' . $op_abcode['word_cut'] . '"' : '';
@@ -118,27 +118,27 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['abcode']['order'] = $cs_abcode['abcode_order'];
 
-  echo cs_subtemplate(__FILE__,$data,'abcode','create');
+  echo cs_subtemplate(__FILE__, $data, 'abcode', 'create');
 }
 else {
   $abcode_cells = array_keys($cs_abcode);
   $abcode_save = array_values($cs_abcode);
-  cs_sql_insert(__FILE__,'abcode',$abcode_cells,$abcode_save);
+  cs_sql_insert(__FILE__, 'abcode', $abcode_cells, $abcode_save);
 
   if(!empty($files['picture']['tmp_name'])) {
     $where = "abcode_pattern = '" . cs_sql_escape($cs_abcode['abcode_pattern']) . "'";
-    $getid = cs_sql_select(__FILE__,'abcode','abcode_id',$where);
+    $getid = cs_sql_select(__FILE__, 'abcode', 'abcode_id', $where);
     $filename = 'picture-' . $getid['abcode_id'] . '.' . $extension;
-    cs_upload('abcode',$filename,$files['picture']['tmp_name']);
+    cs_upload('abcode', $filename, $files['picture']['tmp_name']);
     
     $cs_abcode2['abcode_file'] = $filename;
     $abcode2_cells = array_keys($cs_abcode2);
     $abcode2_save = array_values($cs_abcode2);      
-    cs_sql_update(__FILE__,'abcode',$abcode2_cells,$abcode2_save,$getid['abcode_id']);
+    cs_sql_update(__FILE__, 'abcode', $abcode2_cells, $abcode2_save, $getid['abcode_id']);
   }
 
   cs_cache_delete('abcode_smileys');
   cs_cache_delete('abcode_content');
 
-  cs_redirect($cs_lang['create_done'],'abcode');
+  cs_redirect($cs_lang['create_done'], 'abcode');
 }

@@ -6,8 +6,8 @@ $cs_lang = cs_translate('newsletter');
 
 include_once 'mods/newsletter/functions.php';
 
-$data = array();
-$cs_nl = array();
+$data = [];
+$cs_nl = [];
 
 $cs_nl['newsletter_subject'] = '';
 $cs_nl['newsletter_to'] = '';
@@ -44,7 +44,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['nl']['to_dropdown'] = cs_newsletter_to($cs_nl['newsletter_to']);
 
- echo cs_subtemplate(__FILE__,$data,'newsletter','create');
+ echo cs_subtemplate(__FILE__, $data, 'newsletter', 'create');
 
 }
 else {
@@ -54,13 +54,13 @@ else {
   $count_mails = 0;
   if (!empty($mail_targets)) {
     foreach($mail_targets as $value) {
-      cs_mail($value['email'],$cs_nl['newsletter_subject'],$cs_nl['newsletter_text']);
+      cs_mail($value['email'], $cs_nl['newsletter_subject'], $cs_nl['newsletter_text']);
       $count_mails++;
     }
   }
   $cells = array_keys($cs_nl);
   $values = array_values($cs_nl);
-  cs_sql_insert(__FILE__,'newsletter',$cells,$values);
+  cs_sql_insert(__FILE__, 'newsletter', $cells, $values);
   
-  cs_redirect(sprintf($cs_lang['successfull'],$count_mails),'newsletter');
+  cs_redirect(sprintf($cs_lang['successfull'], $count_mails), 'newsletter');
 }

@@ -13,7 +13,7 @@ $red_lsd = cs_explorer_path($dir, 'escape', 1);
 if (empty($_GET['file'])) cs_redirect($cs_lang['no_object'], 'explorer', 'roots', 'dir=' . $red_lsd);
 if (!$info = stat($dir)) cs_redirect($cs_lang['not_opened'], 'explorer', 'roots', 'dir=' . $red_lsd);
 
-$data = array();
+$data = [];
 
 $data['var']['dir'] = $red_lsd;
 

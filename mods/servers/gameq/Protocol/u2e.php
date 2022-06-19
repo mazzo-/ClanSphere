@@ -50,8 +50,8 @@ class GameQ_Protocol_u2e extends GameQ_Protocol
             }
             
             // Common data
-            $result->addPlayer('name',  $this->_readUnrealString());
-            $result->addPlayer('ping',  $buffer->readInt32());
+            $result->addPlayer('name', $this->_readUnrealString());
+            $result->addPlayer('ping', $buffer->readInt32());
             $result->addPlayer('score', $buffer->readInt32());
 
             // Stats ID
@@ -100,22 +100,22 @@ class GameQ_Protocol_u2e extends GameQ_Protocol
         // Header
         $this->header("\x00");
 
-        $result->add('serverid',    $buffer->readInt32());          // 0
-        $result->add('serverip',    $buffer->readPascalString(1));  // empty
-        $result->add('gameport',    $buffer->readInt32());
-        $result->add('queryport',   $buffer->readInt32());          // 0
-        $result->add('servername',  $buffer->readPascalString(1));
-        $result->add('mapname',     $buffer->readPascalString(1));
-        $result->add('gametype',    $buffer->readPascalString(1));
+        $result->add('serverid', $buffer->readInt32());          // 0
+        $result->add('serverip', $buffer->readPascalString(1));  // empty
+        $result->add('gameport', $buffer->readInt32());
+        $result->add('queryport', $buffer->readInt32());          // 0
+        $result->add('servername', $buffer->readPascalString(1));
+        $result->add('mapname', $buffer->readPascalString(1));
+        $result->add('gametype', $buffer->readPascalString(1));
         $result->add('playercount', $buffer->readInt32());
-        $result->add('maxplayers',  $buffer->readInt32());
-        $result->add('ping',        $buffer->readInt32());          // 0
+        $result->add('maxplayers', $buffer->readInt32());
+        $result->add('ping', $buffer->readInt32());          // 0
 
         // UT2004 only
         // Check if the buffer contains enough bytes
         if ($buffer->getLength() > 6) {
-            $result->add('flags',   $buffer->readInt32());
-            $result->add('skill',   $buffer->readInt16());
+            $result->add('flags', $buffer->readInt32());
+            $result->add('skill', $buffer->readInt16());
         }
     }
 
@@ -147,7 +147,7 @@ class GameQ_Protocol_u2e extends GameQ_Protocol
         // The string is UCS-2, this approximates converting to latin-1
         $str = '';
         for ($i = 0, $ii = strlen($encstr); $i < $ii; $i += 2) {
-            $str .= $encstr{$i};
+            $str .= $encstr[$i];
         }
         
         return $str;

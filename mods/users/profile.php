@@ -7,23 +7,23 @@ $cs_lang = cs_translate('users');
 include_once('lang/' . $account['users_lang'] . '/countries.php');
 include_once('mods/users/functions.php');
 
-$data = array();
+$data = [];
 
 if(isset($_POST['submit'])) {
   
-  $op_users = cs_sql_option(__FILE__,'users');
+  $op_users = cs_sql_option(__FILE__, 'users');
   
   $cs_user['users_nick'] = $_POST['users_nick'];
   $cs_user['users_name'] = $_POST['users_name'];
   $cs_user['users_surname'] = $_POST['users_surname'];
   $cs_user['users_sex'] = $_POST['users_sex'];
-  $cs_user['users_age'] = cs_datepost('age','date');
+  $cs_user['users_age'] = cs_datepost('age', 'date');
   $cs_user['users_height'] = $_POST['users_height'];
   $cs_user['users_country'] = $_POST['users_country'];
   $cs_user['users_postalcode'] = $_POST['users_postalcode'];
   $cs_user['users_place'] = $_POST['users_place'];
   $cs_user['users_adress'] = $_POST['users_adress'];
-  $cs_user['users_icq'] = str_replace('-','',$_POST['users_icq']);
+  $cs_user['users_icq'] = str_replace('-', '', $_POST['users_icq']);
   $cs_user['users_jabber'] = $_POST['users_jabber'];
   $cs_user['users_skype'] = $_POST['users_skype'];
   $cs_user['users_email'] = $_POST['users_email'];
@@ -38,12 +38,12 @@ if(isset($_POST['submit'])) {
     cs_error(__FILE__, $hintJabber);
   }
 
-  $hidden = array();
+  $hidden = [];
   $hidden_count = isset($_POST['hidden']) ? count($_POST['hidden']) : 0;
 
-  $canhid = array('users_name','users_surname','users_age','users_height','users_adress','users_place','users_icq','users_jabber','users_skype','users_email','users_url','users_phone','users_mobile');
+  $canhid = ['users_name','users_surname','users_age','users_height','users_adress','users_place','users_icq','users_jabber','users_skype','users_email','users_url','users_phone','users_mobile'];
   for($hc = 0; $hc < $hidden_count; $hc++) {
-    if(in_array($_POST['hidden'][$hc],$canhid)) {
+    if(in_array($_POST['hidden'][$hc], $canhid)) {
       $hidden[] = $_POST['hidden'][$hc];
     }
   }
@@ -51,29 +51,29 @@ if(isset($_POST['submit'])) {
   $error = 0;
   $errormsg = '';
 
-  $nick2 = str_replace(' ','',$cs_user['users_nick']);
+  $nick2 = str_replace(' ', '', $cs_user['users_nick']);
   $nickchars = strlen($nick2);
   if($nickchars < $op_users['min_letters']) {
     $error++;
-    $errormsg .= sprintf($cs_lang['short_nick'],$op_users['min_letters']) . cs_html_br(1);
+    $errormsg .= sprintf($cs_lang['short_nick'], $op_users['min_letters']) . cs_html_br(1);
   }
 
   $where = "users_nick = '" . cs_sql_escape($cs_user['users_nick']) . "' AND users_id != ";
-  $search_nick = cs_sql_count(__FILE__,'users',$where . $account['users_id']);
+  $search_nick = cs_sql_count(__FILE__, 'users', $where . $account['users_id']);
   if(!empty($search_nick)) {
     $error++;
     $errormsg .= $cs_lang['nick_exists'] . cs_html_br(1);
   }
 
   $where = "users_email = '" . cs_sql_escape($cs_user['users_email']) . "' AND users_id != ";
-  $search_email = cs_sql_count(__FILE__,'users',$where . $account['users_id']);
+  $search_email = cs_sql_count(__FILE__, 'users', $where . $account['users_id']);
   if(!empty($search_email)) {
     $error++;
     $errormsg .= $cs_lang['email_exists'] . cs_html_br(1);
   }
   
   $pattern = "=^[_a-z0-9-]+(\.[_a-z0-9-]+)*@([0-9a-z](-?[0-9a-z])*\.)+[a-z]{2}([zmuvtg]|fo|me)?$=i";
-  if(!preg_match($pattern,$cs_user['users_email'])) {
+  if(!preg_match($pattern, $cs_user['users_email'])) {
     $error++;
     $errormsg .= $cs_lang['email_false'] . cs_html_br(1);
   }
@@ -97,8 +97,8 @@ if(isset($_POST['submit'])) {
 }
 else {
   $cells = 'users_nick, users_name, users_surname, users_sex, users_age, users_height, users_country, users_postalcode, users_place, users_adress, users_icq, users_jabber, users_skype, users_email, users_url, users_phone, users_mobile, users_info, users_hidden';
-  $cs_user = cs_sql_select(__FILE__,'users',$cells,"users_id = '" . $account['users_id'] . "'");
-  $hidden = explode(',',$cs_user['users_hidden']);
+  $cs_user = cs_sql_select(__FILE__, 'users', $cells, "users_id = '" . $account['users_id'] . "'");
+  $hidden = explode(',', $cs_user['users_hidden']);
 }
 if(!isset($_POST['submit'])) {
  $data['users']['body'] = $cs_lang['errors_here'];
@@ -119,11 +119,11 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $sel = 'selected="selected"';
   $checked = 'checked="checked"';
 
-  $data['form']['action'] = cs_url('users','profile');
+  $data['form']['action'] = cs_url('users', 'profile');
   $data['users']['users_nick'] = cs_secure($cs_user['users_nick']);
   $data['users']['users_name'] = cs_secure($cs_user['users_name']);
   $data['users']['users_surname'] = cs_secure($cs_user['users_surname']);
-  $data['users']['users_age'] = cs_dateselect('age','date',$cs_user['users_age']);
+  $data['users']['users_age'] = cs_dateselect('age', 'date', $cs_user['users_age']);
   $data['users']['male_check'] = $cs_user['users_sex'] == 'male' ? $sel : '';
   $data['users']['female_check'] = $cs_user['users_sex'] == 'female' ? $sel : '';
   $data['users']['users_height'] = cs_secure($cs_user['users_height']);
@@ -138,7 +138,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['users']['users_phone'] = cs_secure($cs_user['users_phone']);
   $data['users']['users_mobile'] = cs_secure($cs_user['users_mobile']);
   $data['users']['users_info'] = cs_secure($cs_user['users_info']);
-  $data['users']['country_url'] = cs_html_img('symbols/countries/' . $cs_user['users_country'] . '.png',0,0,'id="country_1"');
+  $data['users']['country_url'] = cs_html_img('symbols/countries/' . $cs_user['users_country'] . '.png', 0, 0, 'id="country_1"');
 
   $data['hidden']['users_name'] = isset($hidden['users_name']) ? $checked : '';
   $data['hidden']['users_surname'] = isset($hidden['users_surname']) ? $checked : '';
@@ -158,7 +158,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['abcode']['features'] =cs_abcode_features('users_info');
   $data['abcode']['smileys'] = cs_abcode_smileys('users_info');
 
-  $data['country'] = array();
+  $data['country'] = [];
 
   $run = 0;
   foreach ($cs_country AS $short => $full) {
@@ -168,12 +168,12 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     $run++;
   }
 
-  echo cs_subtemplate(__FILE__,$data,'users','profile');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'profile');
 }
 else {
-  settype($cs_user['users_height'],'integer');
-  settype($cs_user['users_icq'],'integer');
-  $cs_user['users_hidden'] = implode(',',$hidden);
+  settype($cs_user['users_height'], 'integer');
+  settype($cs_user['users_icq'], 'integer');
+  $cs_user['users_hidden'] = implode(',', $hidden);
   
   if($cs_user['users_nick'] != $account['users_nick']) {
     change_nick($account['users_id'], $account['users_nick']);
@@ -181,22 +181,22 @@ else {
 
   $users_cells = array_keys($cs_user);
   $users_save = array_values($cs_user);
-  cs_sql_update(__FILE__,'users',$users_cells,$users_save,$account['users_id']);
+  cs_sql_update(__FILE__, 'users', $users_cells, $users_save, $account['users_id']);
 
   cs_cache_delete('navbirth');
   cs_cache_delete('nextbirth');
 
-  $data['link']['continue'] = cs_url('users','home');
+  $data['link']['continue'] = cs_url('users', 'home');
   $data['lang']['head'] = $cs_lang['profile'];
 
-  echo cs_subtemplate(__FILE__,$data,'users','done');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'done');
 
   if($account['access_wizard'] == 5) {
-    $wizard = cs_sql_count(__FILE__,'options',"options_name = 'done_prfl' AND options_value = '1'");
+    $wizard = cs_sql_count(__FILE__, 'options', "options_name = 'done_prfl' AND options_value = '1'");
     if(empty($wizard)) {
-      $data['wizard']['show'] = cs_link($cs_lang['show'],'wizard','roots');
-      $data['wizard']['task_done'] = cs_link($cs_lang['task_done'],'wizard','roots','handler=prfl&amp;done=1');
-    echo cs_subtemplate(__FILE__,$data,'users','wizard');
+      $data['wizard']['show'] = cs_link($cs_lang['show'], 'wizard', 'roots');
+      $data['wizard']['task_done'] = cs_link($cs_lang['task_done'], 'wizard', 'roots', 'handler=prfl&amp;done=1');
+    echo cs_subtemplate(__FILE__, $data, 'users', 'wizard');
     }
   }
 } 

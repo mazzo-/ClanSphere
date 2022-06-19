@@ -10,12 +10,12 @@ $files = cs_files();
 $cs_news_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $cs_news_id = $cs_post['id'];
 
-$op_news = cs_sql_option(__FILE__,'news');
-$img_filetypes = array('gif','jpg','png');
+$op_news = cs_sql_option(__FILE__, 'news');
+$img_filetypes = ['gif','jpg','png'];
 
-$news = cs_sql_select(__FILE__,'news','news_pictures',"news_id = '" . $cs_news_id . "'");
+$news = cs_sql_select(__FILE__, 'news', 'news_pictures', "news_id = '" . $cs_news_id . "'");
 $news_string = $news['news_pictures'];
-$news_pics = empty($news_string) ? array() : explode("\n",$news_string);
+$news_pics = empty($news_string) ? [] : explode("\n", $news_string);
 $count_pics = count($news_pics);
 $next = empty($count_pics) ? '' : explode('-', current(explode(".", $news_pics[$count_pics-1])));
 $news_next = empty($count_pics) ? 1 : $next[1] + 1;
@@ -29,10 +29,10 @@ if(!empty($_GET['delete'])) {
   cs_unlink('news', 'thumb-' . $news_pics[$target]);
   $news_pics[$target] = FALSE;
   $news_pics = array_filter($news_pics);
-  $news_string = implode("\n",$news_pics);
-  $cells = array('news_pictures');
-  $content = array($news_string);
-  cs_sql_update(__FILE__,'news',$cells,$content,$cs_news_id);
+  $news_string = implode("\n", $news_pics);
+  $cells = ['news_pictures'];
+  $content = [$news_string];
+  cs_sql_update(__FILE__, 'news', $cells, $content, $cs_news_id);
 }
 elseif(!empty($_POST['submit'])) {
   
@@ -74,15 +74,15 @@ elseif(!empty($_POST['submit'])) {
     if(cs_resample($files['picture']['tmp_name'], 'uploads/news/' . $thumb_name, 80, 200) 
     AND cs_upload('news', $picture_name, $files['picture']['tmp_name'])) {
 
-      $cells = array('news_pictures');
-      $news_string = empty($news_string) ? array($target) : array($news_string . "\n" . $target);
-      cs_sql_update(__FILE__,'news',$cells,$news_string,$cs_news_id);
+      $cells = ['news_pictures'];
+      $news_string = empty($news_string) ? [$target] : [$news_string . "\n" . $target];
+      cs_sql_update(__FILE__, 'news', $cells, $news_string, $cs_news_id);
   
       $data['head']['topline'] = $cs_lang['success'];
       
-      $news = cs_sql_select(__FILE__,'news','news_pictures',"news_id = '" . $cs_news_id . "'");
+      $news = cs_sql_select(__FILE__, 'news', 'news_pictures', "news_id = '" . $cs_news_id . "'");
       $news_string = $news['news_pictures'];
-      $news_pics = empty($news_string) ? array() : explode("\n",$news_string);
+      $news_pics = empty($news_string) ? [] : explode("\n", $news_string);
       
     }
     else {
@@ -128,11 +128,11 @@ else {
   $run = 0;
   foreach($news_pics AS $pic) {
      $link = cs_html_img('uploads/news/thumb-' . $pic);
-     $data['pictures'][$run]['view_link'] = cs_html_link('uploads/news/picture-' . $pic,$link) . ' ';
+     $data['pictures'][$run]['view_link'] = cs_html_link('uploads/news/picture-' . $pic, $link) . ' ';
      $set = 'id=' . $cs_news_id . '&amp;delete=' . ($run + 1);
-     $data['pictures'][$run]['remove_link'] = cs_link($cs_lang['remove'],'news','picture',$set);
+     $data['pictures'][$run]['remove_link'] = cs_link($cs_lang['remove'], 'news', 'picture', $set);
     $run++;
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'news','picture');
+echo cs_subtemplate(__FILE__, $data, 'news', 'picture');

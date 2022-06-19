@@ -37,7 +37,7 @@ if(empty($setup_exists) AND (isset($_POST['create']) OR isset($_POST['view']))) 
     $error++;
     $errormsg .= $cs_lang['no_name'] . cs_html_br(1);
   }
-  if(!preg_match("=^[a-z0-9]+$=i",$cs_db['prefix'])) {
+  if(!preg_match("=^[a-z0-9]+$=i", $cs_db['prefix'])) {
     $error++;
     $errormsg .= $cs_lang['prefix_err'] . cs_html_br(1);
   }
@@ -71,11 +71,11 @@ if(empty($setup_exists) AND (isset($_POST['create']) OR isset($_POST['view']))) 
 
     if(isset($_POST['create'])) {
       $flerr = 0;
-      $create_setup = fopen('setup.php','w') OR $flerr++;
+      $create_setup = fopen('setup.php', 'w') OR $flerr++;
       # set stream encoding if possible to avoid converting issues
       if(function_exists('stream_encoding'))
         stream_encoding($create_setup, $cs_main['charset']);
-      fwrite($create_setup,$setup_php) OR $flerr++;
+      fwrite($create_setup, $setup_php) OR $flerr++;
       fclose($create_setup) OR $flerr++;
 
       # check again to skip form page and prohibite errors
@@ -93,11 +93,11 @@ if(empty($setup_exists) AND (isset($_POST['create']) OR isset($_POST['view']))) 
 }
 else {
 
-  $cs_db = array('hash' => '', 'type' => '', 'subtype' => '', 'place' => 'localhost', 'user' => '', 'pwd' => '', 'name' => '', 'prefix' => 'cs');
-  $log = array('save_actions' => 0, 'save_errors' => 0);
+  $cs_db = ['hash' => '', 'type' => '', 'subtype' => '', 'place' => 'localhost', 'user' => '', 'pwd' => '', 'name' => '', 'prefix' => 'cs'];
+  $log = ['save_actions' => 0, 'save_errors' => 0];
 }
 
-$data = array();
+$data = [];
 
 $data['head']['message'] = $cs_lang['body_settings'];
 if (!empty($error)) $data['head']['message'] = $errormsg;

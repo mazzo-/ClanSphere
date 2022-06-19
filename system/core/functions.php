@@ -12,7 +12,7 @@ function cs_error($file, $message, $log_only = 0) {
     $log .= isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] . "\n" : "unknown\n";
     $log .= !empty($remote_ip) ? $remote_ip . "\n" : "unknown\n";
     $log .= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] . "\n" : "unknown\n";
-    cs_log('errors',$log);
+    cs_log('errors', $log);
   }
   if(empty($log_only))
     $cs_logs['errors'] .= 'Error: ' . $file . ' -> ' . $message . "\n";
@@ -42,19 +42,19 @@ function cs_error_internal($error = 0, $report = 0) {
   require_once 'system/cache/' . $cs_main['cache_mode'] . '.php';
 
   if(empty($account['users_lang']))
-    $account = array('users_id' => 0, 'access_clansphere' => 0, 'access_errors' => 0, 'users_lang' => $cs_main['def_lang']);
+    $account = ['users_id' => 0, 'access_clansphere' => 0, 'access_errors' => 0, 'users_lang' => $cs_main['def_lang']];
   
   echo cs_template($cs_micro, 'error.htm');
 }
 
-function cs_error_sql($cs_file,$part,$message,$stop = 0) {
+function cs_error_sql($cs_file, $part, $message, $stop = 0) {
 
   global $cs_db;
   if(empty($message)) {
     $message = 'Database connection error';
   }
   $cs_db['last_error'] = $part . ' - ' . $message;
-  cs_error($cs_file,$cs_db['last_error']);
+  cs_error($cs_file, $cs_db['last_error']);
 
   if(!empty($stop)) {
     die(cs_error_internal('sql', $message));
@@ -71,17 +71,17 @@ function cs_content_prepare($cs_main) {
     $cs_main['mod'] = $cs_main['def_mod'];
     $cs_main['action'] = $cs_main['def_action'];
 
-    $parameters_split = empty($cs_main['def_parameters']) ? array() : explode('&', $cs_main['def_parameters']);
+    $parameters_split = empty($cs_main['def_parameters']) ? [] : explode('&', $cs_main['def_parameters']);
 
     foreach($parameters_split AS $parameter) {
       if(empty($parameter))
         break;
-      $par_array = explode('=',$parameter);
+      $par_array = explode('=', $parameter);
       $_GET[$par_array[0]] = empty($_GET[$par_array[0]]) ? $par_array[1] : $_GET[$par_array[0]];
     }
   }
 
-  if(!preg_match("=^[_a-z0-9-]+$=i",$cs_main['mod']) OR !preg_match("=^[_a-z0-9-]+$=i",$cs_main['action'])) {
+  if(!preg_match("=^[_a-z0-9-]+$=i", $cs_main['mod']) OR !preg_match("=^[_a-z0-9-]+$=i", $cs_main['action'])) {
     $cs_main['mod'] = 'errors';
     $cs_main['action'] = '404';
   }
@@ -105,7 +105,7 @@ function cs_content_check ($cs_main) {
     $cs_main['show'] = 'mods/errors/403.php';
   }
   else {
-    $axx_file = array();
+    $axx_file = [];
     include($get_axx);
     if (!isset($axx_file[$cs_main['action']])) {
       cs_error($cs_main['show'], 'cs_content_check - No access defined for target file');
@@ -139,7 +139,7 @@ function cs_content_append ($content) {
   }
 
   if($account['access_clansphere'] > 3 AND file_exists('install.php') AND !file_exists('.git'))
-    $content = cs_subtemplate(__FILE__, array(), 'clansphere', 'del_install') . $content;
+    $content = cs_subtemplate(__FILE__, [], 'clansphere', 'del_install') . $content;
 
   return $content;
 }
@@ -174,9 +174,9 @@ function cs_content_lang () {
       setcookie('cs_lang', $lang, $cs_main['cookie']['lifetime'], $cs_main['cookie']['path'], $cs_main['cookie']['domain']);
     }
     elseif($account['users_lang'] != $lang) {
-      $users_cells = array('users_lang');
-      $users_save = array($lang);
-      cs_sql_update(__FILE__,'users',$users_cells,$users_save,$account['users_id'], 0, 0);
+      $users_cells = ['users_lang'];
+      $users_save = [$lang];
+      cs_sql_update(__FILE__, 'users', $users_cells, $users_save, $account['users_id'], 0, 0);
     }
   }
 
@@ -189,12 +189,12 @@ function cs_init($predefined) {
   @error_reporting(E_ALL | E_STRICT);
   @set_error_handler("php_error");
 
-  @ini_set('short_open_tag','off');
-  @ini_set('arg_separator.output','&amp;');
-  @ini_set('session.use_trans_sid','0');
-  @ini_set('session.use_cookies','1');
-  @ini_set('session.use_only_cookies','1');
-  @ini_set('display_errors','on');
+  @ini_set('short_open_tag', 'off');
+  @ini_set('arg_separator.output', '&amp;');
+  @ini_set('session.use_trans_sid', '0');
+  @ini_set('session.use_cookies', '1');
+  @ini_set('session.use_only_cookies', '1');
+  @ini_set('display_errors', 'on');
 
   $phpversion = phpversion();
   if(version_compare($phpversion, '5.1', '>='))
@@ -203,7 +203,7 @@ function cs_init($predefined) {
   global $account, $com_lang, $cs_db, $cs_logs, $cs_main, $cs_micro, $cs_template;
 
   $cs_micro = explode(' ', microtime()); # starting parsetime
-  $cs_logs = array('php_errors' => '', 'errors' => '', 'sql' => '', 'queries' => 0, 'warnings' => 1, 'dir' => 'uploads/logs');
+  $cs_logs = ['php_errors' => '', 'errors' => '', 'sql' => '', 'queries' => 0, 'warnings' => 1, 'dir' => 'uploads/logs'];
   $cs_main['cellspacing'] = 1;
   $cs_main['def_lang'] = empty($cs_main['def_lang']) ? 'English' : $cs_main['def_lang'];
   $cs_main['def_theme'] = empty($cs_main['def_theme']) ? 'base' : $cs_main['def_theme'];
@@ -226,17 +226,17 @@ function cs_init($predefined) {
     require_once 'mods/clansphere/fallback.php';
 
   if($cs_main['php_self']['basename'] == 'install.php')
-    $account = array('users_id' => 0, 'access_clansphere' => 0, 'access_errors' => 2, 'access_install' => 5);
+    $account = ['users_id' => 0, 'access_clansphere' => 0, 'access_errors' => 2, 'access_install' => 5];
   else
     file_exists('setup.php') ? require_once 'setup.php' : die(cs_error_internal('setup', '<a href="' . $cs_main['php_self']['dirname'] . 'install.php">Installation</a>'));
 
-  if(!in_array($cs_main['cache_mode'], array('file', 'none')) AND !extension_loaded($cs_main['cache_mode']))
+  if(!in_array($cs_main['cache_mode'], ['file', 'none']) AND !extension_loaded($cs_main['cache_mode']))
     $cs_main['cache_mode'] = 'file';
   require_once 'system/cache/' . $cs_main['cache_mode'] . '.php';
 
     if(empty($cs_main['charset'])) {
     $cs_main['charset'] = 'UTF-8';
-    die(cs_error_internal(0,'No charset information found in setup.php'));
+    die(cs_error_internal(0, 'No charset information found in setup.php'));
   }
 
   # backfall if json extension is not available
@@ -255,14 +255,14 @@ function cs_init($predefined) {
     $cs_db['con'] = cs_sql_connect($cs_db);
     unset($cs_db['pwd'], $cs_db['user']);
 
-    $cs_options = cs_sql_option(__FILE__,'clansphere');
+    $cs_options = cs_sql_option(__FILE__, 'clansphere');
     
     $cs_options['unicode'] = extension_loaded('unicode') ? 1 : 0;
     if(!isset($cs_options['cache_unicode']) OR $cs_options['cache_unicode'] != $cs_options['unicode'])
       cs_cache_clear();
   }
   else
-    $cs_options = array();
+    $cs_options = [];
 
   $cs_main = array_merge($cs_main, $cs_options, $predefined);
 
@@ -305,7 +305,7 @@ function cs_init($predefined) {
 
   $cs_main['template'] = empty($cs_main['def_tpl']) ? 'clansphere' : $cs_main['def_tpl'];
   $cs_template = cs_template_info($cs_main['template']);
-  if(!empty($_GET['template']) AND preg_match("=^[_a-z0-9-]+$=i",$_GET['template']))
+  if(!empty($_GET['template']) AND preg_match("=^[_a-z0-9-]+$=i", $_GET['template']))
     $cs_main['template'] = $_GET['template'];
 
   if(!empty($predefined['init_tpl'])) {
@@ -324,7 +324,7 @@ function cs_title() {
   $title = htmlentities($cs_main['def_title'], ENT_QUOTES, $cs_main['charset']);
 
   if($cs_main['mod'] != 'static' OR $cs_main['action'] != 'view') {
-    $cs_act_lang = substr($cs_main['show'],0,11) == 'mods/errors' ? cs_translate('errors') : cs_translate($cs_main['mod']);
+    $cs_act_lang = substr($cs_main['show'], 0, 11) == 'mods/errors' ? cs_translate('errors') : cs_translate($cs_main['mod']);
     $title .= ' - ' . $cs_act_lang['mod_name'];
 
     if(empty($cs_main['page_title']) AND isset($cs_act_lang['' . $cs_main['action'] . '']))
@@ -340,13 +340,13 @@ function cs_title() {
 function cs_ajaxwrap() {
 
   global $cs_main, $account;
-  $json = array();
+  $json = [];
 
   header('Content-Type:application/json');
 
   if (empty($cs_main['public']) and $account['access_clansphere'] < $cs_main['maintenance_access'])
   {
-    return json_encode(array('location' => '', 'reload' => 1));
+    return json_encode(['location' => '', 'reload' => 1]);
   }
   if(!isset($_REQUEST['xhr_nocontent'])) {
 
@@ -354,12 +354,12 @@ function cs_ajaxwrap() {
 
     $json['title'] = html_entity_decode(cs_title(), ENT_NOQUOTES, $cs_main['charset']);
 
-    $pathPrefix = str_replace('\\','/',$cs_main['php_self']['dirname'] . $cs_main['php_self']['filename']) . '/';
+    $pathPrefix = str_replace('\\', '/', $cs_main['php_self']['dirname'] . $cs_main['php_self']['filename']) . '/';
 
-    $uri = preg_replace('/^(.*?)\.php\??(.*?)$/s','\\2',$_SERVER['REQUEST_URI']) ;  
-    $uri = preg_replace('/[&\?\/]?(xhr_navlists[=\/])[^&\/]*/s','', $uri);
-    $uri = str_replace(array('&xhr=1', '/xhr/1', '&xhr_nocontent=1', 'params=/', '/params//',$pathPrefix),'', $uri);
-    $uri = preg_replace('/' . str_replace('/','\/', $cs_main['php_self']['dirname']) . '/s', '',$uri, 0);    
+    $uri = preg_replace('/^(.*?)\.php\??(.*?)$/s', '\\2', $_SERVER['REQUEST_URI']) ;  
+    $uri = preg_replace('/[&\?\/]?(xhr_navlists[=\/])[^&\/]*/s', '', $uri);
+    $uri = str_replace(['&xhr=1', '/xhr/1', '&xhr_nocontent=1', 'params=/', '/params//',$pathPrefix], '', $uri);
+    $uri = preg_replace('/' . str_replace('/', '\/', $cs_main['php_self']['dirname']) . '/s', '', $uri, 0);    
 
     $json['location'] = $uri;
 
@@ -371,9 +371,9 @@ function cs_ajaxwrap() {
 
   if(isset($_REQUEST['xhr_navlists'])) {
     $navs = explode(',', $_REQUEST['xhr_navlists']);
-    $navlists = array();
+    $navlists = [];
     foreach($navs AS $nav) {
-      $navlist = explode('-',$nav);
+      $navlist = explode('-', $nav);
       if($navlist[1]!='func') {
         $navlists[$nav] = cs_templatefile($navlist);
       }      
@@ -386,7 +386,7 @@ function cs_ajaxwrap() {
     $cs_logs['php_errors'] = nl2br($cs_logs['php_errors']);
     $cs_logs['errors'] = nl2br($cs_logs['errors']);
 
-    $data = array('data');
+    $data = ['data'];
     $data['data']['log_sql'] = cs_log_format('sql');
     $data['data']['php_errors'] = $cs_logs['php_errors'];
     $data['data']['csp_errors'] = $cs_logs['errors'];
@@ -403,24 +403,24 @@ function cs_contentload($file) {
   if(empty($cs_main['public']) and $account['access_clansphere'] < $cs_main['maintenance_access'])
     $file = 'mods/users/login.php';
 
-  $content = str_replace(array('{', '}'), array('&#123;', '&#125;'), cs_filecontent($file));
+  $content = str_replace(['{', '}'], ['&#123;', '&#125;'], cs_filecontent($file));
   $content = preg_replace_callback('/<script([^>]*?)>(.*?)<\/script>/is', 'cs_revert_script_braces', $content);
 
   return cs_content_append($content);
 }
 
-function cs_log($target,$content) {
+function cs_log($target, $content) {
 
   global $cs_logs, $cs_main;
   $full_path = $cs_logs['dir'] . '/' . $target;
   if(is_writeable($full_path . '/')) {
     $log = "-------- \n" . date('H:i:s') . "\n" . $content;
     $log_file = $full_path . '/' . date('Y-m-d') . '.log';
-    $save_error = fopen($log_file,'a');
+    $save_error = fopen($log_file, 'a');
     # set stream encoding if possible to avoid converting issues
     if(function_exists('stream_encoding'))
       stream_encoding($save_error, $cs_main['charset']);
-    fwrite($save_error,$log);
+    fwrite($save_error, $log);
     fclose($save_error);
     chmod($log_file, 0755);
   }
@@ -439,7 +439,7 @@ function cs_log_sql($file, $sql, $action = 0) {
 
   if(!empty($action) AND !empty($cs_logs['save_actions'])) {
     $log = 'USERS_ID ' . $account['users_id'] . "\n" . $sql . "\n";
-    cs_log('actions',$log);
+    cs_log('actions', $log);
   }
 }
 
@@ -463,7 +463,7 @@ function cs_log_format($part, $addslashes = 0) {
 function cs_warning($message) {
 
   global $cs_logs;
-  static $last_warning = array();
+  static $last_warning = [];
   if(!empty($cs_logs['warnings']) AND !isset($last_warning[$message])) {
     $cs_logs['errors'] .= 'Warning: ' . $message . "\n";
     $last_warning[$message] = 1;
@@ -474,7 +474,7 @@ function cs_parsetime($micro, $precision = 3) {
 
   $new_time = explode(' ', microtime());
   $getparse = $new_time[1] + $new_time[0] - $micro[0] - $micro[1];
-  $getparse = round($getparse,$precision) * 1000;
+  $getparse = round($getparse, $precision) * 1000;
   return $getparse;
 }
 
@@ -509,7 +509,7 @@ function cs_getip () {
   elseif (getenv('HTTP_FORWARDED'))
     $ip = getenv('HTTP_FORWARDED');
   else
-    $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 0;
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 0;
 
   // check for multiple ip's in case of multiple x-forwarders
   $pos = stripos($ip, ',');
@@ -528,7 +528,7 @@ function php_error($errno, $errmsg, $filename, $linenum) {
 
   $silent = (error_reporting() === 0) ? 1 : 0;
 
-  $errortype = Array(
+  $errortype = [
     E_ERROR           => 'Error',
     E_WARNING         => 'Warning',
     E_PARSE           => 'Parsing Error',
@@ -540,7 +540,7 @@ function php_error($errno, $errmsg, $filename, $linenum) {
     E_USER_ERROR      => 'User Error',
     E_USER_WARNING    => 'User Warning',
     E_USER_NOTICE     => 'User Notice',
-  );
+  ];
 
   // Added E_Strict for PHP 5 Version
     $errortype['2048'] = 'Strict Notice/Error';

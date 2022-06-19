@@ -6,7 +6,7 @@ $cs_lang = cs_translate('partner');
 
 if (!empty($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['def_width_navimg'] = (int) $_POST['def_width_navimg'];
   $save['def_height_navimg'] = (int) $_POST['def_height_navimg'];
   $save['max_size_navimg'] = (int) $_POST['max_size_navimg'];
@@ -27,14 +27,14 @@ if (!empty($_POST['submit'])) {
   
 } else {
   
-  $data = array();
-  $data['partner'] = cs_sql_option(__FILE__,'partner');
+  $data = [];
+  $data['partner'] = cs_sql_option(__FILE__, 'partner');
     
   $data['sel']['random'] = $data['partner']['method'] == 'random' ? 'selected="selected"' : '';
   $data['sel']['rotation'] = $data['partner']['method'] == 'rotation' ? 'selected="selected"' : '';
   
   $data['head']['body_text'] = empty($error) ? $cs_lang['errors_here'] : $error;
   
-  echo cs_subtemplate(__FILE__,$data,'partner','options');
+  echo cs_subtemplate(__FILE__, $data, 'partner', 'options');
   
 }

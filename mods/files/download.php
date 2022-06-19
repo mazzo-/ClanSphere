@@ -10,14 +10,14 @@ if(empty($_REQUEST['where']))
   cs_redirect(NULL, 'files', 'list');
 
 $files_id = $_REQUEST['where'];
-settype($files_id,'integer');
-$mirror_id = isset($_REQUEST['target']) ? $_REQUEST['target'] : 0;
-settype($mirror_id,'integer');
+settype($files_id, 'integer');
+$mirror_id = $_REQUEST['target'] ?? 0;
+settype($mirror_id, 'integer');
 
 $from = 'files';
 $select = 'files_count, files_name, files_mirror';
 $where = "files_id = '" . $files_id . "'"; 
-$cs_files = cs_sql_select(__FILE__,$from,$select,$where,0,0,1); 
+$cs_files = cs_sql_select(__FILE__, $from, $select, $where, 0, 0, 1); 
 $files_loop = count($cs_files);
 
 if(!empty($files_loop)) {
@@ -28,9 +28,9 @@ if(!empty($files_loop)) {
   $mirror = explode("\n", $temp_mirror1[$mirror_id]); 
 
   $files_count = $files_count + 1;
-  $files_cells = array('files_count');
-  $files_save = array($files_count);
-  cs_sql_update(__FILE__,'files',$files_cells,$files_save,$files_id);
+  $files_cells = ['files_count'];
+  $files_save = [$files_count];
+  cs_sql_update(__FILE__, 'files', $files_cells, $files_save, $files_id);
 
   if(empty($advanced) AND isset($mirror[1]))
   {
@@ -38,7 +38,7 @@ if(!empty($files_loop)) {
   }  
   elseif(!empty($advanced))
   {
-    $data['file']['wait'] = cs_html_img('symbols/files/wait.gif',0,0,0); 
+    $data['file']['wait'] = cs_html_img('symbols/files/wait.gif', 0, 0, 0); 
 
     /*print("<meta http-equiv=refresh content='3; URL=$downloadfile'>");
     header("Content-disposition: attachment; filename = $downloadfile");

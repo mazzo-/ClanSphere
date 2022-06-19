@@ -19,8 +19,8 @@ unset($cs_db);
 $from = 'votes';
 $select = 'votes_id, votes_question, votes_election, votes_several';
 $where = "votes_access <= '" . $votes_access . "' AND votes_start <= '" . $time . "' AND votes_end >= '" . $time . "'";
-$sort = (in_array($type, array('mysql', 'mysqli'))) ? '{random}' : 'votes_end ASC';
-$cs_votes = cs_sql_select(__FILE__,$from,$select,$where, $sort);
+$sort = (in_array($type, ['mysql', 'mysqli'])) ? '{random}' : 'votes_end ASC';
+$cs_votes = cs_sql_select(__FILE__, $from, $select, $where, $sort);
 $votes_loop = count($cs_votes);
 $votes_id = $cs_votes['votes_id'];
 
@@ -29,7 +29,7 @@ if(!empty($votes_loop)) {
   if($users_id > 0) {
     $where = "voted_mod = 'votes' AND voted_fid = '" . $votes_id . "' AND users_id = '" . $users_id . "'";
   }
-  $checkit_userip = cs_sql_count(__FILE__,'voted',$where);
+  $checkit_userip = cs_sql_count(__FILE__, 'voted', $where);
 }
 
 if(!empty($checkit_userip)) {
@@ -83,7 +83,7 @@ if(isset($_POST['submit_votes']) ) {
     $error_several = 0;
     $where = "voted_fid = '" . $votes_id . "' AND voted_mod = '" . $mod . "' AND voted_ip = '" . cs_sql_escape($users_ip) . "'";
     $where .= " AND users_id = '" . $users_id . "' AND (";
-    $voting = array();
+    $voting = [];
     for ($run = 0; $run < $count_voted; $run++) {
       settype($voted_answer[$run], 'integer');
       if ($voted_answer[$run] < 1 || $voted_answer[$run] >= $count_election || in_array($voted_answer[$run], $voting)) {
@@ -93,33 +93,33 @@ if(isset($_POST['submit_votes']) ) {
       $voting[] = $voted_answer[$run];
       $where .= 'voted_answer = "' . $voted_answer[$run] . '" OR ';
     }
-    $where = substr($where,0,-4) . ')';
+    $where = substr($where, 0, -4) . ')';
     
     $error_several += cs_sql_count(__FILE__, 'voted', $where);
     
     if (!empty($error_several)) die('Multivote triggered an error with answers -> Execution halted.');
     
     for($run = 0; $run < $count_voted; $run++) {
-      $votes_cells = array('voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod');
-      $votes_save = array($votes_id,$users_id,$time,$voted_answer[$run],$users_ip,$mod);
+      $votes_cells = ['voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod'];
+      $votes_save = [$votes_id,$users_id,$time,$voted_answer[$run],$users_ip,$mod];
       if(!empty($voted_answer[$run]))
-        cs_sql_insert(__FILE__,'voted',$votes_cells,$votes_save);
+        cs_sql_insert(__FILE__, 'voted', $votes_cells, $votes_save);
       else
         cs_error(__FILE__, 'Empty answer for multivote with ID ' . $cs_votes_id);
     }
   } else {
-    $votes_cells = array('voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod');
-    $votes_save = array($votes_id,$users_id,$time,$voted_answer,$users_ip,$mod);
+    $votes_cells = ['voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod'];
+    $votes_save = [$votes_id,$users_id,$time,$voted_answer,$users_ip,$mod];
     if(!empty($voted_answer))
-      cs_sql_insert(__FILE__,'voted',$votes_cells,$votes_save);
+      cs_sql_insert(__FILE__, 'voted', $votes_cells, $votes_save);
     else
       cs_error(__FILE__, 'Empty answer for singlevote with ID ' . $cs_votes_id);
   }
 
-  cs_redirect($cs_lang['create_done'],'votes','list');
+  cs_redirect($cs_lang['create_done'], 'votes', 'list');
   } else {
   $votes_form = 0;
-  cs_redirect($cs_lang['error_occurred'],'votes','list');
+  cs_redirect($cs_lang['error_occurred'], 'votes', 'list');
   }
 }
 
@@ -127,7 +127,7 @@ if(!empty($cs_votes) AND !empty($votes_form)) {
   $from = 'voted';
   $select = 'voted_id, users_id, voted_ip, voted_answer';
   $where = "voted_fid = \"" . $votes_id . "\" AND voted_mod = 'votes'";
-  $cs_voted = cs_sql_select(__FILE__,$from,$select,$where,'','0','0');
+  $cs_voted = cs_sql_select(__FILE__, $from, $select, $where, '', '0', '0');
   $voted_loop = count($cs_voted);
   $check_user_voted = 0;
   for ($run = 0; $run < $voted_loop; $run++) {
@@ -144,7 +144,7 @@ if(!empty($cs_votes) AND !empty($votes_form)) {
   }
   }
   if(empty($check_user_voted)) {
-    $votes_navlist = array();
+    $votes_navlist = [];
   $votes_navlist['lang']['create'] = $cs_lang['create'];
   $votes_navlist['votes']['id'] = $votes_id;
   $votes_navlist['votes']['type'] = empty($cs_votes['votes_several']) ? 'radio' : 'checkbox';
@@ -161,9 +161,9 @@ if(!empty($cs_votes) AND !empty($votes_form)) {
     $votes_navlist['answers'][$run]['value'] = ($run + 1);
     $votes_navlist['answers'][$run]['answer'] = $temp[($run + 1)];
   }
-  echo cs_subtemplate(__FILE__,$votes_navlist,'votes','navlist_vote');
+  echo cs_subtemplate(__FILE__, $votes_navlist, 'votes', 'navlist_vote');
   } else {
-    $votes_navlist = array();
+    $votes_navlist = [];
   $votes_navlist['votes']['question'] = $cs_votes['votes_question'];
   $temp = explode("\n", $cs_votes['votes_election']);
   $answers_stop = count($temp) - 1;
@@ -181,18 +181,18 @@ if(!empty($cs_votes) AND !empty($votes_form)) {
     } else {
     $answer_percent = '0';
     }
-    $answer_percent = round($answer_percent,1);
+    $answer_percent = round($answer_percent, 1);
     $votes_navlist['results'][$run]['answer'] = $temp[($run + 1)];
     $votes_navlist['results'][$run]['percent'] = $answer_percent;
     if(!empty($answer_count)) {
-      $votes_navlist['results'][$run]['end_img'] = cs_html_img('symbols/votes/vote02.png','13','2');
+      $votes_navlist['results'][$run]['end_img'] = cs_html_img('symbols/votes/vote02.png', '13', '2');
     } else {
     $votes_navlist['results'][$run]['end_img']  = '';
     }
   }
   $votes_navlist['votes']['id'] = $votes_id;
   $votes_navlist['lang']['current_vote'] = $cs_lang['current_vote'];
-  echo cs_subtemplate(__FILE__,$votes_navlist,'votes','navlist_results');
+  echo cs_subtemplate(__FILE__, $votes_navlist, 'votes', 'navlist_results');
   }
 } else {
   if(!empty($votes_form)) {

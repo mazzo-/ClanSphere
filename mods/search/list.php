@@ -4,9 +4,9 @@
 
 $cs_lang = cs_translate('search');
 
-$data = array();
+$data = [];
 
-$mods_allowed = array('articles', 'clans', 'files', 'news', 'users');
+$mods_allowed = ['articles', 'clans', 'files', 'news', 'users'];
 
 $search_error = 0; 
 $data['search']['raw_where'] = ''; 
@@ -54,7 +54,7 @@ if(!empty($search_error))
 $data['search']['text'] = cs_secure($data['search']['raw_text']);
 $data['search']['where'] = cs_secure($data['search']['raw_where']);
 
-echo cs_subtemplate(__FILE__,$data,'search','list');
+echo cs_subtemplate(__FILE__, $data, 'search', 'list');
 
 if(!empty($submit) AND empty($search_error)) {
 

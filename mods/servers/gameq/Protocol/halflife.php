@@ -57,26 +57,26 @@ class GameQ_Protocol_halflife extends GameQ_Protocol
         $this->header('m');
 
         // Rules
-        $this->r->add('address',     $this->p->readString());
-        $this->r->add('hostname',    $this->p->readString());
-        $this->r->add('map',         $this->p->readString());
-        $this->r->add('gamedir',     $this->p->readString());
-        $this->r->add('gamename',    $this->p->readString());
+        $this->r->add('address', $this->p->readString());
+        $this->r->add('hostname', $this->p->readString());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('gamedir', $this->p->readString());
+        $this->r->add('gamename', $this->p->readString());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('protocol',    $this->p->readInt8());
+        $this->r->add('protocol', $this->p->readInt8());
         $this->r->add('server_type', $this->p->read());
-        $this->r->add('server_os',   $this->p->read());
-        $this->r->add('password',    $this->p->readInt8());
-        $this->r->add('mod',         $this->p->readInt8());
+        $this->r->add('server_os', $this->p->read());
+        $this->r->add('password', $this->p->readInt8());
+        $this->r->add('mod', $this->p->readInt8());
 
         // These only exist when the server is running a mod
         if ($this->p->getLength() > 2) {
-            $this->r->add('mod_info',      $this->p->readString());
-            $this->r->add('mod_download',  $this->p->readString());
-            $this->r->add('mod_version',   $this->p->readInt32());
-            $this->r->add('mod_size',      $this->p->readInt32());
-            $this->r->add('mod_ssonly',    $this->p->readInt8());
+            $this->r->add('mod_info', $this->p->readString());
+            $this->r->add('mod_download', $this->p->readString());
+            $this->r->add('mod_version', $this->p->readInt32());
+            $this->r->add('mod_size', $this->p->readInt32());
+            $this->r->add('mod_ssonly', $this->p->readInt8());
             $this->r->add('mod_customdll', $this->p->readInt8());
         }
     }
@@ -95,10 +95,10 @@ class GameQ_Protocol_halflife extends GameQ_Protocol
 
         // Players
         while ($this->p->getLength()) {
-            $this->r->addPlayer('id',      $this->p->readInt8());
-            $this->r->addPlayer('name',    $this->p->readString());
-            $this->r->addPlayer('score',   $this->p->readInt32());
-            $this->r->addPlayer('time',    $this->p->readFloat32());
+            $this->r->addPlayer('id', $this->p->readInt8());
+            $this->r->addPlayer('name', $this->p->readString());
+            $this->r->addPlayer('score', $this->p->readInt32());
+            $this->r->addPlayer('time', $this->p->readFloat32());
         }
     }
 
@@ -145,7 +145,7 @@ class GameQ_Protocol_halflife extends GameQ_Protocol
             }
             
             // Get the low nibble of the 9th bit
-            $key = substr(bin2hex($packet{8}), 0, 1);
+            $key = substr(bin2hex($packet[8]), 0, 1);
             
             // Strip whole header
             $packet = substr($packet, 9);

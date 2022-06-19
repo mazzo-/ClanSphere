@@ -25,8 +25,8 @@ if(!empty($_GET['activate'])) {
 
 $current = empty($current) ? $cs_main['def_theme'] : $current;
 
-$data['lang']['body'] = sprintf($cs_lang['themes_listed'],$themes_count);
-$data['link']['cache'] = cs_url('clansphere','cache');
+$data['lang']['body'] = sprintf($cs_lang['themes_listed'], $themes_count);
+$data['link']['cache'] = cs_url('clansphere', 'cache');
 
 $run = 0;
 
@@ -36,8 +36,8 @@ if(empty($themes)) {
 
 foreach ($themes as $theme) {
   $data['themes_list'][$run]['name'] = $theme['name'];
-  $data['themes_list'][$run]['active'] = $theme['dir'] != $current ? cs_link(cs_icon('cancel'),'clansphere','themes_list','activate='.$theme['dir']) : cs_icon('submit');
+  $data['themes_list'][$run]['active'] = $theme['dir'] != $current ? cs_link(cs_icon('cancel'), 'clansphere', 'themes_list', 'activate='.$theme['dir']) : cs_icon('submit');
   $run++;
 }
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','themes_list');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'themes_list');

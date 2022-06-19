@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('search');
 
-$data = array();
+$data = [];
 
 $search_error = 0; 
 $data['search']['where'] = ''; 
@@ -51,4 +51,4 @@ if(!empty($search_error)) {
   $data['if']['errmsg'] = true;
 }
 
-echo cs_subtemplate(__FILE__,$data,'search','navlist');
+echo cs_subtemplate(__FILE__, $data, 'search', 'navlist');

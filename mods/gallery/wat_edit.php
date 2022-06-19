@@ -15,10 +15,10 @@ if (!empty($cs_post['id']))  $wm_id = $cs_post['id'];
 $img_max['width'] = 200;
 $img_max['height'] = 200;
 $img_max['size'] = 76800;
-$img_filetypes = array('gif','png');
+$img_filetypes = ['gif','png'];
 
 $where = "categories_id = '" . $wm_id . "'";
-$cs_gallery_wm = cs_sql_select(__FILE__,'categories','categories_name, categories_picture',$where);
+$cs_gallery_wm = cs_sql_select(__FILE__, 'categories', 'categories_name, categories_picture', $where);
 
 if(isset($_POST['submit'])) {
   
@@ -54,7 +54,7 @@ if(isset($_POST['submit'])) {
   if(!empty($cs_gallery_wm['categories_name'])) {
     $where = "categories_name = '" . cs_sql_escape($cs_gallery_wm['categories_name']) . "' AND categories_mod = 'gallery-watermark' ";
     $where .= "AND categories_id != '" . $wm_id . "'";
-    $check_name = cs_sql_count(__FILE__,'categories',$where);
+    $check_name = cs_sql_count(__FILE__, 'categories', $where);
     if(!empty($check_name))
       $error .= $cs_lang['watermark_exists'] . cs_html_br(1);
   } else {
@@ -74,7 +74,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $select = 'categories_picture, categories_name'; 
   $where = "categories_id = '" . $wm_id . "'";
-  $cs_gallery_wm = cs_sql_select(__FILE__,'categories',$select,$where);
+  $cs_gallery_wm = cs_sql_select(__FILE__, 'categories', $select, $where);
 
   $data['wm']['current'] = cs_html_img('uploads/categories/' . $cs_gallery_wm['categories_picture']);
 
@@ -91,22 +91,22 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['wm']['id'] = $wm_id;
   
- echo cs_subtemplate(__FILE__,$data,'gallery','wat_edit');
+ echo cs_subtemplate(__FILE__, $data, 'gallery', 'wat_edit');
 }
 else {
 
   $wm_cells = array_keys($cs_gallery_wm);
   $wm_save = array_values($cs_gallery_wm);
-  cs_sql_update(__FILE__,'categories',$wm_cells,$wm_save,$wm_id);
+  cs_sql_update(__FILE__, 'categories', $wm_cells, $wm_save, $wm_id);
 
   if(!empty($files_gl['picture']['tmp_name'])) {
     $filename = 'watermark-' . $wm_id . '.' . $ext;
-   cs_upload('categories',$filename,$files_gl['picture']['tmp_name']);
+   cs_upload('categories', $filename, $files_gl['picture']['tmp_name']);
   
-    $cells = array('categories_picture');
-    $save = array($filename);      
-   cs_sql_update(__FILE__,'categories',$cells,$save,$wm_id);
+    $cells = ['categories_picture'];
+    $save = [$filename];      
+   cs_sql_update(__FILE__, 'categories', $cells, $save, $wm_id);
   }
   
- cs_redirect($cs_lang['changes_done'],'gallery','wat_manage');
+ cs_redirect($cs_lang['changes_done'], 'gallery', 'wat_manage');
 }

@@ -13,12 +13,12 @@ if (isset($_POST['submit'])) {
   
   cs_optionsave('comments', $save);
   
-  cs_redirect($cs_lang['success'],'options','roots');
+  cs_redirect($cs_lang['success'], 'options', 'roots');
 }
 
-$data = array();
+$data = [];
 
-$options = cs_sql_option(__FILE__,'comments');
+$options = cs_sql_option(__FILE__, 'comments');
 
 $checked = ' checked="checked"';
 $data['checked']['show_avatar'] = empty($options['show_avatar']) ? '' : $checked;
@@ -27,4 +27,4 @@ $data['checked']['show_avatar_no'] = !empty($options['show_avatar']) ? '' : $che
 $data['checked']['allow_unreg'] = empty($options['allow_unreg']) ? '' : $checked;
 $data['checked']['allow_unreg_no'] = !empty($options['allow_unreg']) ? '' : $checked;
 
-echo cs_subtemplate(__FILE__, $data, 'comments','options');
+echo cs_subtemplate(__FILE__, $data, 'comments', 'options');

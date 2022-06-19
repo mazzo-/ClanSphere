@@ -7,7 +7,7 @@ $cs_lang = cs_translate('users');
 include_once 'lang/' . $account['users_lang'] . '/countries.php';
 include_once 'mods/users/functions.php';
 
-$data = array();
+$data = [];
 
 $users_id = (int) $_REQUEST['id'];
 
@@ -25,7 +25,7 @@ if($account['access_clansphere'] >= $target_user['access_clansphere'] AND
 # if target user is granted more than the current user deny access
 if(empty($data['if']['allowed'])) {
   $data['users']['body'] = $cs_lang['access_denied'];
-  echo cs_subtemplate(__FILE__,$data,'users','edit');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'edit');
 }
 else {
   if(isset($_POST['sendpw'])) {
@@ -41,7 +41,7 @@ else {
     // DB update
     $users_cells = array_keys($aPass);
     $users_save = array_values($aPass);
-    cs_sql_update(__FILE__,'users', $users_cells, $users_save, $users_id);
+    cs_sql_update(__FILE__, 'users', $users_cells, $users_save, $users_id);
 
     // Send Mail
     $content = $cs_lang['mail_admin_sendpw_start'] . $_POST['data']['users_nick'];
@@ -50,7 +50,7 @@ else {
     $url = $cs_main['php_self']['website'] . $cs_main['php_self']['dirname'];
     $content .= sprintf($cs_lang['mail_admin_sendpw_url'], $url);
     $content .= $cs_lang['mail_admin_sendpw_end'] . $cs_main['def_title'];
-    cs_mail($_POST['data']['users_email'],$cs_main['def_title'] . ' ' . $cs_lang['pwd_new'],$content);
+    cs_mail($_POST['data']['users_email'], $cs_main['def_title'] . ' ' . $cs_lang['pwd_new'], $content);
 
     cs_redirect($cs_lang['mail_admin_sendpw_ok'], 'users');
   }
@@ -69,10 +69,10 @@ else {
     $old_user = cs_sql_select(__FILE__, 'users', 'users_email, users_nick', 'users_id = ' . $users_id);
 
     // Rework the hidden fields
-    $hidden = array();
+    $hidden = [];
     $hidden_count = isset($_POST['hidden']) ? count($_POST['hidden']) : 0;
 
-    $canhid = array(  'users_name',
+    $canhid = [  'users_name',
                       'users_surname',
                       'users_age',
                       'users_height',
@@ -84,19 +84,19 @@ else {
                       'users_email',
                       'users_url',
                       'users_phone',
-                      'users_mobile' );
+                      'users_mobile', ];
 
     for($hc = 0; $hc < $hidden_count; $hc++) {
-      if(in_array($_POST['hidden'][$hc],$canhid)) {
+      if(in_array($_POST['hidden'][$hc], $canhid)) {
         $hidden[] = $_POST['hidden'][$hc];
       }
     }
 
     // More data polish
     $cs_user['users_country'] = isset($cs_country[$cs_user['users_country']]) ? $cs_user['users_country'] : 'fam';
-    $cs_user['users_age'] = cs_datepost('age','date');
+    $cs_user['users_age'] = cs_datepost('age', 'date');
     $cs_user['access_id'] = (int)$_POST['access_id'];
-    $cs_user['users_icq'] = str_replace('-','',$cs_user['users_icq']);
+    $cs_user['users_icq'] = str_replace('-', '', $cs_user['users_icq']);
 
     // Error handling
     $error = 0;
@@ -170,13 +170,13 @@ else {
 
     // Set empty data when user is not found
     if(empty($cs_user['users_id'])) {
-      $cs_user = array('access_id' => 0, 'users_active' => '', 'users_age' => '', 'users_country' => '',
-                       'users_info' => '', 'users_lang' => '', 'users_sex' => '', 'users_signature' => '');
+      $cs_user = ['access_id' => 0, 'users_active' => '', 'users_age' => '', 'users_country' => '',
+                       'users_info' => '', 'users_lang' => '', 'users_sex' => '', 'users_signature' => '', ];
       $data['users'] = $cs_user;
     }
 
     // Edit addditional user information
-    $hidden = empty($cs_user['users_hidden']) ? array() : explode(',',$cs_user['users_hidden']);
+    $hidden = empty($cs_user['users_hidden']) ? [] : explode(',', $cs_user['users_hidden']);
     $hidden = array_flip($hidden);
     if(empty($cs_user['users_height'])) { $cs_user['users_height'] = ''; }
     if(empty($cs_user['users_icq'])) { $cs_user['users_icq'] = ''; }
@@ -184,11 +184,11 @@ else {
     $sel = 'selected="selected"';
     $checked = 'checked="checked"';
 
-    $data['form']['action'] = cs_url('users','edit');
-    $data['users']['users_age'] = cs_dateselect('age','date',$cs_user['users_age']);
+    $data['form']['action'] = cs_url('users', 'edit');
+    $data['users']['users_age'] = cs_dateselect('age', 'date', $cs_user['users_age']);
     $data['users']['male_check'] = $cs_user['users_sex'] == 'male' ? $sel : '';
     $data['users']['female_check'] = $cs_user['users_sex'] == 'female' ? $sel : '';
-    $data['users']['country_url'] = cs_html_img('symbols/countries/' . $cs_user['users_country'] . '.png',0,0,'id="country_1"');
+    $data['users']['country_url'] = cs_html_img('symbols/countries/' . $cs_user['users_country'] . '.png', 0, 0, 'id="country_1"');
 
     $data['hidden']['users_name'] = isset($hidden['users_name']) ? $checked : '';
     $data['hidden']['users_surname'] = isset($hidden['users_surname']) ? $checked : '';
@@ -213,7 +213,7 @@ else {
     $data['abcode2']['features'] = cs_abcode_features('users_signature');
     $data['abcode2']['smileys'] = cs_abcode_smileys('users_signature');
 
-    $data['country'] = array();
+    $data['country'] = [];
 
     $run = 0;
     foreach ($cs_country AS $short => $full) {
@@ -223,7 +223,7 @@ else {
       $run++;
     }
     
-    $old_nicks = cs_sql_select(__FILE__,'usernicks','users_nick','users_id = ' . $users_id,'users_changetime DESC',0,0);
+    $old_nicks = cs_sql_select(__FILE__, 'usernicks', 'users_nick', 'users_id = ' . $users_id, 'users_changetime DESC', 0, 0);
     $data['if']['old_nicks'] = false;
     if(!empty($old_nicks)) {
       $data['if']['old_nicks'] = true;
@@ -249,13 +249,13 @@ else {
     $data['users']['language_dropdown'] = cs_dropdown('data[users_lang]', 'data[users_lang]', $fixed_lang, $cs_user['users_lang']);
 
     // Output
-    echo cs_subtemplate(__FILE__,$data,'users','edit');
+    echo cs_subtemplate(__FILE__, $data, 'users', 'edit');
 
   } else {
 
-    $cs_user['users_hidden'] = implode(',',$hidden);
+    $cs_user['users_hidden'] = implode(',', $hidden);
 
-    $old_nick = cs_sql_select(__FILE__,'users','users_nick','users_id = ' . $users_id,0,0,1);
+    $old_nick = cs_sql_select(__FILE__, 'users', 'users_nick', 'users_id = ' . $users_id, 0, 0, 1);
     if($old_nick['users_nick'] != $cs_user['users_nick']) {
       change_nick($users_id, $old_nick['users_nick']);
     }

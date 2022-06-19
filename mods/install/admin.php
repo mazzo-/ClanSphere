@@ -16,14 +16,14 @@ if(isset($_POST['submit'])) {
   $create_['password'] = $_POST['password'];
   $create['users_email'] = $_POST['email'];
 
-  $nick2 = str_replace(' ','',$create['users_nick']);
+  $nick2 = str_replace(' ', '', $create['users_nick']);
   $nickchars = strlen($nick2);
   if($nickchars<4) {
     $error++;
     $errormsg .= $cs_lang['short_nick'] . cs_html_br(1);
   }
 
-  $pwd2 = str_replace(' ','',$create_['password']);
+  $pwd2 = str_replace(' ', '', $create_['password']);
   $pwdchars = strlen($pwd2);
   if($pwdchars<4) {
     $error++;
@@ -31,7 +31,7 @@ if(isset($_POST['submit'])) {
   }
 
   $pattern = "=^[_a-z0-9-]+(\.[_a-z0-9-]+)*@([0-9a-z](-?[0-9a-z])*\.)+[a-z]{2}([zmuvtg]|fo|me)?$=i";
-  if(!preg_match($pattern,$create['users_email'])) {
+  if(!preg_match($pattern, $create['users_email'])) {
     $error++;
     $errormsg .= $cs_lang['email_false'] . cs_html_br(1);
   }
@@ -47,13 +47,13 @@ else {
 
 if(!empty($error) OR !isset($_POST['submit'])) {
   
-  $data = array();
+  $data = [];
   
   if (isset($_POST['submit'])) $data['lang']['create_admin'] = $errormsg;
 
   $langs = cs_checkdirs('lang');
   $i = 0;
-  $data['langs'] = array();
+  $data['langs'] = [];
   
   foreach ($langs AS $lang) {
     $data['langs'][$i]['name'] = $lang['name'];
@@ -73,16 +73,16 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $dstime = date('I');
   $create['users_timezone'] = empty($dstime) ? date('Z') : date('Z') - 3600;
   $create['users_dstime'] = 0;
-  $access = cs_sql_select(__FILE__,'access','access_id','access_clansphere = 5');
-  create_user($access['access_id'],$create['users_nick'],$create_['password'],$create['users_lang'],$create['users_email'],'fam',$create['users_timezone'],$create['users_dstime']);
+  $access = cs_sql_select(__FILE__, 'access', 'access_id', 'access_clansphere = 5');
+  create_user($access['access_id'], $create['users_nick'], $create_['password'], $create['users_lang'], $create['users_email'], 'fam', $create['users_timezone'], $create['users_dstime']);
   
   // Options
-  $def_cell = array('options_value');
-  cs_sql_update(__FILE__,'options',$def_cell,array($create['users_timezone']),0,'options_mod = \'clansphere\' AND options_name = \'def_timezone\'');
-  cs_sql_update(__FILE__,'options',$def_cell,array($_POST['clanlabel']),0,'options_mod = \'clans\' AND options_name = \'label\'');
-  cs_sql_update(__FILE__,'options',$def_cell,array($_POST['squadlabel']),0,'options_mod = \'squads\' AND options_name = \'label\'');
-  cs_sql_update(__FILE__,'options',$def_cell,array($_POST['memberlabel']),0,'options_mod = \'members\' AND options_name = \'label\'');
+  $def_cell = ['options_value'];
+  cs_sql_update(__FILE__, 'options', $def_cell, [$create['users_timezone']], 0, 'options_mod = \'clansphere\' AND options_name = \'def_timezone\'');
+  cs_sql_update(__FILE__, 'options', $def_cell, [$_POST['clanlabel']], 0, 'options_mod = \'clans\' AND options_name = \'label\'');
+  cs_sql_update(__FILE__, 'options', $def_cell, [$_POST['squadlabel']], 0, 'options_mod = \'squads\' AND options_name = \'label\'');
+  cs_sql_update(__FILE__, 'options', $def_cell, [$_POST['memberlabel']], 0, 'options_mod = \'members\' AND options_name = \'label\'');
 
   
-  cs_redirect('','install','complete','lang='.$create['users_lang']);
+  cs_redirect('', 'install', 'complete', 'lang='.$create['users_lang']);
 }

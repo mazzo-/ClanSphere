@@ -8,7 +8,7 @@ if (isset($_POST['submit'])) {
   
   require_once 'mods/clansphere/func_options.php';
   
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -20,8 +20,8 @@ if (isset($_POST['submit'])) {
   
 } else {
   
-  $data = array();
-  $data['op'] = cs_sql_option(__FILE__,'categories');
+  $data = [];
+  $data['op'] = cs_sql_option(__FILE__, 'categories');
   $data['head']['getmsg'] = cs_getmsg();
 
   $modules = cs_checkdirs('mods');
@@ -29,10 +29,10 @@ if (isset($_POST['submit'])) {
   foreach($modules as $mods) {
     if(!empty($mods['categories'])) {
         $mods['dir'] == $data['op']['def_mod'] ? $sel = 1 : $sel = 0;
-        $data['mod'][$run]['sel'] = cs_html_option($mods['name'],$mods['dir'],$sel);
+        $data['mod'][$run]['sel'] = cs_html_option($mods['name'], $mods['dir'], $sel);
       $run++;
     }
   }
 
-  echo cs_subtemplate(__FILE__,$data,'categories','options');
+  echo cs_subtemplate(__FILE__, $data, 'categories', 'options');
 }

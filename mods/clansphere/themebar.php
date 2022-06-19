@@ -6,8 +6,8 @@ function cs_themebar($source, $string, $mod, $action) {
 
   global $cs_main, $account; 
   // themebar has some side-effects, so it is forbidden in a few mod/action combinations
-  $forbidden = array('abcode/sourcebox', 'errors/500', 'pictures/select', 'clansphere/debug', 
-                     'clansphere/navmeta', 'clansphere/themebar', 'clansphere/themebar_light');
+  $forbidden = ['abcode/sourcebox', 'errors/500', 'pictures/select', 'clansphere/debug', 
+                     'clansphere/navmeta', 'clansphere/themebar', 'clansphere/themebar_light', ];
 
   if(!in_array($mod . '/' . $action, $forbidden)) {
 
@@ -15,7 +15,7 @@ function cs_themebar($source, $string, $mod, $action) {
     $xsrf = $cs_main['xsrf_protection'];
     $cs_main['xsrf_protection'] = false;
 
-    $data = array();
+    $data = [];
     $data['data']['content'] = $string;
     $data['raw']['target'] = 'themes/' . $cs_main['def_theme'] . '/' . $mod . '/' . $action . '.tpl';
     $data['raw']['langfile'] = 'lang/' . $account['users_lang'] . '/' . $mod . '.php';

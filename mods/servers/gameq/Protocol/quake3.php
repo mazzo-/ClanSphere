@@ -43,8 +43,8 @@ class GameQ_Protocol_quake3 extends GameQ_Protocol
         while ($this->p->getLength()) {
             $this->r->add(
                 $this->p->readString('\\'),
-                $this->p->readStringMulti(array('\\', "\x0a"), $delimfound)
-                );
+                $this->p->readStringMulti(['\\', "\x0a"], $delimfound)
+            );
                 
             if ($delimfound === "\x0a") {
                 break;
@@ -65,7 +65,7 @@ class GameQ_Protocol_quake3 extends GameQ_Protocol
         
         while ($this->p->getLength()) {
             $this->r->addPlayer('frags', $this->p->readString("\x20"));
-            $this->r->addPlayer('ping',  $this->p->readString("\x20"));
+            $this->r->addPlayer('ping', $this->p->readString("\x20"));
             
             // Team, currently only used in nexuiz
             $del = $this->p->lookAhead();

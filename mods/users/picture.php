@@ -4,11 +4,11 @@
 
 $cs_lang = cs_translate('users');
 
-$op_users = cs_sql_option(__FILE__,'users');
-$img_filetypes = array('gif','jpg','png');
+$op_users = cs_sql_option(__FILE__, 'users');
+$img_filetypes = ['gif','jpg','png'];
 if (empty($_POST)) cs_ajaxfiles_clear();
 
-$user = cs_sql_select(__FILE__,'users','users_picture',"users_id = '" . $account['users_id'] . "'");
+$user = cs_sql_select(__FILE__, 'users', 'users_picture', "users_id = '" . $account['users_id'] . "'");
 $userpic = $user['users_picture'];
 
 $del = 0;
@@ -19,11 +19,11 @@ if(isset($_POST['delete']) AND $_POST['delete'] == TRUE AND !empty($userpic) && 
   
   $del = 1;
   cs_unlink('users', $userpic);
-  $cells = array('users_picture');
-  $content = empty($op_users['def_picture']) ? array('') : array('nopicture.jpg');
-  cs_sql_update(__FILE__,'users',$cells,$content,$account['users_id']);
+  $cells = ['users_picture'];
+  $content = empty($op_users['def_picture']) ? [''] : ['nopicture.jpg'];
+  cs_sql_update(__FILE__, 'users', $cells, $content, $account['users_id']);
   
-  cs_redirect($cs_lang['success'],'users','picture');
+  cs_redirect($cs_lang['success'], 'users', 'picture');
 
 }
 elseif(!empty($files['picture']['tmp_name'])) {
@@ -61,11 +61,11 @@ elseif(!empty($files['picture']['tmp_name'])) {
       if($userpic != $filename && !empty($userpic) && $userpic != 'nopicture.jpg') {
         cs_unlink('users', $userpic);
       }
-      $cells = array('users_picture');
-      $content = array($filename);
-      cs_sql_update(__FILE__,'users',$cells,$content,$account['users_id']);
+      $cells = ['users_picture'];
+      $content = [$filename];
+      cs_sql_update(__FILE__, 'users', $cells, $content, $account['users_id']);
   
-      cs_redirect($cs_lang['success'],'users','picture');
+      cs_redirect($cs_lang['success'], 'users', 'picture');
     }
     else {
         $error .= $cs_lang['up_error'];
@@ -87,7 +87,7 @@ if(!empty($error) OR empty($files['picture']['tmp_name']) AND empty($del)) {
     $data['if']['extended'] = TRUE;
     $place = 'uploads/users/' . $userpic;
     $size = getimagesize($cs_main['def_path'] . '/' . $place);
-    $data['users']['current_pic'] = cs_html_img($place,$size[1],$size[0]);
+    $data['users']['current_pic'] = cs_html_img($place, $size[1], $size[0]);
   }
 
   $matches[1] = $cs_lang['pic_infos'];
@@ -101,5 +101,5 @@ if(!empty($error) OR empty($files['picture']['tmp_name']) AND empty($del)) {
   $matches[2] .= $cs_lang['filetypes'] . $return_types;
   $data['users']['picup_clip'] = cs_abcode_clip($matches);
 
-  echo cs_subtemplate(__FILE__,$data,'users','picture');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'picture');
 }

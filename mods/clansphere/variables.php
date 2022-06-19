@@ -42,4 +42,4 @@ foreach($account AS $key => $value) {
   $account_run++;
 }
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','variables');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'variables');

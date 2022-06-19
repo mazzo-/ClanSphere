@@ -4,16 +4,16 @@
 
 $cs_lang = cs_translate('users');
 
-$op_users = cs_sql_option(__FILE__,'users');
+$op_users = cs_sql_option(__FILE__, 'users');
 $cs_contact = cs_sql_option(__FILE__, 'contact');
 
 require_once('mods/users/functions.php');
 require_once('mods/captcha/functions.php');
 
-$data = array();
+$data = [];
 
 if(empty($op_users['register'])) {
-  echo cs_subtemplate(__FILE__,$data,'users','register_disabled');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'register_disabled');
 } else {
   $captcha = extension_loaded('gd') ? 1 : 0;
   $languages = cs_checkdirs('lang');
@@ -30,14 +30,14 @@ if(empty($op_users['register'])) {
     $userlang = $register['lang'];
     $register['lang'] = isset($languages[$userlang]) ? $register['lang'] : $cs_main['def_lang'];
 
-    $nick2 = str_replace(' ','',$register['nick']);
+    $nick2 = str_replace(' ', '', $register['nick']);
     $nickchars = strlen($nick2);
     if($nickchars < $op_users['min_letters']) {
       $error++;
-      $errormsg .= sprintf($cs_lang['short_nick'],$op_users['min_letters']) . cs_html_br(1);
+      $errormsg .= sprintf($cs_lang['short_nick'], $op_users['min_letters']) . cs_html_br(1);
     }
 
-    $search_nick = cs_sql_count(__FILE__,'users',"users_nick = '" . cs_sql_escape($register['nick']) . "'");
+    $search_nick = cs_sql_count(__FILE__, 'users', "users_nick = '" . cs_sql_escape($register['nick']) . "'");
     if(!empty($search_nick)) {
       $error++;
       $errormsg .= $cs_lang['nick_exists'] . cs_html_br(1);
@@ -49,21 +49,21 @@ if(empty($op_users['register'])) {
       $errormsg .= $cs_lang['chars_in_nick'] . cs_html_br(1);
     }
 
-    $pwd2 = str_replace(' ','',$register['password']);
+    $pwd2 = str_replace(' ', '', $register['password']);
     $pwdchars = strlen($pwd2);
     if($pwdchars<4) {
       $error++;
       $errormsg .= $cs_lang['short_pwd'] . cs_html_br(1);
     }
 
-    $search_email = cs_sql_count(__FILE__,'users',"users_email = '" . cs_sql_escape($register['email']) . "'");
+    $search_email = cs_sql_count(__FILE__, 'users', "users_email = '" . cs_sql_escape($register['email']) . "'");
     if(!empty($search_email)) {
       $error++;
       $errormsg .= $cs_lang['email_exists'] . cs_html_br(1);
     }
 
     $pattern = "=^[_a-z0-9-]+(\.[_a-z0-9-]+)*@([0-9a-z](-?[0-9a-z])*\.)+[a-z]{2}([zmuvtg]|fo|me)?$=i";
-    if(!preg_match($pattern,$register['email'])) {
+    if(!preg_match($pattern, $register['email'])) {
       $error++;
       $errormsg .= $cs_lang['email_false'] . cs_html_br(1);
     }
@@ -74,7 +74,7 @@ if(empty($op_users['register'])) {
       $errormsg .= $cs_lang['email_false'] . cs_html_br(1);
     }
 
-  $flood = cs_sql_select(__FILE__,'users','users_register',0,'users_register DESC');
+  $flood = cs_sql_select(__FILE__, 'users', 'users_register', 0, 'users_register DESC');
   $maxtime = $flood['users_register'] + $cs_main['def_flood'];
   if($maxtime > cs_time()) {
     $error++;
@@ -113,10 +113,10 @@ if(empty($op_users['register'])) {
   if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['head']['action'] = $cs_lang['register'];
-  echo cs_subtemplate(__FILE__,$data,'users','head');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'head');
 
-  $data = array();
-  $data['form']['register'] = cs_url('users','register');
+  $data = [];
+  $data['form']['register'] = cs_url('users', 'register');
   $data['register']['nick'] = $register['nick'];
   $data['register']['password'] = $register['password'];
   $data['register']['email'] = $register['email'];
@@ -127,7 +127,7 @@ if(empty($op_users['register'])) {
 
   foreach($languages as $lang) {
     $lang['name'] == $register['lang'] ? $sel = 1 : $sel = 0;
-  $data['register']['languages'] .= cs_html_option($lang['name'],$lang['name'],$sel);
+  $data['register']['languages'] .= cs_html_option($lang['name'], $lang['name'], $sel);
   }
 
   $data['if']['captcha'] = 0;
@@ -145,10 +145,10 @@ if(empty($op_users['register'])) {
     else {
       $data['if']['reg_mail'] = 0;
     }
-      echo cs_subtemplate(__FILE__,$data,'users','register_code');
+      echo cs_subtemplate(__FILE__, $data, 'users', 'register_code');
     }
     else {
-      echo cs_subtemplate(__FILE__,$data,'users','register_mail');
+      echo cs_subtemplate(__FILE__, $data, 'users', 'register_mail');
     }
   }
   else {
@@ -157,7 +157,7 @@ if(empty($op_users['register'])) {
     $active = empty($op_users['def_register']) ? $register['users_active'] = 1 : $register['users_active'] = 0;
     $def_timezone = empty($cs_main['def_timezone']) ? 0 : $cs_main['def_timezone'];
     $def_dstime = empty($cs_main['def_dstime']) ? 0 : $cs_main['def_dstime'];
-    create_user(2,$register['nick'],$register['password'],$register['lang'],$register['email'],'fam',$def_timezone,$def_dstime,$register['newsletter'],$active,20,$register['users_key']);
+    create_user(2, $register['nick'], $register['password'], $register['lang'], $register['email'], 'fam', $def_timezone, $def_dstime, $register['newsletter'], $active, 20, $register['users_key']);
 
     $ip = cs_getip();
     if(!empty($register['send_mail']) OR !empty($op_users['def_register']) OR $op_users['def_register'] == '2') {
@@ -169,13 +169,13 @@ if(empty($op_users['register'])) {
         $content .= $cs_main['php_self']['website'] . str_replace('&amp;', '&', cs_url('users', 'activate', 'key=' . $register['users_key'] . '&email=' . $register['email']));
       }
       $content .= $cs_lang['mail_reg_ask'] . $cs_contact['def_mail'] . $cs_lang['mail_reg_end'];
-      cs_mail($register['email'],$cs_lang['mail_reg_head'],$content);
+      cs_mail($register['email'], $cs_lang['mail_reg_head'], $content);
     }
 
     $data['lang']['head'] = $cs_lang['register'];
-    $data['link']['continue'] = cs_url('users','login');
+    $data['link']['continue'] = cs_url('users', 'login');
 
     $data['lang']['success'] = !empty($op_users['def_register']) ? $cs_lang['done2'] : $cs_lang['done'];
-    echo cs_subtemplate(__FILE__,$data,'users','done');
+    echo cs_subtemplate(__FILE__, $data, 'users', 'done');
   }
 }

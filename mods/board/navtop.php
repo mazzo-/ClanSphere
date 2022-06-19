@@ -4,8 +4,8 @@
 
 require_once 'mods/board/functions.php';
 
-$cs_option = cs_sql_option(__FILE__,'board');
-$data = array();
+$cs_option = cs_sql_option(__FILE__, 'board');
+$data = [];
 
 $toplist = toplist_comments(0, $cs_option['max_navtop']);
 
@@ -19,4 +19,4 @@ if(!empty($toplist)) {
   }
 }
   
-echo cs_subtemplate(__FILE__,$data, 'board', 'navtop');
+echo cs_subtemplate(__FILE__, $data, 'board', 'navtop');

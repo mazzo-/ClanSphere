@@ -12,8 +12,8 @@ function cs_kisort($k1, $k2) {
 function cs_phpconfigcheck ($name, $exception = 0) {
 
   $value = strtolower(ini_get($name));
-  $array_false = array('0', 'off', 'false');
-  $array_true = array('1', 'on', 'true');
+  $array_false = ['0', 'off', 'false'];
+  $array_true = ['1', 'on', 'true'];
   if(empty($value) OR in_array($value, $array_false))
     return false;
   elseif(!empty($exception) OR in_array($value, $array_true))
@@ -34,9 +34,9 @@ $trans_sid = cs_phpconfigcheck('session.use_trans_sid');
 $basedir = cs_phpconfigcheck('open_basedir', true);
 $url_fopen = cs_phpconfigcheck('allow_url_fopen');
 $url_include = cs_phpconfigcheck('allow_url_include');
-$limit['post_max_size'] = str_replace('M',' MiB', ini_get('post_max_size'));
-$limit['upload_max_filesize'] = str_replace('M',' MiB', ini_get('upload_max_filesize'));
-$limit['memory_limit'] = str_replace('M',' MiB', ini_get('memory_limit'));
+$limit['post_max_size'] = str_replace('M', ' MiB', ini_get('post_max_size'));
+$limit['upload_max_filesize'] = str_replace('M', ' MiB', ini_get('upload_max_filesize'));
+$limit['memory_limit'] = str_replace('M', ' MiB', ini_get('memory_limit'));
 
 $data['software']['os'] = @php_uname('s') . ' ' . @php_uname('r') . ' ' . @php_uname('v');
 $data['software']['host'] = @php_uname('n');
@@ -44,7 +44,7 @@ $data['software']['host'] = @php_uname('n');
 if(function_exists('apache_get_version'))
   $data['software']['webserver'] = apache_get_version();
 if(empty($data['software']['webserver']))
-  $data['software']['webserver'] = isset($_SERVER['SERVER_SOFTWARE']) ? str_replace('/',' ',$_SERVER['SERVER_SOFTWARE']) : '';
+  $data['software']['webserver'] = isset($_SERVER['SERVER_SOFTWARE']) ? str_replace('/', ' ', $_SERVER['SERVER_SOFTWARE']) : '';
 
 $data['software']['php_mode'] = php_sapi_name();
 $data['software']['php_mod'] = phpversion();
@@ -120,8 +120,8 @@ uksort($gle, "cs_kisort");
 $gle = array_flip($gle);
 
 # parse php extensions into a loop compatible array
-$data['php_ext'] = array();
+$data['php_ext'] = [];
 foreach($gle AS $num => $ext)
   $data['php_ext'][$num]['name'] = $ext;
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','software');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'software');

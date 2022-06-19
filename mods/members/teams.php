@@ -5,11 +5,11 @@
 $clan_id = 1;
 
 $cs_lang = cs_translate('members');
-$op_members = cs_sql_option(__FILE__,'members');
+$op_members = cs_sql_option(__FILE__, 'members');
 
 $squads_order = 'squads_order, squads_name';
 $where = 'squads_own = \'1\' AND squads_hidden = 0';
-$cs_squads = cs_sql_select(__FILE__,'squads','*',$where,$squads_order,0,0);
+$cs_squads = cs_sql_select(__FILE__, 'squads', '*', $where, $squads_order, 0, 0);
 $squads_loop = count($cs_squads);
 
 $data['lang']['mod_name'] = $cs_lang[$op_members['label']];
@@ -26,7 +26,7 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   $where = "mem.squads_id = '" . $cs_squads[$sq_run]['squads_id'] . "'";
   $order = 'mem.members_order ASC, usr.users_nick ASC';
   
-  $cs_members = cs_sql_select(__FILE__,$from,$select,$where,$order,0,0);
+  $cs_members = cs_sql_select(__FILE__, $from, $select, $where, $order, 0, 0);
   $members_loop = count($cs_members);
 
 
@@ -36,12 +36,12 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   else {
     $place = 'uploads/squads/' . $cs_squads[$sq_run]['squads_picture'];
     $size = getimagesize($cs_main['def_path'] . '/' . $place);
-    $data['members'][$sq_run]['pic'] = cs_html_img($place,$size[1],$size[0]);
+    $data['members'][$sq_run]['pic'] = cs_html_img($place, $size[1], $size[0]);
   }
   
   $id = 'id=' . $cs_squads[$sq_run]['squads_id'];
   $squads_name = cs_secure($cs_squads[$sq_run]['squads_name']);
-  $data['members'][$sq_run]['name'] = cs_link($squads_name,'squads','view',$id);
+  $data['members'][$sq_run]['name'] = cs_link($squads_name, 'squads', 'view', $id);
 
   if(!empty($cs_squads[$sq_run]['games_id'])) {    
     if(file_exists('uploads/games/' . $cs_squads[$sq_run]['games_id'] . '.gif')) {
@@ -50,9 +50,9 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
       $data['members'][$sq_run]['icon'] = '';
     }
     $where = "games_id = '" . $cs_squads[$sq_run]['games_id'] . "'";
-    $cs_game = cs_sql_select(__FILE__,'games','games_name, games_id',$where);
+    $cs_game = cs_sql_select(__FILE__, 'games', 'games_name, games_id', $where);
     $id = 'id=' . $cs_game['games_id'];
-    $data['members'][$sq_run]['game'] = ' ' . cs_link($cs_game['games_name'],'games','view',$id);
+    $data['members'][$sq_run]['game'] = ' ' . cs_link($cs_game['games_name'], 'games', 'view', $id);
     $data['members'][$sq_run]['if']['game'] = TRUE;
   } else {
     $data['members'][$sq_run]['if']['game'] = FALSE;
@@ -82,4 +82,4 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   }  
 }
 
-echo cs_subtemplate(__FILE__,$data,'members','teams');
+echo cs_subtemplate(__FILE__, $data, 'members', 'teams');

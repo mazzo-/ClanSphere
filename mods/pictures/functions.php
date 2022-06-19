@@ -7,7 +7,7 @@ function cs_pictures_select($mod, $fid = 0) {
   settype($fid, 'integer');
   $cs_lang = cs_translate('pictures');
   
-  $data = array();
+  $data = [];
   
   if (empty($fid))
     $data['if']['already'] = false;
@@ -21,7 +21,7 @@ function cs_pictures_select($mod, $fid = 0) {
       $data['picture']['file'] = $picture['pictures_file'];
     }
   }
-  $string = cs_subtemplate(__FILE__,$data,'pictures','select');
+  $string = cs_subtemplate(__FILE__, $data, 'pictures', 'select');
   
   return $string;
 }
@@ -36,7 +36,7 @@ function cs_pictures_delete ($var, $mod = 0) {
     $file = $pic['pictures_file'];
     $pictures_id = $pic['pictures_id'];
   } else {
-    $pictures_id = (int) substr($var,8);
+    $pictures_id = (int) substr($var, 8);
     $file = $var;
   }
   
@@ -53,11 +53,11 @@ function cs_pictures_upload($file, $mod, $fid, $ajaxclean = 1) {
   if (empty($file['tmp_name'])) return true;
   
   settype($fid, 'integer');
-  $types_allowed = array('image/jpeg','image/png','image/pjpeg','image/x-png');
+  $types_allowed = ['image/jpeg','image/png','image/pjpeg','image/x-png'];
   
   if (!in_array($file['type'], $types_allowed)) return false;
   
-  $exts = array('image/jpeg' => 'jpg', 'image/png' => 'png', 'image/pjpeg' => 'jpg' ,'image/x-png' => 'png');
+  $exts = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/pjpeg' => 'jpg','image/x-png' => 'png'];
   $ext = $exts[$file['type']];
   
   $where = "pictures_fid = '" . $fid . "' AND pictures_mod = '" . $mod . "'";
@@ -65,7 +65,7 @@ function cs_pictures_upload($file, $mod, $fid, $ajaxclean = 1) {
   $pictures_id = $already['pictures_id'];
   
   if (empty($already)) {
-    $vars = array();
+    $vars = [];
     $vars['pictures_mod'] = $mod;
     $vars['pictures_fid'] = $fid;
     
@@ -79,8 +79,8 @@ function cs_pictures_upload($file, $mod, $fid, $ajaxclean = 1) {
     return false;
   }
   
-  $cells = array('pictures_file');
-  $content = array('picture-' . $pictures_id . '.' . $ext);
+  $cells = ['pictures_file'];
+  $content = ['picture-' . $pictures_id . '.' . $ext];
   cs_sql_update(__FILE__, 'pictures', $cells, $content, $pictures_id);
   
   return true;

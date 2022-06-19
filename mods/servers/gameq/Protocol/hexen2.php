@@ -38,9 +38,9 @@ class GameQ_Protocol_hexen2 extends GameQ_Protocol
         // Header?
         $this->p->skip(5);
 
-        $this->r->add('address',     $this->p->readString());
-        $this->r->add('servername',  $this->p->readString());
-        $this->r->add('map',         $this->p->readString());
+        $this->r->add('address', $this->p->readString());
+        $this->r->add('servername', $this->p->readString());
+        $this->r->add('map', $this->p->readString());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
         $this->p->skip(); // unknown

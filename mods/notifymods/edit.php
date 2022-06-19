@@ -3,15 +3,15 @@
 // $Id$
 
 $cs_lang = cs_translate('notifymods');
-$data = array(); 
+$data = []; 
 
 if (isset($_POST['submit'])) {
 
-  $cs_bm['notifymods_gbook'] = isset($_POST['notifymods_gbook']) ? $_POST['notifymods_gbook'] : 0;
-  $cs_bm['notifymods_joinus'] = isset($_POST['notifymods_joinus']) ? $_POST['notifymods_joinus'] : 0;
-  $cs_bm['notifymods_fightus'] = isset($_POST['notifymods_fightus']) ? $_POST['notifymods_fightus'] : 0;
-  $cs_bm['notifymods_files'] = isset($_POST['notifymods_files']) ? $_POST['notifymods_files'] : 0;
-  $cs_bm['notifymods_board'] = isset($_POST['notifymods_board']) ? $_POST['notifymods_board'] : 0;
+  $cs_bm['notifymods_gbook'] = $_POST['notifymods_gbook'] ?? 0;
+  $cs_bm['notifymods_joinus'] = $_POST['notifymods_joinus'] ?? 0;
+  $cs_bm['notifymods_fightus'] = $_POST['notifymods_fightus'] ?? 0;
+  $cs_bm['notifymods_files'] = $_POST['notifymods_files'] ?? 0;
+  $cs_bm['notifymods_board'] = $_POST['notifymods_board'] ?? 0;
   
   $error = 0;
   $errormsg = '';
@@ -24,7 +24,7 @@ else {
   $tables = 'notifymods ntm INNER JOIN {pre}_users usr ON usr.users_id = ntm.notifymods_user';
   $cells  = 'ntm.notifymods_id, ntm.notifymods_user, usr.users_nick AS users_nick, ' .
             'ntm.notifymods_gbook, ntm.notifymods_joinus, ntm.notifymods_fightus, ntm.notifymods_files, ntm.notifymods_board';
-  $cs_bm = cs_sql_select(__FILE__,$tables,$cells,'notifymods_id = ' . $notifymods_id);
+  $cs_bm = cs_sql_select(__FILE__, $tables, $cells, 'notifymods_id = ' . $notifymods_id);
 }
 
 if (!isset($_POST['submit']) AND empty($error)) {
@@ -46,8 +46,8 @@ if (!empty($error) OR !isset($_POST['submit'])) {
 else {
   $notifymods_cells = array_keys($cs_bm);
   $notifymods_save = array_values($cs_bm);
-  cs_sql_update(__FILE__,'notifymods',$notifymods_cells,$notifymods_save,$_POST['id']);
-  cs_redirect($cs_lang['changes_done'],'notifymods');
+  cs_sql_update(__FILE__, 'notifymods', $notifymods_cells, $notifymods_save, $_POST['id']);
+  cs_redirect($cs_lang['changes_done'], 'notifymods');
 } 
 
-echo cs_subtemplate(__FILE__,$data,'notifymods','edit');
+echo cs_subtemplate(__FILE__, $data, 'notifymods', 'edit');

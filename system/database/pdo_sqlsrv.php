@@ -35,16 +35,16 @@ function cs_sql_connect($cs_db, $test = 0) {
 
 function cs_sql_replace($replace) {
 
-  $replace = preg_replace("={optimize}(.*?[;])=si",'',$replace);
-  $replace = str_replace('{serial}','int IDENTITY(1,1)',$replace);
-  $replace = str_replace('{engine}','',$replace);
-  return preg_replace("=int\((.*?)\)=si",'int',$replace);
+  $replace = preg_replace("={optimize}(.*?[;])=si", '', $replace);
+  $replace = str_replace('{serial}', 'int IDENTITY(1,1)', $replace);
+  $replace = str_replace('{engine}', '', $replace);
+  return preg_replace("=int\((.*?)\)=si", 'int', $replace);
 }
 
 function cs_sql_version($cs_file) {
 
   global $cs_db;
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $client = $cs_db['con']->getAttribute(PDO::ATTR_CLIENT_VERSION);
 
   $sql_infos['type'] = 'Microsoft SQL Server (pdo_sqlsrv)';

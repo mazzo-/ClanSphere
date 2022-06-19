@@ -62,7 +62,7 @@ if (!empty($_POST['submit'])) {
 
     $infocontent .= '$mod_info[\'name\'] = $cs_lang[\'mod\']'.";\r\n";
     $infocontent .= '$mod_info[\'version\'] = \''.$_POST['modversion']."';\r\n";
-    $infocontent .= '$mod_info[\'released\'] = \''.cs_datepost('release','date')."';\r\n";
+    $infocontent .= '$mod_info[\'released\'] = \''.cs_datepost('release', 'date')."';\r\n";
     $infocontent .= '$mod_info[\'creator\'] = \''.$_POST['creator']."';\r\n";
     $infocontent .= '$mod_info[\'team\'] = \''.$_POST['team']."';\r\n";
     $infocontent .= '$mod_info[\'url\'] = \''.$_POST['homepage']."';\r\n";
@@ -77,9 +77,9 @@ if (!empty($_POST['submit'])) {
 
     $moddir = $cs_main['def_path'].'/mods/'.$_POST['moddir'];
 
-    if (!mkdir($moddir,0777))
+    if (!mkdir($moddir, 0777))
       $error .= cs_html_br(1) . $cs_lang['moddir_create_failed'];
-    elseif (!$infofile = fopen($moddir.'/info.php','w'))
+    elseif (!$infofile = fopen($moddir.'/info.php', 'w'))
       $error .= cs_html_br(1) . $cs_lang['modinfo_create_failed'];
     elseif (!fwrite($infofile, $infocontent))
       $error .= cs_html_br(1) . $cs_lang['modinfo_write_failed'];
@@ -97,7 +97,7 @@ if (!empty($_POST['submit'])) {
 
     $langinfocontent .= '?>';
 
-    if (!$langinfofile = fopen($cs_main['def_path'].'/lang/'.$account['users_lang'].'/'.$_POST['moddir'].'.php','w'))
+    if (!$langinfofile = fopen($cs_main['def_path'].'/lang/'.$account['users_lang'].'/'.$_POST['moddir'].'.php', 'w'))
       $error .= cs_html_br(1) . $cs_lang['modinfolang_create_failed'];
     elseif (!fwrite($langinfofile, $langinfocontent))
       $error .= cs_html_br(1) . $cs_lang['modinfolang_write_failed']; 
@@ -107,7 +107,7 @@ if (!empty($_POST['submit'])) {
     // SQL
     $query = 'ALTER TABLE {pre}_access ADD access_'.cs_sql_escape($_POST['moddir']).' int(2) NOT NULL default \'0\';';
     $query = cs_sql_replace($query);
-    if (!cs_sql_query(__FILE__,$query)) {
+    if (!cs_sql_query(__FILE__, $query)) {
       $error .= cs_html_br(1) . $cs_lang['sqlaccess_failed'];
     }
   }
@@ -139,7 +139,7 @@ if (empty($_POST['submit']) || !empty($error)) {
   $data['value']['moddir'] = empty($_POST['moddir']) ? '' : $_POST['moddir'];
   $data['value']['modversion'] = empty($_POST['modversion']) ? '' : $_POST['modversion'];
   $data['value']['description'] = empty($_POST['description']) ? '' : $_POST['description'];
-  $var = cs_datepost('release','date');
+  $var = cs_datepost('release', 'date');
   $data['value']['dateselect'] = empty($var) ? cs_datereal('Y-m-d') : $var;
   $data['value']['creator'] = empty($_POST['creator']) ? '' : $_POST['creator'];
   $data['value']['team'] = empty($_POST['team']) ? '' : $_POST['team'];
@@ -158,13 +158,13 @@ if (empty($_POST['submit']) || !empty($error)) {
   $data['selected']['protected_no'] = empty($_POST['protected']) ? $sel : '';
   $data['selected']['protected_yes'] = empty($_POST['protected']) ? '' : $sel;
 
-  $data['form']['url'] = cs_url('modules','create');
-  $data['input']['dateselect'] = cs_dateselect('release','date',$data['value']['dateselect']);
+  $data['form']['url'] = cs_url('modules', 'create');
+  $data['input']['dateselect'] = cs_dateselect('release', 'date', $data['value']['dateselect']);
 
-  echo cs_subtemplate(__FILE__,$data,'modules','create');
+  echo cs_subtemplate(__FILE__, $data, 'modules', 'create');
 }
 else {
   cs_cache_clear();
 
-  cs_redirect($cs_lang['create_done'],'modules','roots');
+  cs_redirect($cs_lang['create_done'], 'modules', 'roots');
 }

@@ -50,15 +50,15 @@ class GameQ_Protocol_cry extends GameQ_Protocol
         $this->p->read(15);
 
         $this->r->add('hostname', $this->p->readString());
-        $this->r->add('mod',      $this->p->readString());
+        $this->r->add('mod', $this->p->readString());
         $this->r->add('gametype', $this->p->readString());
-        $this->r->add('map',      $this->p->readString());
+        $this->r->add('map', $this->p->readString());
 
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('password',    $this->p->readInt8());
+        $this->r->add('password', $this->p->readInt8());
         $this->p->read(2);
-        $this->r->add('punkbuster',  $this->p->readInt8());
+        $this->r->add('punkbuster', $this->p->readInt8());
     }
     
 
@@ -68,12 +68,12 @@ class GameQ_Protocol_cry extends GameQ_Protocol
         $this->p->skip(2);
 
         while ($this->p->getLength()) {
-            $this->r->addPlayer('name',    $this->p->readString());
-            $this->r->addPlayer('team',    $this->p->readString());
+            $this->r->addPlayer('name', $this->p->readString());
+            $this->r->addPlayer('team', $this->p->readString());
             $this->p->skip(1);
-            $this->r->addPlayer('score',   $this->p->readInt8());
+            $this->r->addPlayer('score', $this->p->readInt8());
             $this->p->skip(3);
-            $this->r->addPlayer('ping',    $this->p->readInt8());
+            $this->r->addPlayer('ping', $this->p->readInt8());
             $this->p->skip(7);
         }
     }

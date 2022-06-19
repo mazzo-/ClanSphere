@@ -6,7 +6,7 @@ $cs_lang = cs_translate('news');
 global $cs_http;
 require_once 'mods/categories/functions.php';
 $news_newtime = 0;
-$op_news = cs_sql_option(__FILE__,'news');
+$op_news = cs_sql_option(__FILE__, 'news');
 
 $data['lang'] = $cs_lang;
 $data['head']['mod'] = $cs_lang['mod_name'];
@@ -34,7 +34,7 @@ if (!empty($_GET['warid'])) {
   
   $wars_id = (int) $_GET['warid'];
   
-  $lang = cs_substr($account['users_lang'],0,2);
+  $lang = cs_substr($account['users_lang'], 0, 2);
   if (!file_exists('uploads/wars/news_' . $lang . '.txt')) $lang = 'de';
   
   $text = file_get_contents('uploads/wars/news_' . $lang . '.txt');
@@ -48,14 +48,14 @@ if (!empty($_GET['warid'])) {
   $cells .= 'w.wars_id AS wars_id, c.clans_id AS clans_id'; 
   $war = cs_sql_select(__FILE__, $tables, $cells, "wars_id = '" . $wars_id . "'");
   
-  $replace = array();
+  $replace = [];
   $replace['{SQUADNAME}'] = $war['squads_name'];
-  $replace['{SQUADURL}'] = cs_url('squads','view','id=' . $war['squads_id']);
+  $replace['{SQUADURL}'] = cs_url('squads', 'view', 'id=' . $war['squads_id']);
   $replace['{OPPONENTNAME}'] = $war['clans_name'];
   $replace['{OPPONENTURL}'] = cs_url('clans', 'view', 'id=' . $war['clans_id']);
   $replace['{SCORE_1}'] = $war['wars_score1'];
   $replace['{SCORE_2}'] = $war['wars_score2'];
-  $replace['{MATCH_URL}'] = cs_url('wars','view','id=' . $war['wars_id']);
+  $replace['{MATCH_URL}'] = cs_url('wars', 'view', 'id=' . $war['wars_id']);
   $replace['{CAT_NAME}'] = $war['categories_name'];
   
   $search = array_keys($replace);
@@ -66,7 +66,7 @@ if (!empty($_GET['warid'])) {
   $cs_news['news_text'] = $text;
 }
 
-$abcode = explode(",",$op_news['abcode']);
+$abcode = explode(",", $op_news['abcode']);
 $data['op']['features'] = empty($abcode[0]) ? $cs_lang['no'] : $cs_lang['yes'];
 $data['op']['smileys'] = empty($abcode[1]) ? $cs_lang['no'] : $cs_lang['yes'];
 $data['op']['clip'] = empty($abcode[2]) ? $cs_lang['no'] : $cs_lang['yes'];
@@ -75,21 +75,21 @@ $data['op']['php'] = empty($abcode[4]) ? $cs_lang['no'] : $cs_lang['yes'];
 
 if (isset($_POST['submit']) or isset($_POST['preview'])) {
   $cs_news['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('news', $_POST['categories_name']);
-  $cs_news['news_close'] = isset($_POST['news_close']) ? $_POST['news_close'] : 0;
-  $cs_news['news_public'] = isset($_POST['news_public']) ? $_POST['news_public'] : 0;
-  $cs_news['news_attached'] = isset($_POST['news_attached']) ? $_POST['news_attached'] : 0;
+  $cs_news['news_close'] = $_POST['news_close'] ?? 0;
+  $cs_news['news_public'] = $_POST['news_public'] ?? 0;
+  $cs_news['news_attached'] = $_POST['news_attached'] ?? 0;
   $cs_news['news_headline'] = $_POST['news_headline'];
   $cs_news['news_time'] = cs_time();
   $cs_news['users_id'] = $account['users_id'];
   $cs_news['news_publishs_at'] = isset($_POST['publish_at']) ? cs_datepost('date', 'unix') : 0;
-  $cs_news['news_readmore_active'] = isset($_POST['news_readmore_active']) ? $_POST['news_readmore_active'] : 0;
+  $cs_news['news_readmore_active'] = $_POST['news_readmore_active'] ?? 0;
   $data['if']['no_readmore'] = isset($_POST['news_readmore_active']) ? false : true;
   $cs_news['news_text'] = empty($cs_main['rte_html']) ? $_POST['news_text'] : cs_abcode_inhtml($_POST['news_text'], 'add');
   $cs_news['news_readmore'] = empty($cs_main['rte_html']) ? $_POST['news_readmore'] : cs_abcode_inhtml($_POST['news_readmore'], 'add');
     
   if(!empty($cs_news['news_publishs_at'])) $cs_news['news_public'] = 0;
 
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+  $run_loop = $_POST['run_loop'] ?? 1;
   $cs_news['news_mirror'] = '';
   $cs_news['news_mirror_name'] = '';
 
@@ -130,18 +130,18 @@ elseif (isset($_POST['preview'])) {
 if(isset($_POST['preview']) and empty($error)) {
   $run = $_POST['run_loop'];
   $data['news']['news_time'] = cs_date('unix', cs_time(), 1);
-  $data['news']['preview_news_text'] = cs_secure($cs_news['news_text'],$abcode[0],$abcode[1],$abcode[2],$abcode[3],$abcode[4]);
+  $data['news']['preview_news_text'] = cs_secure($cs_news['news_text'], $abcode[0], $abcode[1], $abcode[2], $abcode[3], $abcode[4]);
 
   $data['if']['readmore'] = false;
 
   if(!empty($cs_news['news_readmore'])) {
     $data['if']['readmore'] = true;
-    $data['news']['preview_news_readmore'] = cs_secure($cs_news['news_readmore'],$abcode[0],$abcode[1],$abcode[2],$abcode[3],$abcode[4]) . cs_html_br(2);
+    $data['news']['preview_news_readmore'] = cs_secure($cs_news['news_readmore'], $abcode[0], $abcode[1], $abcode[2], $abcode[3], $abcode[4]) . cs_html_br(2);
   }
 
   $search = 'users_id = ' . $cs_news['users_id'];
   $cs_news_user = cs_sql_select(__FILE__, 'users', 'users_nick, users_active', $search);
-  $data['news']['users_link'] = cs_user($cs_news['users_id'],$cs_news_user['users_nick'], $cs_news_user['users_active']);
+  $data['news']['users_link'] = cs_user($cs_news['users_id'], $cs_news_user['users_nick'], $cs_news_user['users_active']);
 
   $data['if']['catimg'] = false;
   $cat_search = "categories_id = '" . $cs_news['categories_id'] . "'";
@@ -158,7 +158,7 @@ if(isset($_POST['preview']) and empty($error)) {
     $data['if']['show'] = true;
 
     if(isset($_POST['mirror'])) {
-      $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+      $run_loop = $_POST['run_loop'] ?? 1;
     } else {
       $temp_mirror = explode("\n", $cs_news['news_mirror']);
       $temp_mirror_name = explode("\n", $cs_news['news_mirror_name']);
@@ -178,7 +178,7 @@ if(isset($_POST['preview']) and empty($error)) {
         $data['prev_mirror'][$prev_run]['dot'] =  ' - ';
       }
 
-      $data['prev_mirror'][$prev_run]['news_mirror'] = cs_html_link($temp_mirror[$run_prev],$temp_mirror_name[$run_prev]);
+      $data['prev_mirror'][$prev_run]['news_mirror'] = cs_html_link($temp_mirror[$run_prev], $temp_mirror_name[$run_prev]);
       $prev_run++;
     }
   }
@@ -188,13 +188,13 @@ if(isset($_POST['preview']) and empty($error)) {
 
 if(isset($_POST['mirror'])) {
   $cs_news['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('news', $_POST['categories_name']);
-  $cs_news['news_close'] = isset($_POST['news_close']) ? $_POST['news_close'] : 0;
-  $cs_news['news_public'] = isset($_POST['news_public']) ? $_POST['news_public'] : 0;
-  $cs_news['news_attached'] = isset($_POST['news_attached']) ? $_POST['news_attached'] : 0;
+  $cs_news['news_close'] = $_POST['news_close'] ?? 0;
+  $cs_news['news_public'] = $_POST['news_public'] ?? 0;
+  $cs_news['news_attached'] = $_POST['news_attached'] ?? 0;
   $cs_news['news_headline'] = $_POST['news_headline'];
   $cs_news['news_time'] = cs_time();
   $cs_news['news_publishs_at'] = isset($_POST['publish_at']) ? cs_datepost('date', 'unix') : 0;
-  $cs_news['news_readmore_active'] = isset($_POST['news_readmore_active']) ? $_POST['news_readmore_active'] : 0;
+  $cs_news['news_readmore_active'] = $_POST['news_readmore_active'] ?? 0;
   $cs_news['news_text'] = empty($cs_main['rte_html']) ? $_POST['news_text'] : cs_abcode_inhtml($_POST['news_text'], 'add');
   $cs_news['news_readmore'] = empty($cs_main['rte_html']) ? $_POST['news_readmore'] : cs_abcode_inhtml($_POST['news_readmore'], 'add');
 
@@ -203,13 +203,13 @@ if(isset($_POST['mirror'])) {
 
 if(!empty($error) or isset($_POST['preview']) or !isset($_POST['submit'])) {
   
-  $data['categories']['dropdown'] = cs_categories_dropdown('news',$cs_news['categories_id']);
+  $data['categories']['dropdown'] = cs_categories_dropdown('news', $cs_news['categories_id']);
   $data['news']['news_headline'] = cs_secure($cs_news['news_headline']);
   $data['news']['news_text'] = cs_secure($cs_news['news_text']);
   $data['news']['news_readmore'] = cs_secure($cs_news['news_readmore']);
 
   if(isset($_POST['mirror'])) {
-    $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+    $run_loop = $_POST['run_loop'] ?? 1;
   } else {
     $temp_mirror = explode("\n", $cs_news['news_mirror']);
     $temp_mirror_name = explode("\n", $cs_news['news_mirror_name']);
@@ -225,8 +225,8 @@ if(!empty($error) or isset($_POST['preview']) or !isset($_POST['submit'])) {
     $num = empty($cs_news['news_mirror']) ? $run + 1 : $run;
 
     if(isset($_POST['mirror'])) {
-      $cs_news["news_mirror_$num"] = isset($_POST["news_mirror_$num"]) ? $_POST["news_mirror_$num"] : '';
-      $cs_news["news_mirror_name_$num"] = isset($_POST["news_mirror_name_$num"]) ? $_POST["news_mirror_name_$num"] : '';
+      $cs_news["news_mirror_$num"] = $_POST["news_mirror_$num"] ?? '';
+      $cs_news["news_mirror_name_$num"] = $_POST["news_mirror_name_$num"] ?? '';
     } else {
       $cs_news["news_mirror_$num"] = $temp_mirror[$run];
       $cs_news["news_mirror_name_$num"] = $temp_mirror_name[$run];

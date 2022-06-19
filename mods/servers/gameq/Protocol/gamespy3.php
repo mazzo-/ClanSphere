@@ -78,7 +78,7 @@ class GameQ_Protocol_gamespy3 extends GameQ_Protocol
 
     public function preprocess($packets)
     {
-        $result = array();
+        $result = [];
 
         // Get packet index, remove header
         foreach ($packets as $packet) {

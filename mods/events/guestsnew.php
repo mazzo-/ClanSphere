@@ -8,11 +8,11 @@ $events_options = cs_sql_option(__FILE__, 'events');
 
 $users_nick = empty($_REQUEST['users_nick']) ? '' : $_REQUEST['users_nick'];
 
-$data = array();
+$data = [];
 $data['head']['info'] = $cs_lang['new_guest_info'];
 
 $data['eventguests']['events_id'] = empty($_REQUEST['events_id']) ? 0 : $_REQUEST['events_id'];
-settype($data['eventguests']['events_id'],'integer');
+settype($data['eventguests']['events_id'], 'integer');
 $data['eventguests']['users_id'] = 0;
 $data['eventguests']['eventguests_since'] = cs_time();
 $data['eventguests']['eventguests_name'] = empty($_POST['eventguests_name']) ? '' : $_POST['eventguests_name'];
@@ -49,7 +49,7 @@ if(isset($_POST['submit'])) {
 
     $where = "events_id = '" . $data['eventguests']['events_id'] . "' AND users_id = '";
     $where .= $data['eventguests']['users_id'] . "'";
-    $search_collision = cs_sql_count(__FILE__,'eventguests',$where);
+    $search_collision = cs_sql_count(__FILE__, 'eventguests', $where);
 
     if(!empty($search_collision))
       $errormsg .= $cs_lang['user_event_exists'] . cs_html_br(1);
@@ -67,7 +67,7 @@ if(isset($_POST['submit'])) {
     $where = "events_id = '" . $data['eventguests']['events_id'] . "' AND eventguests_name = '"
            . cs_sql_escape($data['eventguests']['eventguests_name']) . "' AND eventguests_surname = '"
            . cs_sql_escape($data['eventguests']['eventguests_surname']) . "'";
-    $search_collision = cs_sql_count(__FILE__,'eventguests',$where);
+    $search_collision = cs_sql_count(__FILE__, 'eventguests', $where);
 
     if(!empty($search_collision))
       $errormsg .= $cs_lang['name_event_exists'] . cs_html_br(1);
@@ -80,35 +80,35 @@ if(!empty($errormsg))
   $data['head']['info'] = $errormsg;
 
 if(!empty($errormsg) OR !isset($_POST['submit'])) {
-  $data['url']['form'] = cs_url('events','guestsnew');
+  $data['url']['form'] = cs_url('events', 'guestsnew');
 
-  $data['events']['time'] = cs_date('unix',$data['events']['events_time'],1);
+  $data['events']['time'] = cs_date('unix', $data['events']['events_time'], 1);
 
   $data['users']['nick'] = cs_secure($users_nick);
 
-  $data['select'] = array(0 => '', 3 => '', 4 => '', 5 => '');
+  $data['select'] = [0 => '', 3 => '', 4 => '', 5 => ''];
   $select = $data['eventguests']['eventguests_status'];
   $data['select'][$select] = ' selected ="selected"';
 
-  echo cs_subtemplate(__FILE__,$data,'events','guestsnew');
+  echo cs_subtemplate(__FILE__, $data, 'events', 'guestsnew');
 }
 else {
   settype($data['eventguests']['eventguests_age'], 'integer');
   $eventguests_cells = array_keys($data['eventguests']);
   $eventguests_save = array_values($data['eventguests']);
-  cs_sql_insert(__FILE__,'eventguests',$eventguests_cells,$eventguests_save);
+  cs_sql_insert(__FILE__, 'eventguests', $eventguests_cells, $eventguests_save);
 
   # email notification for eventguest interactions
   if(!empty($data['eventguests']['users_id'])) {
     $subject  = $cs_lang['evg_mail_subject'] . ': ' . $data['events']['events_name'];
     $message  = $cs_lang['evg_mail_reasons'] . $cs_lang['evg_mail_signups'] . "\n\n";
     $message .= $cs_lang['event'] . ': ' . $data['events']['events_name'] . "\n";
-    $message .= $cs_lang['date'] . ': ' . cs_date('unix',$data['events']['events_time'],1) . "\n";
+    $message .= $cs_lang['date'] . ': ' . cs_date('unix', $data['events']['events_time'], 1) . "\n";
     $message .= $cs_lang['status'] . ': ' . $cs_lang['status_' . $data['eventguests']['eventguests_status']] . "\n\n";
     $message .= $cs_lang['evg_mail_weblink'] . "\n";
     $message .= $cs_main['php_self']['website'] . cs_url('events', 'view', 'id=' . $data['events']['events_id']);
     cs_mail($users_data['users_email'], $subject, $message);
   }
 
-  cs_redirect($cs_lang['create_done'],'events','guests','id=' . $data['eventguests']['events_id']);
+  cs_redirect($cs_lang['create_done'], 'events', 'guests', 'id=' . $data['eventguests']['events_id']);
 }

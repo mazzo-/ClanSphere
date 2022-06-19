@@ -29,7 +29,7 @@ $arrays[$logs_count] = $cs_logs;
 $arrays[$acc_count] = $account;
 
 foreach($arrays AS $name => $content) {
-  $matches = array(1 => $name, 2 => '');
+  $matches = [1 => $name, 2 => ''];
   
   foreach($content AS $key => $value) {
     if(is_array($value)) {

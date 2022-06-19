@@ -4,9 +4,9 @@
 
 $cs_lang = cs_translate('access');
 
-$cs_access = cs_sql_select(__FILE__,'access','*',"access_id = '" . $account['access_id'] . "'");
+$cs_access = cs_sql_select(__FILE__, 'access', '*', "access_id = '" . $account['access_id'] . "'");
 unset($cs_access['access_id']);
-$data = array();
+$data = [];
 $run = 0;
 
 $data['lang']['name'] = cs_secure($cs_access['access_name']);
@@ -16,7 +16,7 @@ $modules = cs_checkdirs('mods');
 
 foreach($modules as $mod) {
   $acc_dir = 'access_' . $mod['dir'];
-  if(array_key_exists($acc_dir,$cs_access) AND $mod['dir'] != 'clansphere' AND !empty($account[$acc_dir])) {
+  if(array_key_exists($acc_dir, $cs_access) AND $mod['dir'] != 'clansphere' AND !empty($account[$acc_dir])) {
     if(!empty($mod['icon'])) {
       $data['access'][$run]['icon'] = cs_icon($mod['icon']);
     }
@@ -31,4 +31,4 @@ foreach($modules as $mod) {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'access','view');
+echo cs_subtemplate(__FILE__, $data, 'access', 'view');

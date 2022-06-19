@@ -3,7 +3,7 @@
 // $Id$
 
 # Overwrite global settings by using the following array
-$cs_main = array('init_sql' => true, 'init_tpl' => false, 'init_mod' => true);
+$cs_main = ['init_sql' => true, 'init_tpl' => false, 'init_mod' => true];
 
 chdir('../../');
 
@@ -15,4 +15,4 @@ require 'mods/categories/functions.php';
 
 $mod = cs_sql_escape($_GET['mod']);
 
-echo cs_categories_dropdown2($mod,0,0);
+echo cs_categories_dropdown2($mod, 0, 0);

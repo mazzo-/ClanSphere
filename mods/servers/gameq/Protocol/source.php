@@ -32,35 +32,35 @@ require_once GAMEQ_BASE . 'Protocol.php';
  */
 class GameQ_Protocol_source extends GameQ_Protocol
 {
-    const TYPE_GOLDSOURCE = 9;
-    const TYPE_SOURCE     = 12;
+    public const TYPE_GOLDSOURCE = 9;
+    public const TYPE_SOURCE     = 12;
     
     public function details()
     {
         // 0x49 for source, 0x6D for goldsource (obsolete)
         $this->p->skip(4);
         $type = $this->p->readInt8();
-        if ($type == 0x6D) $this->r->add('address',  $this->p->readString());
+        if ($type == 0x6D) $this->r->add('address', $this->p->readString());
         else               $this->r->add('protocol', $this->p->readInt8());
         
-        $this->r->add('hostname',    $this->p->readString());
-        $this->r->add('map',         $this->p->readString());
-        $this->r->add('game_dir',    $this->p->readString());
-        $this->r->add('game_descr',  $this->p->readString());
+        $this->r->add('hostname', $this->p->readString());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('game_dir', $this->p->readString());
+        $this->r->add('game_descr', $this->p->readString());
 
-        if ($type != 0x6D) $this->r->add('steamappid',  $this->p->readInt16());
+        if ($type != 0x6D) $this->r->add('steamappid', $this->p->readInt16());
 
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
 
-        if ($type == 0x6D) $this->r->add('protocol',    $this->p->readInt8());
-        else               $this->r->add('num_bots',    $this->p->readInt8());
+        if ($type == 0x6D) $this->r->add('protocol', $this->p->readInt8());
+        else               $this->r->add('num_bots', $this->p->readInt8());
 
-        $this->r->add('dedicated',   $this->p->read());
-        $this->r->add('os',          $this->p->read());
-        $this->r->add('password',    $this->p->readInt8());
-        $this->r->add('secure',      $this->p->readInt8());
-        $this->r->add('version',     $this->p->readInt8());
+        $this->r->add('dedicated', $this->p->read());
+        $this->r->add('os', $this->p->read());
+        $this->r->add('password', $this->p->readInt8());
+        $this->r->add('secure', $this->p->readInt8());
+        $this->r->add('version', $this->p->readInt8());
     }
 
 
@@ -75,10 +75,10 @@ class GameQ_Protocol_source extends GameQ_Protocol
 
         // Players
         while ($this->p->getLength()) {
-            $this->r->addPlayer('id',      $this->p->readInt8());
-            $this->r->addPlayer('name',    $this->p->readString());
-            $this->r->addPlayer('score',   $this->p->readInt32());
-            $this->r->addPlayer('time',    $this->p->readFloat32());
+            $this->r->addPlayer('id', $this->p->readInt8());
+            $this->r->addPlayer('name', $this->p->readString());
+            $this->r->addPlayer('score', $this->p->readInt32());
+            $this->r->addPlayer('time', $this->p->readFloat32());
         }
     }
 
@@ -110,7 +110,7 @@ class GameQ_Protocol_source extends GameQ_Protocol
 
     public function preprocess($packets)
     {
-        $result = array();
+        $result = [];
         $type   = false;
         $compressed = false;
 

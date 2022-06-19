@@ -11,12 +11,12 @@ if (!empty($cs_post['submit'])) {
   $errors = '';
   
   if (!empty($files['loading']['tmp_name'])) {
-    $ext = strtolower(substr(strrchr($files['loading']['name'],'.'),1));
+    $ext = strtolower(substr(strrchr($files['loading']['name'], '.'), 1));
     if ($ext != 'gif') $errors .= cs_html_br(1) . '- ' . $cs_lang['ext_only_gif'];
   }
   
   if (empty($errors)) {
-    if (!empty($files['loading']['tmp_name'])) cs_upload('ajax','loading.gif',$files['loading']['tmp_name']);
+    if (!empty($files['loading']['tmp_name'])) cs_upload('ajax', 'loading.gif', $files['loading']['tmp_name']);
 
     if (empty($cs_post['ajax'])) {
       $cs_post['ajax_reload'] = 0;
@@ -24,7 +24,7 @@ if (!empty($cs_post['submit'])) {
 
     require_once 'mods/clansphere/func_options.php';
 
-    $save = array();
+    $save = [];
     $save['ajax'] = empty($cs_post['ajax']) ? '0' : (int) $cs_post['for'];
     $save['ajax_reload'] = $cs_post['ajax_reload'];
 
@@ -33,11 +33,11 @@ if (!empty($cs_post['submit'])) {
     # clear cache to not run into trouble on ajax changes
     cs_cache_clear();
 
-    cs_redirect($cs_lang['success'], 'options','roots');
+    cs_redirect($cs_lang['success'], 'options', 'roots');
   }
 }
 
-$data = array();
+$data = [];
 $selected = ' selected="selected"';
 if (!empty($errors)) $data['lang']['errors_here'] = $cs_lang['error_occured'] . $errors;
 
@@ -62,4 +62,4 @@ if (empty($cs_main['ajax'])) {
 
 $data['switch']['ajax_on'] = empty($cs_main['ajax']) ? 'display: none' : '';
 
-echo cs_subtemplate(__FILE__,$data,'ajax','options');
+echo cs_subtemplate(__FILE__, $data, 'ajax', 'options');

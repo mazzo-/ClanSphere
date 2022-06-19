@@ -41,13 +41,13 @@ class GameQ_Protocol_ase extends GameQ_Protocol
         }
 
         // Variables
-        $this->r->add('gamename',    $this->p->readPascalString(1, true));
-        $this->r->add('port',        $this->p->readPascalString(1, true));
-        $this->r->add('servername',  $this->p->readPascalString(1, true));
-        $this->r->add('gametype',    $this->p->readPascalString(1, true));
-        $this->r->add('map',         $this->p->readPascalString(1, true));
-        $this->r->add('version',     $this->p->readPascalString(1, true));
-        $this->r->add('password',    $this->p->readPascalString(1, true));
+        $this->r->add('gamename', $this->p->readPascalString(1, true));
+        $this->r->add('port', $this->p->readPascalString(1, true));
+        $this->r->add('servername', $this->p->readPascalString(1, true));
+        $this->r->add('gametype', $this->p->readPascalString(1, true));
+        $this->r->add('map', $this->p->readPascalString(1, true));
+        $this->r->add('version', $this->p->readPascalString(1, true));
+        $this->r->add('password', $this->p->readPascalString(1, true));
         $this->r->add('num_players', $this->p->readPascalString(1, true));
         $this->r->add('max_players', $this->p->readPascalString(1, true));
 

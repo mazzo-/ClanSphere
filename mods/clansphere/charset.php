@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('clansphere');
 
-$data = array();
+$data = [];
 
 $data['charset']['result_setup_file']  = '';
 $data['charset']['result_tpl_setting'] = '';
@@ -19,10 +19,10 @@ if($charset != 'utf-8' AND cs_substr($charset, 0, 9) != 'iso-8859-') {
 }
 
 # Check every .htm file in the activated template for a matching charset definition
-$tpl_charset = array();
+$tpl_charset = [];
 $tpl_files = cs_paths('templates/' . $cs_main['def_tpl']);
 foreach($tpl_files AS $file => $int)
-  if(strtolower(substr($file,-4,4)) == '.htm') {
+  if(strtolower(substr($file, -4, 4)) == '.htm') {
     $filename = 'templates/' . $cs_main['def_tpl'] . '/' . $file;
     $fp = fopen($filename, 'r');
     $tpl_content = fread($fp, filesize($filename));
@@ -56,7 +56,7 @@ if(file_exists($file)) {
 
   preg_match_all("=(#\s*|)adddefaultcharset\s+(.*?)\s+=si", $web_content, $web_check, PREG_SET_ORDER);
   foreach($web_check AS $found) {
-    if(substr($found[1],0,1) != '#') {
+    if(substr($found[1], 0, 1) != '#') {
       if(!empty($found[2])) $web_charset = $found[2];
       $foundlow = strtolower($found[2]);
       if($foundlow != $charset) {
@@ -79,7 +79,7 @@ $sql_charset = strtolower($sql_info['encoding']);
 $sql_valid = 0;
 if($charset == 'utf-8' AND ($sql_charset == 'utf-8' OR $sql_charset == 'utf8' OR $sql_charset == 'unicode'))
   $sql_valid = 1;
-elseif(cs_substr($charset, 0, 9) == 'iso-8859-' AND (cs_substr($sql_charset, 0, 9) == 'iso-8859-' OR cs_substr($sql_charset,0,5) == 'latin'))
+elseif(cs_substr($charset, 0, 9) == 'iso-8859-' AND (cs_substr($sql_charset, 0, 9) == 'iso-8859-' OR cs_substr($sql_charset, 0, 5) == 'latin'))
   $sql_valid = 1;
 elseif($sql_charset == 'default' OR $sql_charset == 'pdo encoding')
   $sql_valid = 1;
@@ -89,7 +89,7 @@ else
 # Check for MySQL version 4.1.8 or above due to charset / collation support
 $data['if']['old_mysql'] = 0;
 global $cs_db;
-$ext_mysql = array('mysql', 'mysqli', 'pdo_mysql');
+$ext_mysql = ['mysql', 'mysqli', 'pdo_mysql'];
 if(in_array($cs_db['type'], $ext_mysql)) {
   $myv = explode('.', $sql_info['server']);
   settype($myv[2], 'integer');

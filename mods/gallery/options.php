@@ -32,9 +32,9 @@ if(isset($_POST['submit'])) {
 
 } else {
 
-  $data = array();
+  $data = [];
 
-  $data['op'] = cs_sql_option(__FILE__,'gallery');
+  $data['op'] = cs_sql_option(__FILE__, 'gallery');
   
   $data['op']['size'] = $data['op']['size'] / 1024;
   $data['op']['size2'] = $data['op']['size2'] / 1024;
@@ -52,7 +52,7 @@ if(isset($_POST['submit'])) {
   $var2 = '';
   while($levels < 2) {
     $data['op']['list_sort'] == $levels ? $sel = 1 : $sel = 0;
-    $var2 .= cs_html_option($cs_lang['sort_' . $levels],$levels,$sel);
+    $var2 .= cs_html_option($cs_lang['sort_' . $levels], $levels, $sel);
     $levels++;
   }
   $data['sort']['options'] = $var2;
@@ -61,10 +61,10 @@ if(isset($_POST['submit'])) {
   $var = '';
   while($levels < 2) {
     $data['op']['lightbox'] == $levels ? $sel = 1 : $sel = 0;
-    $var .= cs_html_option($cs_lang['light_' . $levels],$levels,$sel);
+    $var .= cs_html_option($cs_lang['light_' . $levels], $levels, $sel);
     $levels++;
   }
   $data['lightbox']['options'] = $var;
 
-  echo cs_subtemplate(__FILE__,$data,'gallery','options');
+  echo cs_subtemplate(__FILE__, $data, 'gallery', 'options');
 }

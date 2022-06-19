@@ -9,7 +9,7 @@ $cs_get = cs_get('id');
 $history_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $history_id = $cs_post['id'];
 
-$data = array();
+$data = [];
 $data['if']['preview'] = FALSE;
 
 if(isset($_POST['submit']) OR isset($_POST['preview'])) {
@@ -29,7 +29,7 @@ if(isset($_POST['submit']) OR isset($_POST['preview'])) {
   
 } else {
   
-  $history = cs_sql_select(__FILE__,'history','history_time, history_text, users_id',"history_id = '" . $history_id . "'");
+  $history = cs_sql_select(__FILE__, 'history', 'history_time, history_text, users_id', "history_id = '" . $history_id . "'");
   $newtime = 0;
 }
 
@@ -44,12 +44,12 @@ if(!isset($_POST['submit']) AND !isset($_POST['preview'])) {
 if(isset($_POST['preview']) AND empty($error)) {
   $data['if']['preview'] = TRUE;
   
-  $data['preview']['date'] = cs_date('unix',$history['history_time'],1);
+  $data['preview']['date'] = cs_date('unix', $history['history_time'], 1);
 
-  $cs_user = cs_sql_select(__FILE__,'users','users_nick, users_active',"users_id = '" . $history['users_id'] . "'");
-  $data['preview']['user'] = cs_user($history['users_id'],$cs_user['users_nick'],$cs_user['users_active']);
+  $cs_user = cs_sql_select(__FILE__, 'users', 'users_nick, users_active', "users_id = '" . $history['users_id'] . "'");
+  $data['preview']['user'] = cs_user($history['users_id'], $cs_user['users_nick'], $cs_user['users_active']);
 
-  $data['preview']['text'] = cs_secure($history['history_text'],1,1,1,1);
+  $data['preview']['text'] = cs_secure($history['history_text'], 1, 1, 1, 1);
 }
 
 if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
@@ -64,17 +64,17 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
   else {
     $data['if']['rte_html'] = 1;
     $data['if']['no_rte_html'] = 0;
-    $data['history']['rte_html'] = cs_rte_html('history_text',$history['history_text']);
+    $data['history']['rte_html'] = cs_rte_html('history_text', $history['history_text']);
   }
   $data['history']['new_time'] = $newtime == 1 ? 'checked="checked"' : '';
   $data['history']['id'] = $history_id;
   
-  echo cs_subtemplate(__FILE__,$data,'history','edit');
+  echo cs_subtemplate(__FILE__, $data, 'history', 'edit');
   
 } else {
   $history_cells = array_keys($history);
   $history_save = array_values($history);
-  cs_sql_update(__FILE__,'history',$history_cells,$history_save,$history_id);
+  cs_sql_update(__FILE__, 'history', $history_cells, $history_save, $history_id);
   
-  cs_redirect($cs_lang['changes_done'],'history');
+  cs_redirect($cs_lang['changes_done'], 'history');
 }

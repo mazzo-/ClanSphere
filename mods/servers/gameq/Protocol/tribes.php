@@ -38,20 +38,20 @@ class GameQ_Protocol_tribes extends GameQ_Protocol
         }
 
         // Variables
-        $this->r->add('game',        $this->p->readPascalString());
-        $this->r->add('version',     $this->p->readPascalString());
-        $this->r->add('hostname',    $this->p->readPascalString());
-        $this->r->add('dedicated',   $this->p->readInt8());
-        $this->r->add('password',    $this->p->readInt8());
+        $this->r->add('game', $this->p->readPascalString());
+        $this->r->add('version', $this->p->readPascalString());
+        $this->r->add('hostname', $this->p->readPascalString());
+        $this->r->add('dedicated', $this->p->readInt8());
+        $this->r->add('password', $this->p->readInt8());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('cpu_lsb',     $this->p->readInt8());
-        $this->r->add('cpu_msb',     $this->p->readInt8());
-        $this->r->add('mod',         $this->p->readPascalString());
-        $this->r->add('gametype',    $this->p->readPascalString());
-        $this->r->add('map',         $this->p->readPascalString());
-        $this->r->add('motd',        $this->p->readPascalString());
-        $this->r->add('teamcount',   $this->p->readInt8());         // Not sure
+        $this->r->add('cpu_lsb', $this->p->readInt8());
+        $this->r->add('cpu_msb', $this->p->readInt8());
+        $this->r->add('mod', $this->p->readPascalString());
+        $this->r->add('gametype', $this->p->readPascalString());
+        $this->r->add('map', $this->p->readPascalString());
+        $this->r->add('motd', $this->p->readPascalString());
+        $this->r->add('teamcount', $this->p->readInt8());         // Not sure
 
         // TODO: player listing
     }

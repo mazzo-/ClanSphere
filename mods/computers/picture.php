@@ -12,13 +12,13 @@ $cs_get = cs_get('id');
 $cs_computers_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $cs_computers_id = $cs_post['id'];
 
-$op_computers = cs_sql_option(__FILE__,'computers');
-$img_filetypes = array('gif','jpg','png');
+$op_computers = cs_sql_option(__FILE__, 'computers');
+$img_filetypes = ['gif','jpg','png'];
 
 $select = 'computers_pictures, users_id';
-$computer = cs_sql_select(__FILE__,'computers',$select,"computers_id = '" . $cs_computers_id . "'");
+$computer = cs_sql_select(__FILE__, 'computers', $select, "computers_id = '" . $cs_computers_id . "'");
 $computer_string = $computer['computers_pictures'];
-$computer_pics = empty($computer_string) ? array() : explode("\n",$computer_string);
+$computer_pics = empty($computer_string) ? [] : explode("\n", $computer_string);
 $computer_next = count($computer_pics) + 1;
 
 $error = '';
@@ -29,10 +29,10 @@ if(!empty($_GET['delete'])) {
   cs_unlink('computers', 'thumb-' . $computer_pics[$target]);
   $computer_pics[$target] = FALSE;
   $computer_pics = array_filter($computer_pics);
-  $computer_string = implode("\n",$computer_pics);
-  $cells = array('computers_pictures');
-  $content = array($computer_string);
-  cs_sql_update(__FILE__,'computers',$cells,$content,$cs_computers_id);
+  $computer_string = implode("\n", $computer_pics);
+  $cells = ['computers_pictures'];
+  $content = [$computer_string];
+  cs_sql_update(__FILE__, 'computers', $cells, $content, $cs_computers_id);
 }
 elseif(!empty($_POST['submit'])) {
   
@@ -69,11 +69,11 @@ elseif(!empty($_POST['submit'])) {
     if(cs_resample($files_gl['picture']['tmp_name'], 'uploads/computers/' . $thumb_name, 150, 300) 
     AND cs_upload('computers', $picture_name, $files_gl['picture']['tmp_name'])) {
 
-      $cells = array('computers_pictures');
-      $content = empty($computer_string) ? array($target) : array($computer_string . "\n" . $target);
-      cs_sql_update(__FILE__,'computers',$cells,$content,$cs_computers_id);
+      $cells = ['computers_pictures'];
+      $content = empty($computer_string) ? [$target] : [$computer_string . "\n" . $target];
+      cs_sql_update(__FILE__, 'computers', $cells, $content, $cs_computers_id);
 
-      cs_redirect($cs_lang['success'],'computers','picture','id=' . $cs_computers_id);
+      cs_redirect($cs_lang['success'], 'computers', 'picture', 'id=' . $cs_computers_id);
     }
     else {
       $error .= $cs_lang['up_error'];
@@ -81,14 +81,14 @@ elseif(!empty($_POST['submit'])) {
   }
 }
 
-$data = array();
+$data = [];
 $data['if']['own'] = $computer['users_id'] == $account['users_id'] ? true : false;
 
 if(!empty($error)) {
   $data['head']['body'] = $error;
 }
 elseif(isset($_GET['delete'])) {
-  cs_redirect($cs_lang['remove_done'],'computers','picture','id=' . $cs_computers_id);
+  cs_redirect($cs_lang['remove_done'], 'computers', 'picture', 'id=' . $cs_computers_id);
 }
 else {
   $data['head']['body'] = $cs_lang['body_picture'];
@@ -119,12 +119,12 @@ if(!empty($error) OR empty($_POST['submit'])) {
     $run = 0;
     foreach($computer_pics AS $pic) {
       $link = cs_html_img('uploads/computers/thumb-' . $pic);
-      $data['pictures'][$run]['thumb'] = cs_html_link('uploads/computers/picture-' . $pic,$link) . ' ';
+      $data['pictures'][$run]['thumb'] = cs_html_link('uploads/computers/picture-' . $pic, $link) . ' ';
       $remove = 'id=' . $cs_computers_id . '&amp;delete=' . ($run + 1);
-      $data['pictures'][$run]['url_remove'] = cs_link($cs_lang['remove'],'computers','picture',$remove);
+      $data['pictures'][$run]['url_remove'] = cs_link($cs_lang['remove'], 'computers', 'picture', $remove);
       $run++;
     }
   }
 
-  echo cs_subtemplate(__FILE__,$data,'computers','picture');
+  echo cs_subtemplate(__FILE__, $data, 'computers', 'picture');
 }

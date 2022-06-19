@@ -5,10 +5,10 @@ $cs_lang = cs_translate('clansphere');
 $data['if']['done'] = false;
   
 if($account['access_wizard'] == 5) {
-  $wizard = cs_sql_count(__FILE__,'options',"options_name = 'done_meta' AND options_value = '1'");
+  $wizard = cs_sql_count(__FILE__, 'options', "options_name = 'done_meta' AND options_value = '1'");
   if(empty($wizard)) {
     $data['if']['done'] = true;
-    $data['lang']['link_2'] = cs_link($cs_lang['show'],'wizard','roots') . ' - ' . cs_link($cs_lang['task_done'],'wizard','roots','handler=meta&amp;done=1');
+    $data['lang']['link_2'] = cs_link($cs_lang['show'], 'wizard', 'roots') . ' - ' . cs_link($cs_lang['task_done'], 'wizard', 'roots', 'handler=meta&amp;done=1');
   }
 }
 
@@ -102,31 +102,31 @@ if(isset($_POST['submit'])) {
   if(!empty($error)) {
     $data['head']['action'] = $cs_lang['metatags'];
     $data['head']['error'] = $errormsg;
-    echo cs_subtemplate(__FILE__,$data,'clansphere','error');
+    echo cs_subtemplate(__FILE__, $data, 'clansphere', 'error');
   }
   
   if(empty($error)) {
     $opt_where = "metatags_name = ";
-    $def_cell = array('metatags_content','metatags_active');
-    $def_cont = array($_POST['description'], $active_keywords);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'description'");
-    $def_cont = array($_POST['keywords'], $active_keywords);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'keywords'");
-    $def_cont = array($_POST['language'], $active_language);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'language'");
-    $def_cont = array($_POST['author'], $active_author);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'author'");
-    $def_cont = array($_POST['designer'], $active_designer);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'designer'");
-    $def_cont = array($_POST['publisher'], $active_publisher);
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'publisher'");
-    $def_cont = array($_POST['robots'], '1');
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'robots'");
-    $def_cont = array($_POST['distribution'], '1');
-  cs_sql_update(__FILE__,'metatags',$def_cell,$def_cont,0,$opt_where . "'distribution'");
+    $def_cell = ['metatags_content','metatags_active'];
+    $def_cont = [$_POST['description'], $active_keywords];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'description'");
+    $def_cont = [$_POST['keywords'], $active_keywords];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'keywords'");
+    $def_cont = [$_POST['language'], $active_language];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'language'");
+    $def_cont = [$_POST['author'], $active_author];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'author'");
+    $def_cont = [$_POST['designer'], $active_designer];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'designer'");
+    $def_cont = [$_POST['publisher'], $active_publisher];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'publisher'");
+    $def_cont = [$_POST['robots'], '1'];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'robots'");
+    $def_cont = [$_POST['distribution'], '1'];
+  cs_sql_update(__FILE__, 'metatags', $def_cell, $def_cont, 0, $opt_where . "'distribution'");
   
   $data['head']['action'] = $cs_lang['metatags'];
-  $data['link']['continue'] = cs_url('clansphere','system');
+  $data['link']['continue'] = cs_url('clansphere', 'system');
   
   cs_cache_delete('metatags');
   
@@ -140,7 +140,7 @@ else {
   $select = 'metatags_id, metatags_name, metatags_content';
   $where = '';
   $order = 'metatags_name';
-  $cs_metatags = cs_sql_select(__FILE__,'metatags',$select,$where,$order,0,0);
+  $cs_metatags = cs_sql_select(__FILE__, 'metatags', $select, $where, $order, 0, 0);
   $count_metatags = count($cs_metatags);
 
   for($run = 0; $run < $count_metatags; $run++)
@@ -150,5 +150,5 @@ else {
   $data['selected']['distribution_global'] = $data['metatags']['distribution'] != 'global' ? '' : $sel;
   $data['selected']['distribution_intern'] = $data['metatags']['distribution'] == 'global' ? '' : $sel;
 
-  echo cs_subtemplate(__FILE__,$data,'clansphere','metatags');
+  echo cs_subtemplate(__FILE__, $data, 'clansphere', 'metatags');
 }

@@ -34,12 +34,12 @@ class GameQ_Protocol_samp extends GameQ_Protocol
     public function status()
     {
         $this->p->skip(11);
-        $this->r->add('password',    $this->p->readInt8());
+        $this->r->add('password', $this->p->readInt8());
         $this->r->add('num_players', $this->p->readInt16());
         $this->r->add('max_players', $this->p->readInt16());
-        $this->r->add('servername',  $this->readString());
-        $this->r->add('gametype',    $this->readString());
-        $this->r->add('map',         $this->readString());
+        $this->r->add('servername', $this->readString());
+        $this->r->add('gametype', $this->readString());
+        $this->r->add('map', $this->readString());
     }
 
     public function players()

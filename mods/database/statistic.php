@@ -7,7 +7,7 @@ $cs_lang = cs_translate('database');
 
 $modules = cs_checkdirs('mods');
 
-$static = array();
+$static = [];
 $total_tables = 0;
 $total_datasets = 0;
 $run = 0;
@@ -30,7 +30,7 @@ foreach($modules as $mod) {
     $data['statistic'][$run]['icon'] = ''; 
   }
 
-  $data['statistic'][$run]['url'] = cs_url('modules','view','dir=' . $mod['dir']);
+  $data['statistic'][$run]['url'] = cs_url('modules', 'view', 'dir=' . $mod['dir']);
   $data['statistic'][$run]['name'] = $mod['name'];
 
     asort($mod['tables']);
@@ -57,4 +57,4 @@ foreach($modules as $mod) {
 $data['data']['tables'] = $total_tables;
 $data['data']['dataset'] = $total_datasets;
 
-echo cs_subtemplate(__FILE__,$data,'database','statistic');
+echo cs_subtemplate(__FILE__, $data, 'database', 'statistic');

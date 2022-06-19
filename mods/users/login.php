@@ -4,8 +4,8 @@
 
 $cs_lang = cs_translate('users');
 
-$data = array();
-$data['options'] = cs_sql_option(__FILE__,'users');
+$data = [];
+$data['options'] = cs_sql_option(__FILE__, 'users');
 $data['head']['mod'] = $cs_lang['mod_name'];
 $data['head']['action'] = $cs_lang['login'];
 
@@ -48,8 +48,8 @@ if(empty($login['mode'])) {
   $data['lang']['reset'] = $cs_lang['reset'];
 
   echo cs_html_br(0);
-  echo cs_subtemplate(__FILE__,$data,'users','head');
-  echo cs_subtemplate(__FILE__,$data,'users','login');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'head');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'login');
 }
 else {
   if($data['options']['login'] == 'email') {
@@ -59,17 +59,17 @@ else {
   $data['head']['action'] = $cs_lang['login'];
   $login_method = $login['method'];
   $data['head']['body_text'] = $cs_lang['method_' . $login_method];
-  echo cs_subtemplate(__FILE__,$data,'users','head');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'head');
 
   	if($cs_main['tpl_file'] == 'admin.htm' and $account['access_clansphere'] < 3){
 		require('mods/errors/403.php');
 	}else if(empty($_POST['uri']) OR strstr($_POST['uri'], 'logout')) {
-    cs_redirect('','users','home');
+    cs_redirect('', 'users', 'home');
   }
   else {
     # do not use htmlspecialchars with charset here due to website
     $uri = htmlspecialchars($_POST['uri'], ENT_QUOTES);
-    $data['link']['continue'] = cs_html_link($uri,$cs_lang['continue'],0);
-    echo cs_subtemplate(__FILE__,$data,'users','continue');
+    $data['link']['continue'] = cs_html_link($uri, $cs_lang['continue'], 0);
+    echo cs_subtemplate(__FILE__, $data, 'users', 'continue');
   }
 }

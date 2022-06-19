@@ -31,14 +31,14 @@ class GameQ_Protocol_aa3 extends GameQ_Protocol
 	public function status()
     {
 		
-		$temp_array = array ();
+		$temp_array =  [];
 		
 		while ($this->p->getLength())
 		{	
 			$attribute_name = $this->readCustomPascal();
 			$attribute_type = $this->p->readInt8();			
 			
-			$temp = array ("type" => $attribute_type);
+			$temp =  ["type" => $attribute_type];
 			
 			switch ($attribute_type)
 			{
@@ -83,10 +83,11 @@ class GameQ_Protocol_aa3 extends GameQ_Protocol
 		return  $this->p->read ($this->p->readInt16 ());
 	}
 	
-	function ssc_crypt($buffer, $encrypt = FALSE)
+	public function ssc_crypt($buffer, $encrypt = FALSE)
 	{		
-		$master_key = pack("H*",
-		"f5c5914b27235dc0dc274200ddd187c32fe02aed5fc5c079518f49208e4c5548aaef313c5d2e7c91dc580d3cd9e1aec577595325d3c5c84b44a020802becb17e".
+		$master_key = pack(
+		    "H*",
+		    "f5c5914b27235dc0dc274200ddd187c32fe02aed5fc5c079518f49208e4c5548aaef313c5d2e7c91dc580d3cd9e1aec577595325d3c5c84b44a020802becb17e".
 		"7d6b6b87e8a4ebc8e4cafbaf5720f9600818b334ad2695ba0f19e1fbd48d0139f05e9059e98a15c79ebabb4f3aa8039d8720aef2bf1b4693a67a20a114b8505b".
 		"693cf5b24a236503582ecdb8109a7d89a8d90d660b96435b4656ecec3fff2086e94c54988843d2aa55adefb2d47fc804c0024a7897e993b2326e8990e425f7c8".
 		"38aef55f2002f22d84479f43849de260a8a2de6a7de09225c275a172729e65be687182bde68cb17b3fd77bf513c8045f0b6696d3a501b255db0632e36c0e7806".
@@ -213,7 +214,8 @@ class GameQ_Protocol_aa3 extends GameQ_Protocol
 		"0e60abac5ced203dd26bb75df922938723b1341bb07b0250d7af1bf91788994f8ed193221dd829e6665b114763e490fd8482955b097ac3b5b124bf92ae8ce902".
 		"1897b67db820cbfd646fe2c61e63baa972651a47bb1aae56f5e623a1167beff84166ea78cc9854b21a9478ebf3a1429226213c20a7a9ce8031eced508b937263".
 		"1357591069d5c482c0f6f99e4a6084f34fdab7b26399b4efcb0e5217e4e9115d0f6011bcfe55e0f05d3d8850febab0a6100bab8142a3913662a568f9d32367bf".
-		"5db46b6572cb76bd6a49d84bd567e1f834bbd705dd395c1609e9eba7fe8b9c59f1c4cb2561461204805c25a384140314e515f84050949529050279393884f8d0");
+		"5db46b6572cb76bd6a49d84bd567e1f834bbd705dd395c1609e9eba7fe8b9c59f1c4cb2561461204805c25a384140314e515f84050949529050279393884f8d0"
+		);
 
 		$game_key = "c6mw4it2kg7sz5o0813d9qyufenhj\x00";
 
@@ -239,9 +241,9 @@ class GameQ_Protocol_aa3 extends GameQ_Protocol
     {
 		if (count ($packets) == 1)
 		{
-			if ($packets[0]{5} != "\x02") #we only got one packet, but the head say we have multiple packets
+			if ($packets[0][5] != "\x02") #we only got one packet, but the head say we have multiple packets
 			{
-				printf ("Error packet(5) %d != 2", ord ($packets[0]{5}));
+				printf ("Error packet(5) %d != 2", ord ($packets[0][5]));
 			}
 			
 			$packets[0] =  substr($packets[0], 10);
@@ -250,7 +252,7 @@ class GameQ_Protocol_aa3 extends GameQ_Protocol
 		{
 			#todo: check if we got all packets
 			
-			$sorted_packets = array ();
+			$sorted_packets =  [];
 			foreach ($packets as $packet)
 			{
 				$packet_order = ord($packet[10]);

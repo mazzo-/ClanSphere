@@ -4,12 +4,12 @@
 
 $cs_lang = cs_translate('users');
 
-$data = array();
+$data = [];
 
 $letter = empty($_REQUEST['where']) ? 0 : $_REQUEST['where'];
 $search_name = empty($_REQUEST['search_name']) ? '' : $_REQUEST['search_name'];
 $data['search']['name'] = empty($search_name) ? '' : cs_secure($search_name);
-$search_url = rawurlencode(str_replace(array('/', '&', '\\'), '', $search_name));
+$search_url = rawurlencode(str_replace(['/', '&', '\\'], '', $search_name));
 $match = empty($search_url) ? $letter : $letter . '&amp;search_name=' . $search_url;
 
 $start = empty($_REQUEST['start']) ? 0 : $_REQUEST['start'];
@@ -47,7 +47,7 @@ for ($run = 0; $run < $users_loop; $run++) {
   $cs_users[$run]['country'] = empty($cs_users[$run]['users_country']) ? 'symbols/countries/fam.png' : 'symbols/countries/' . $cs_users[$run]['users_country'] . '.png';
   $cs_users[$run]['nick'] = cs_user($cs_users[$run]['users_id'], $cs_users[$run]['users_nick'], $cs_users[$run]['users_active'], $cs_users[$run]['users_delete']);
   $cs_users[$run]['laston'] = cs_date('unix', $cs_users[$run]['users_laston']);
-  $cs_users[$run]['page'] = cs_userstatus($cs_users[$run]['users_laston'],$cs_users[$run]['users_invisible']);
+  $cs_users[$run]['page'] = cs_userstatus($cs_users[$run]['users_laston'], $cs_users[$run]['users_invisible']);
   $cs_users[$run]['active'] = cs_secure($cs_users[$run]['users_active']);
   $cs_users_access = cs_sql_select(__FILE__, 'access', 'access_id, access_name', "access_id = " . $cs_users[$run]['access_id'], 0, 0, 1);
   $cs_users[$run]['access'] = $cs_users_access['access_name'];

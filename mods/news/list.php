@@ -27,23 +27,23 @@ $cs_sort[4] = 'news_headline ASC';
 $order = $cs_sort[$sort];
 
 $join = 'news nws INNER JOIN {pre}_categories cat ON nws.categories_id = cat.categories_id';
-$data['head']['news_count'] = cs_sql_count(__FILE__,$join,$where,'news_id');
-$data['head']['pages'] = cs_pages('news','list',$data['head']['news_count'],$start,$cat_id,$sort);
-$data['head']['dropdown'] = cs_categories_dropdown2('news', $cat_id,0,'where');
+$data['head']['news_count'] = cs_sql_count(__FILE__, $join, $where, 'news_id');
+$data['head']['pages'] = cs_pages('news', 'list', $data['head']['news_count'], $start, $cat_id, $sort);
+$data['head']['dropdown'] = cs_categories_dropdown2('news', $cat_id, 0, 'where');
 
 $select = 'nws.news_headline AS news_headline, nws.news_time AS news_time, nws.news_id AS news_id';
-$cs_news = cs_sql_select(__FILE__,$join,$select,$where,$order,$start,$account['users_limit']);
+$cs_news = cs_sql_select(__FILE__, $join, $select, $where, $order, $start, $account['users_limit']);
 $news_loop = count($cs_news);
 
-$data['sort']['news_time'] = cs_sort('news','list',$start,$cat_id,1,$sort);
-$data['sort']['news_headline'] = cs_sort('news','list',$start,$cat_id,3,$sort);
+$data['sort']['news_time'] = cs_sort('news', 'list', $start, $cat_id, 1, $sort);
+$data['sort']['news_headline'] = cs_sort('news', 'list', $start, $cat_id, 3, $sort);
 
 for($run=0; $run<$news_loop; $run++) {
 
-  $cs_news[$run]['news_time'] = cs_date('unix',$cs_news[$run]['news_time'],1);
+  $cs_news[$run]['news_time'] = cs_date('unix', $cs_news[$run]['news_time'], 1);
   $sec_head = cs_secure($cs_news[$run]['news_headline']);
-  $cs_news[$run]['news_headline'] = cs_link($sec_head,'news','view','id=' . $cs_news[$run]['news_id']);
+  $cs_news[$run]['news_headline'] = cs_link($sec_head, 'news', 'view', 'id=' . $cs_news[$run]['news_id']);
 }
 
 $data['news'] = $cs_news;
-echo cs_subtemplate(__FILE__,$data,'news','list');
+echo cs_subtemplate(__FILE__, $data, 'news', 'list');

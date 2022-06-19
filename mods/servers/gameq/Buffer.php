@@ -129,7 +129,7 @@ class GameQ_Buffer
     public function readLast()
     {
         $len           = strlen($this->data);
-        $string        = $this->data{strlen($this->data) - 1};
+        $string        = $this->data[strlen($this->data) - 1];
         $this->data    = substr($this->data, 0, $len - 1);
         $this->length -= 1;
 
@@ -247,7 +247,7 @@ class GameQ_Buffer
     public function readStringMulti($delims, &$delimfound = null)
     {
         // Get position of delimiters
-        $pos = array();
+        $pos = [];
         foreach ($delims as $delim) {
             if ($p = strpos($this->data, $delim, min($this->index, $this->length))) {
                 $pos[] = $p;

@@ -4,16 +4,16 @@
 
 $cs_lang = cs_translate('clansphere');
 
-$data = array();
+$data = [];
 $data['if']['done'] = false;
 $data['options'] = cs_sql_option(__FILE__, 'clansphere');
 
 if($account['access_wizard'] == 5) {
   
-  $wizard = cs_sql_count(__FILE__,'options',"options_name = 'done_opts' AND options_value = 1");
+  $wizard = cs_sql_count(__FILE__, 'options', "options_name = 'done_opts' AND options_value = 1");
   if(empty($wizard)) {
     $data['if']['done'] = true;
-    $data['lang']['link_2'] = cs_link($cs_lang['show'],'wizard','roots') . ' - ' . cs_link($cs_lang['task_done'],'wizard','roots','handler=opts&amp;done=1');
+    $data['lang']['link_2'] = cs_link($cs_lang['show'], 'wizard', 'roots') . ' - ' . cs_link($cs_lang['task_done'], 'wizard', 'roots', 'handler=opts&amp;done=1');
   }
 }
 
@@ -28,7 +28,7 @@ if(isset($_POST['submit'])) {
     }
   }
 
-  $save = array();
+  $save = [];
   $save['mod_rewrite'] = (int) $_POST['mod_rewrite'];
   $save['def_width'] = $_POST['def_width'];
   $save['cellspacing'] = (int) $_POST['cellspacing'];
@@ -59,19 +59,19 @@ if(isset($_POST['submit'])) {
 
   if(!empty($_POST['dstime_all'])) {
     $query = 'UPDATE {pre}_users SET users_dstime = \''.$_POST['def_dstime'].'\'';
-    cs_sql_query(__FILE__,$query);
+    cs_sql_query(__FILE__, $query);
   }
 
   if(!empty($_POST['data_limit_all'])) {
     $query = 'UPDATE {pre}_users SET users_limit = \'' . (int) $_POST['data_limit'] . '\'';
-    cs_sql_query(__FILE__,$query);
+    cs_sql_query(__FILE__, $query);
   }
 
   global $cs_main;
 
   $cs_main['mod_rewrite'] = $save['mod_rewrite'];
 
-  cs_redirect($cs_lang['success'], 'options','roots');
+  cs_redirect($cs_lang['success'], 'options', 'roots');
 } 
 else {
 
@@ -115,7 +115,7 @@ else {
 
   foreach($modules as $mods) {
     $sel = $mods['dir'] == $data['options']['def_mod'] ? 1 : 0;
-    $data['sel'][$run]['options'] = cs_html_option($mods['name'],$mods['dir'],$sel);
+    $data['sel'][$run]['options'] = cs_html_option($mods['name'], $mods['dir'], $sel);
     $run++;
   }
 
@@ -130,14 +130,14 @@ else {
   $data['options']['sec_remote_1'] = !empty($data['options']['sec_remote']) ? 'checked="checked"' : '';
   $data['options']['sec_remote_2'] = empty($data['options']['sec_remote']) ? 'checked="checked"' : '';
 
-  $data['options']['timezone_select'] = cs_html_select(1,'def_timezone');
+  $data['options']['timezone_select'] = cs_html_select(1, 'def_timezone');
   $timezone = -10;
 
   while($timezone <= 12) {
     $zonename = $timezone >= 0 ? 'UTC +' . $timezone: 'UTC ' . $timezone;
     $offset = $timezone * 3600;
     $sel = $offset == $data['options']['def_timezone'] ? 1 : 0;
-    $data['options']['timezone_select'] .= cs_html_option($zonename,$offset,$sel);
+    $data['options']['timezone_select'] .= cs_html_option($zonename, $offset, $sel);
     $timezone = $timezone + 0.5;
   }
 
@@ -154,5 +154,5 @@ else {
   $data['options']['main_acc4_checked'] = $data['options']['maintenance_access'] == 4 ? 'selected="selected"' : '';
   $data['options']['main_acc5_checked'] = $data['options']['maintenance_access'] == 5 ? 'selected="selected"' : '';
 
-  echo cs_subtemplate(__FILE__,$data,'clansphere','options');
+  echo cs_subtemplate(__FILE__, $data, 'clansphere', 'options');
 }

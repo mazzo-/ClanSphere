@@ -6,10 +6,10 @@ $cs_lang = cs_translate('clans');
 $files = cs_files();
 
 $clans_id = $_REQUEST['id'];
-settype($clans_id,'integer');
+settype($clans_id, 'integer');
 
-$op_clans = cs_sql_option(__FILE__,'clans');
-$img_filetypes = array('gif','jpg','png');
+$op_clans = cs_sql_option(__FILE__, 'clans');
+$img_filetypes = ['gif','jpg','png'];
 
 $users_nick = '';
 $cs_clans['users_id'] = 0;
@@ -21,9 +21,9 @@ if(isset($_POST['submit'])) {
   $cs_clans['clans_tagpos'] = $_POST['tag_pos'];  
   $cs_clans['clans_country'] = $_POST['clans_country'];  
   $cs_clans['clans_url'] = $_POST['clans_url'];
-  $cs_clans['clans_since'] = cs_datepost('since','date');
+  $cs_clans['clans_since'] = cs_datepost('since', 'date');
   
-  $picture = cs_sql_select(__FILE__,'clans','clans_picture',"clans_id = " . (int)$clans_id);
+  $picture = cs_sql_select(__FILE__, 'clans', 'clans_picture', "clans_id = " . (int)$clans_id);
   
   $cs_clans['clans_picture'] = empty($_POST['clans_picture']) ? $picture['clans_picture'] : $_POST['clans_picture'];
   $cs_clans['clans_pwd'] = $_POST['clans_pwd'];
@@ -108,7 +108,7 @@ if(empty($cs_clans['clans_short'])) {
   
 $where = "clans_name = '" . cs_sql_escape($cs_clans['clans_name']) . "'";
 $where .= " AND clans_id != " . (int)$clans_id;
-$search = cs_sql_count(__FILE__,'clans',$where);
+$search = cs_sql_count(__FILE__, 'clans', $where);
 
 if(!empty($search)) {
   $error++;
@@ -117,8 +117,8 @@ if(!empty($search)) {
 }
 else {
   $cells = 'clans_name, clans_short, clans_tag, clans_tagpos, clans_country, clans_url, clans_since, clans_pwd, clans_picture, users_id';
-  $cs_clans = cs_sql_select(__FILE__,'clans',$cells,"clans_id = " . (int)$clans_id);
-  $cs_users = cs_sql_select(__FILE__,'users','users_nick','users_id = ' . (int) $cs_clans['users_id']);
+  $cs_clans = cs_sql_select(__FILE__, 'clans', $cells, "clans_id = " . (int)$clans_id);
+  $cs_users = cs_sql_select(__FILE__, 'users', 'users_nick', 'users_id = ' . (int) $cs_clans['users_id']);
   $users_nick = $cs_users['users_nick'];
 }
 
@@ -153,17 +153,17 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $el_id = 'country_1';
   $onc = "document.getElementById('" . $el_id . "').src='" . $cs_main['php_self']['dirname'] . "symbols/countries/' + this.form.";
   $onc .= "clans_country.options[this.form.clans_country.selectedIndex].value + '.png'";
-  $data['clans']['country'] = cs_html_select(1,'clans_country',"onchange=\"" . $onc . "\"");
+  $data['clans']['country'] = cs_html_select(1, 'clans_country', "onchange=\"" . $onc . "\"");
   include_once('lang/' . $account['users_lang'] . '/countries.php');
   
   foreach ($cs_country AS $short => $full) {
     $short == $cs_clans['clans_country'] ? $sel = 1 : $sel = 0;
-    $data['clans']['country'] .= cs_html_option($full,$short,$sel);
+    $data['clans']['country'] .= cs_html_option($full, $short, $sel);
   }
   
-  $data['clans']['country'] .= cs_html_select(0) . ' ' . cs_html_img('symbols/countries/' . $cs_clans['clans_country'] . '.png',11,16,'id="' . $el_id . '"');
+  $data['clans']['country'] .= cs_html_select(0) . ' ' . cs_html_img('symbols/countries/' . $cs_clans['clans_country'] . '.png', 11, 16, 'id="' . $el_id . '"');
   $data['clans']['url'] = cs_secure($cs_clans['clans_url']);
-  $data['clans']['since'] = cs_dateselect('since','date',$cs_clans['clans_since']);
+  $data['clans']['since'] = cs_dateselect('since', 'date', $cs_clans['clans_since']);
   $data['clans']['password'] = cs_secure($cs_clans['clans_pwd']);
 
   $data['users']['nick'] = $users_nick;
@@ -174,7 +174,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   else {
   $place = 'uploads/clans/' . $cs_clans['clans_picture'];
     $size = getimagesize($cs_main['def_path'] . '/' . $place);
-    $data['clans']['pic'] = cs_html_img($place,$size[1],$size[0]);
+    $data['clans']['pic'] = cs_html_img($place, $size[1], $size[0]);
   }
 
   $matches[1] = $cs_lang['pic_infos'];
@@ -189,12 +189,12 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['clans']['clip'] = cs_abcode_clip($matches);
   $data['data']['id'] = $clans_id;
 
-  echo cs_subtemplate(__FILE__,$data,'clans','edit');
+  echo cs_subtemplate(__FILE__, $data, 'clans', 'edit');
 }
 else {
   $clans_cells = array_keys($cs_clans);
   $clans_save = array_values($cs_clans);
-  cs_sql_update(__FILE__,'clans',$clans_cells,$clans_save,$clans_id);
+  cs_sql_update(__FILE__, 'clans', $clans_cells, $clans_save, $clans_id);
   
   cs_redirect($cs_lang['changes_done'], 'clans') ;
 }

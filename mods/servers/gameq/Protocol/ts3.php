@@ -30,8 +30,8 @@ require_once GAMEQ_BASE . 'Protocol.php';
 class GameQ_Protocol_ts3 extends GameQ_Protocol
 {
 
-    private $clients = array();
-    private $channels = array();
+    private $clients = [];
+    private $channels = [];
 
 
     public function details()
@@ -93,7 +93,7 @@ class GameQ_Protocol_ts3 extends GameQ_Protocol
 
 	protected function replace ($data)
 	{
-		$search_replace = array (
+		$search_replace =  [
 			"\\\\" => "\\",
 			"\\/" => "/",
 			"\\s" => " ",
@@ -104,8 +104,8 @@ class GameQ_Protocol_ts3 extends GameQ_Protocol
 			"\\f" => "\f",
 			"\\n" => "\n",
 			"\\r" => "\r",
-			"\\t" => "\t"
-		);
+			"\\t" => "\t",
+		];
 
 		return strtr ($data, $search_replace);
 	}
@@ -142,12 +142,12 @@ class GameQ_Protocol_ts3 extends GameQ_Protocol
 	protected function parseResponse ($data)
 	{
 		$data = explode ('|', trim ($data));
-		$return = array ();
+		$return =  [];
 
 		foreach ($data as $part)
 		{
 			$variables = explode (' ', $part);
-			$info = array ();
+			$info =  [];
 			foreach ($variables as $variable)
 			{
 				$temp = explode ('=', $variable);

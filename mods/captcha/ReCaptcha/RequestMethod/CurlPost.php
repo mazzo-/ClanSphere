@@ -40,7 +40,7 @@ class CurlPost implements RequestMethod
      * URL to which requests are sent via cURL.
      * @const string
      */
-    const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+    public const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * Curl connection to the reCAPTCHA service
@@ -67,17 +67,17 @@ class CurlPost implements RequestMethod
     {
         $handle = $this->curl->init(self::SITE_VERIFY_URL);
 
-        $options = array(
+        $options = [
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $params->toQueryString(),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'
-            ),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/x-www-form-urlencoded',
+            ],
             CURLINFO_HEADER_OUT => false,
             CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => true
-        );
+            CURLOPT_SSL_VERIFYPEER => true,
+        ];
         $this->curl->setoptArray($handle, $options);
 
         $response = $this->curl->exec($handle);

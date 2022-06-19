@@ -37,24 +37,24 @@ class GameQ_Filter_normalise extends GameQ_Filter
      */
     public function __construct()
     { 
-        $this->vars = array(
+        $this->vars = [
             // target       => source
-            'dedicated'     => array('listenserver', 'dedic', 'bf2dedicated', 'netserverdedicated', 'bf2142dedicated'),
-            'gametype'      => array('ggametype', 'sigametype', 'matchtype'),
-            'hostname'      => array('svhostname', 'servername', 'siname', 'name'),
-            'mapname'       => array('map', 'simap'),
-            'maxplayers'    => array('svmaxclients', 'simaxplayers', 'maxclients'),
-            'mod'           => array('game', 'gamedir', 'gamevariant'),
-            'numplayers'    => array('clients', 'sinumplayers'),
-            'password'      => array('protected', 'siusepass', 'sineedpass', 'pswrd', 'gneedpass', 'auth'),
-            'players'       => array('player')
-        );
+            'dedicated'     => ['listenserver', 'dedic', 'bf2dedicated', 'netserverdedicated', 'bf2142dedicated'],
+            'gametype'      => ['ggametype', 'sigametype', 'matchtype'],
+            'hostname'      => ['svhostname', 'servername', 'siname', 'name'],
+            'mapname'       => ['map', 'simap'],
+            'maxplayers'    => ['svmaxclients', 'simaxplayers', 'maxclients'],
+            'mod'           => ['game', 'gamedir', 'gamevariant'],
+            'numplayers'    => ['clients', 'sinumplayers'],
+            'password'      => ['protected', 'siusepass', 'sineedpass', 'pswrd', 'gneedpass', 'auth'],
+            'players'       => ['player'],
+        ];
 
-        $this->player = array(
-            'name'          => array('nick', 'player'),
-            'score'         => array('score', 'kills', 'frags', 'skill'),
-            'ping'          => array(),
-        );
+        $this->player = [
+            'name'          => ['nick', 'player'],
+            'score'         => ['score', 'kills', 'frags', 'skill'],
+            'ping'          => [],
+        ];
     }
 
     /**
@@ -66,7 +66,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
      */
     public function filter($original, $server)
     {
-        $result = array();
+        $result = [];
         if (empty($original)) return $result;
 
         // Normalise results
@@ -86,7 +86,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
         }
         else
 		{
-			$result['players'] = array();
+			$result['players'] = [];
 		}
 
         unset($result['gq_players']);
@@ -139,7 +139,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
      */
     private function fill($vars, $val = false)
     {
-        $data = array();
+        $data = [];
 
         foreach ($vars as $target => $source) {
             $data['gq_' . $target] = $val;

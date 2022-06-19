@@ -28,7 +28,7 @@
  */
 class GameQ_Communicate
 {
-    private $sockets    = array();
+    private $sockets    = [];
 
     /**
      * Perform a batch query
@@ -150,7 +150,7 @@ class GameQ_Communicate
         // Initialize
         $loops     = 0;
         $maxloops  = 50;
-        $result    = array();
+        $result    = [];
         $starttime = microtime(true);
         $r         = $this->sockets;
         $w         = null;
@@ -187,7 +187,7 @@ class GameQ_Communicate
         foreach ($this->sockets as &$socket) {
             fclose($socket);
         }
-        $this->sockets = array();
+        $this->sockets = [];
     }
 
     /**

@@ -20,8 +20,8 @@ if(!empty($board_id)) {
 
 $readed = cs_sql_select(__FILE__, $from, $cells, $where, 0, 0, 0);
 
-$read_cells = array('read_since');
-$read_save = array(cs_time());
+$read_cells = ['read_since'];
+$read_save = [cs_time()];
 
 if(!empty($readed)) {
 foreach($readed AS $readme)
@@ -40,12 +40,12 @@ if(!empty($board_id)) {
 
 $readed = cs_sql_select(__FILE__, $from, $cells, $where, 0, 0, 0);
 
-$read_cells = array('read_since', 'users_id', 'threads_id');
+$read_cells = ['read_since', 'users_id', 'threads_id'];
 
 if(!empty($readed)) {
   foreach($readed AS $readme) {
     if(empty($readme['users_id'])) {
-      $read_save = array(cs_time(), $account['users_id'], $readme['threads_id']);
+      $read_save = [cs_time(), $account['users_id'], $readme['threads_id']];
       cs_sql_insert(__FILE__, 'read', $read_cells, $read_save);
     }
   }

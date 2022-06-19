@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('board');
 
-$data = array();
+$data = [];
 
 if(isset($_POST['agree'])) {
 
@@ -19,4 +19,4 @@ elseif(isset($_POST['cancel'])) {
   cs_redirect($cs_lang['repair_false'], 'board');
 }
 
-echo cs_subtemplate(__FILE__,$data,'board','metadata');
+echo cs_subtemplate(__FILE__, $data, 'board', 'metadata');

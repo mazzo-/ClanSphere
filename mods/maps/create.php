@@ -5,10 +5,10 @@
 $cs_lang = cs_translate('maps');
 
 $files_gl = cs_files();
-$data = array();
-$options = cs_sql_option(__FILE__,'maps');
+$data = [];
+$options = cs_sql_option(__FILE__, 'maps');
 
-$img_filetypes = array('gif','jpg','png');
+$img_filetypes = ['gif','jpg','png'];
 
 if (!empty($_POST['submit'])) {
 
@@ -63,11 +63,11 @@ if (!empty($_POST['submit'])) {
 
 if(empty($_POST['submit']) || !empty($error)) {
   $data['maps']['message'] = empty($error) ? $cs_lang['fill_in'] : $cs_lang['error_occured'] . $error;
-  $data['maps']['action'] = cs_url('maps','create');
+  $data['maps']['action'] = cs_url('maps', 'create');
   $data['abcode']['features'] = cs_abcode_features('maps_text');
   $data['abcode']['smileys'] = cs_abcode_smileys('maps_text');
-  $data['games'] = cs_sql_select(__FILE__,'games','games_name,games_id',0,'games_name',0,0);
-  $data['games'] = cs_dropdownsel($data['games'],$data['maps']['games_id'],'games_id');
+  $data['games'] = cs_sql_select(__FILE__, 'games', 'games_name,games_id', 0, 'games_name', 0, 0);
+  $data['games'] = cs_dropdownsel($data['games'], $data['maps']['games_id'], 'games_id');
   $return_types = '';
   foreach($img_filetypes AS $add) {
     $return_types .= empty($return_types) ? $add : ', ' . $add;
@@ -78,26 +78,26 @@ if(empty($_POST['submit']) || !empty($error)) {
   $matches[2] .= $cs_lang['max_size'] . cs_filesize($options['max_size']) . cs_html_br(1);
   $matches[2] .= $cs_lang['filetypes'] . $return_types;
   $data['maps']['matches'] = cs_abcode_clip($matches);
-  echo cs_subtemplate(__FILE__,$data,'maps','create');
+  echo cs_subtemplate(__FILE__, $data, 'maps', 'create');
 
 } elseif (!empty($_POST['submit']) && empty($error)) {
 
-  $cells = array('games_id','maps_name','maps_text', 'server_name');
-  $values = array($_POST['games_id'],$_POST['maps_name'],$_POST['maps_text'], $_POST['server_name']);
-  cs_sql_insert(__FILE__,'maps',$cells,$values);
+  $cells = ['games_id','maps_name','maps_text', 'server_name'];
+  $values = [$_POST['games_id'],$_POST['maps_name'],$_POST['maps_text'], $_POST['server_name']];
+  cs_sql_insert(__FILE__, 'maps', $cells, $values);
 
   if(!empty($files_gl['picture']['tmp_name'])) {
     $where = "maps_name = '" . cs_sql_escape($_POST['maps_name']) . "'";
-    $getid = cs_sql_select(__FILE__,'maps','maps_id',$where);
+    $getid = cs_sql_select(__FILE__, 'maps', 'maps_id', $where);
 
     $filename = 'picture-' . $getid['maps_id'] . '.' . $extension;
 
-    cs_upload('maps',$filename,$files_gl['picture']['tmp_name']);
+    cs_upload('maps', $filename, $files_gl['picture']['tmp_name']);
 
-    $cells2 = array('maps_picture');
-    $values2 = array($filename);
+    $cells2 = ['maps_picture'];
+    $values2 = [$filename];
 
-    cs_sql_update(__FILE__,'maps',$cells2,$values2,$getid['maps_id']);
+    cs_sql_update(__FILE__, 'maps', $cells2, $values2, $getid['maps_id']);
   }
-  cs_redirect($cs_lang['create_done'],'maps');
+  cs_redirect($cs_lang['create_done'], 'maps');
 }

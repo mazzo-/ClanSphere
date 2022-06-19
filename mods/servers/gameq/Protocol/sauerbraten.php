@@ -60,15 +60,15 @@ class GameQ_Protocol_sauerbraten extends GameQ_Protocol
         }
 
         // Vars
-        $this->r->add('num_players',    $this->getint());
+        $this->r->add('num_players', $this->getint());
         $this->r->add('num_attributes', $this->getint());
-        $this->r->add('protocol',       $this->getint());
-        $this->r->add('servermode',     $this->getint());
+        $this->r->add('protocol', $this->getint());
+        $this->r->add('servermode', $this->getint());
         $this->r->add('time_remaining', $this->getint());
-        $this->r->add('max_players',    $this->getint());
-        $this->r->add('locked',         $this->getint());
-        $this->r->add('map',            $this->p->readString());
-        $this->r->add('servername',     $this->p->readString());
+        $this->r->add('max_players', $this->getint());
+        $this->r->add('locked', $this->getint());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('servername', $this->p->readString());
     }
 }
 

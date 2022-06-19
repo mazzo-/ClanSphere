@@ -4,10 +4,10 @@
 
 $cs_lang = cs_translate('linkus');
 
-$linkus_count = cs_sql_count(__FILE__,'linkus');
+$linkus_count = cs_sql_count(__FILE__, 'linkus');
 $data['head']['body'] = sprintf($cs_lang['count_all'], $linkus_count);
 
-$data['linkus'] = cs_sql_select(__FILE__,'linkus','*',0,0,0,0);
+$data['linkus'] = cs_sql_select(__FILE__, 'linkus', '*', 0, 0, 0, 0);
 $linkus_loop = count($data['linkus']);
 
 for($run = 0; $run < $linkus_loop; $run++) {
@@ -31,4 +31,4 @@ for($run = 0; $run < $linkus_loop; $run++) {
   $data['linkus'][$run]['run'] = $run;
 }
 
-echo cs_subtemplate(__FILE__,$data,'linkus','list');
+echo cs_subtemplate(__FILE__, $data, 'linkus', 'list');

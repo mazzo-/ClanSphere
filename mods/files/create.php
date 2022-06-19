@@ -4,14 +4,14 @@
 
 $cs_lang = cs_translate('files');
 
-$data = array();
+$data = [];
 
 require_once('mods/categories/functions.php');
 
 $data['file']['files_time'] = cs_time();
 $data['file']['users_id'] = $account['users_id'];
 
-$filetypes = array('application/pdf' => 'pdf','text/plain' => 'txt');
+$filetypes = ['application/pdf' => 'pdf','text/plain' => 'txt'];
 
 $data['file']['files_close'] = 0;
 $data['file']['files_vote'] = 0;
@@ -27,10 +27,10 @@ $size = '';
 if(isset($_POST['submit']))
 {
   $data['file']['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] :
-  cs_categories_create('files',$_POST['categories_name']);
+  cs_categories_create('files', $_POST['categories_name']);
 
-  $data['file']['files_close'] = isset($_POST['files_close']) ? $_POST['files_close'] : 0;
-  $data['file']['files_vote'] = isset($_POST['files_vote']) ? $_POST['files_vote'] : 0;
+  $data['file']['files_close'] = $_POST['files_close'] ?? 0;
+  $data['file']['files_vote'] = $_POST['files_vote'] ?? 0;
   $data['file']['files_name'] = $_POST['files_name'];
   $data['file']['files_version'] = $_POST['files_version'];
   $data['file']['files_description'] = $_POST['files_description'];
@@ -71,7 +71,7 @@ if(isset($_POST['submit']))
   if(empty($data['file']['files_mirror']))
   $error .= $cs_lang['no_mirror'] . cs_html_br(1);
 
-  $flood = cs_sql_select(__FILE__,'files','files_time',0,'files_time DESC');
+  $flood = cs_sql_select(__FILE__, 'files', 'files_time', 0, 'files_time DESC');
   $maxtime = $flood['files_time'] + $cs_main['def_flood'];
   if($maxtime > cs_time()) {
     $diff = $maxtime - cs_time();
@@ -82,16 +82,16 @@ if(isset($_POST['submit']))
 if(isset($_POST['mirror'])) {
   $_POST['run_loop']++;
   $data['file']['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] :
-  cs_categories_create('files',$_POST['categories_name']);
-  $data['file']['files_close'] = isset($_POST['files_close']) ? $_POST['files_close'] : 0;
-  $data['file']['files_vote'] = isset($_POST['files_vote']) ? $_POST['files_vote'] : 0;
+  cs_categories_create('files', $_POST['categories_name']);
+  $data['file']['files_close'] = $_POST['files_close'] ?? 0;
+  $data['file']['files_vote'] = $_POST['files_vote'] ?? 0;
   $data['file']['files_name'] = $_POST['files_name'];
   $data['file']['files_version'] = $_POST['files_version'];
   $data['file']['files_description'] = $_POST['files_description'];
   $data['file']['files_size'] = stripos($_POST['files_size'], ',') === FALSE ? $_POST['files_size'] : strtr($_POST['files_size'], ',', '.');
   $data['file']['files_size'] = round($data['file']['files_size'], 2);
   $size = $_POST['size'];
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+  $run_loop = $_POST['run_loop'] ?? 1;
 
 } else {
   $files_mirror = $data['file']['files_mirror'];
@@ -118,24 +118,24 @@ if(!empty($error) OR !isset($_POST['submit']))
     $data['levels'][$l]['name'] = $cs_lang['size_' . $l];
     $data['levels'][$l]['if']['selected'] = $size == $l ? true : false;
   }
-  $data['categories']['dropdown'] = cs_categories_dropdown2('files',$data['file']['categories_id']);
+  $data['categories']['dropdown'] = cs_categories_dropdown2('files', $data['file']['categories_id']);
   $data['text']['smileys'] = cs_abcode_smileys('files_description');
   $data['text']['features'] = cs_abcode_features('files_description');
 
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
-  $data['mirrors'] = array();
+  $run_loop = $_POST['run_loop'] ?? 1;
+  $data['mirrors'] = [];
 
   for($run=0; $run < $run_loop; $run++){
     $num = $run+1;
     $data['mirrors'][$run]['run'] = $run+1;
     $data['mirrors'][$run]['num'] = $num;
 
-    $data['mirrors'][$run]['url'] = isset($_POST["files_mirror_url_$num"]) ? $_POST["files_mirror_url_$num"] : 'http://server.net/data.zip';
-    $data['mirrors'][$run]['name'] = isset($_POST["files_mirror_name_$num"]) ? $_POST["files_mirror_name_$num"] : 'Mirror ' . $num;
-    $data['mirrors'][$run]['ext'] = isset($_POST["files_mirror_ext_$num"]) ? $_POST["files_mirror_ext_$num"] : 'zip';
-    $data['mirrors'][$run]['access'] = isset($_POST["files_access_$num"]) ? $_POST["files_access_$num"] : 0;
+    $data['mirrors'][$run]['url'] = $_POST["files_mirror_url_$num"] ?? 'http://server.net/data.zip';
+    $data['mirrors'][$run]['name'] = $_POST["files_mirror_name_$num"] ?? 'Mirror ' . $num;
+    $data['mirrors'][$run]['ext'] = $_POST["files_mirror_ext_$num"] ?? 'zip';
+    $data['mirrors'][$run]['access'] = $_POST["files_access_$num"] ?? 0;
      
-    $data['mirrors'][$run]['accesses'] = array();
+    $data['mirrors'][$run]['accesses'] = [];
     for($a = 0; $a < 6; $a++) {
       $data['mirrors'][$run]['accesses'][$a]['name'] = $a . ' - ' . $cs_lang['lev_' . $a];
       $data['mirrors'][$run]['accesses'][$a]['value'] = $a;
@@ -146,13 +146,13 @@ if(!empty($error) OR !isset($_POST['submit']))
   $data['if']['votes'] = $data['file']['files_vote'] ? true : false;
   $data['mirror']['run_loop'] = $run_loop;
 
-  echo cs_subtemplate(__FILE__,$data,'files','create');
+  echo cs_subtemplate(__FILE__, $data, 'files', 'create');
 }
 else
 {
   $files_cells = array_keys($data['file']);
   $files_save = array_values($data['file']);
-  cs_sql_insert(__FILE__,'files',$files_cells,$files_save);
+  cs_sql_insert(__FILE__, 'files', $files_cells, $files_save);
 
-  cs_redirect($cs_lang['create_done'],'files');
+  cs_redirect($cs_lang['create_done'], 'files');
 }

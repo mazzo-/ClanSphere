@@ -2,7 +2,7 @@
 // ClanSphere 2010 - www.clansphere.net
 // $Id$
 
-$data = array('langs' => array());
+$data = ['langs' => []];
 $data['form']['url'] = cs_url($cs_main['def_mod'], $cs_main['def_action'], $cs_main['def_parameters']);
 $langs = cs_checkdirs('lang');
 $row = 0;
@@ -14,4 +14,4 @@ foreach($langs as $lang) {
   $row++;
 }
 
-echo cs_subtemplate(__FILE__,$data,'users','navlang');
+echo cs_subtemplate(__FILE__, $data, 'users', 'navlang');

@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('cash');
 $cs_post = cs_post('start,sort');
 $cs_get = cs_get('start,sort');
-$data = array();
+$data = [];
 $data['op'] = cs_sql_option(__FILE__, 'cash');
 
 $start = empty($cs_get['start']) ? 0 : $cs_get['start'];
@@ -25,13 +25,13 @@ $cs_sort[6] = 'cash_inout ASC';
 $order = $cs_sort[$sort];
 $where_user = "users_id = '" . $account['users_id'] . "'";
 $and_user = " AND users_id = '" . $account['users_id'] . "'";
-$cash_count = cs_sql_count(__FILE__,'cash',$where_user);
+$cash_count = cs_sql_count(__FILE__, 'cash', $where_user);
 
 $data['head']['count'] = $cash_count;
-$data['head']['pages'] = cs_pages('cash','center',$cash_count,$start,0,$sort);
+$data['head']['pages'] = cs_pages('cash', 'center', $cash_count, $start, 0, $sort);
 
 // Kontodaten
-$konto = cs_sql_select(__FILE__,'account','*',0,0,0);
+$konto = cs_sql_select(__FILE__, 'account', '*', 0, 0, 0);
 $konto_count = count($konto);
 
 if(!empty($konto_count)) {
@@ -60,7 +60,7 @@ if(!empty($konto_count)) {
 
 $money = 0;
 $where = "cash_inout = 'in'" . $and_user;
-$cs_cash_overview = cs_sql_select(__FILE__,'cash','cash_money',$where,0,0,0);
+$cs_cash_overview = cs_sql_select(__FILE__, 'cash', 'cash_money', $where, 0, 0, 0);
 $over_loop = count($cs_cash_overview);
 for($run=0; $run<$over_loop; $run++) {
   $money = $money + $cs_cash_overview[$run]['cash_money'];
@@ -68,7 +68,7 @@ for($run=0; $run<$over_loop; $run++) {
 $money_in = $money;
 $money = 0;
 $where = "cash_inout = 'out'" . $and_user;
-$cs_cash_overview = cs_sql_select(__FILE__,'cash','cash_money',$where,0,0,0);
+$cs_cash_overview = cs_sql_select(__FILE__, 'cash', 'cash_money', $where, 0, 0, 0);
 $over_loop = count($cs_cash_overview);
 for($run=0; $run<$over_loop; $run++) {
   $money = $money + $cs_cash_overview[$run]['cash_money'];
@@ -82,17 +82,17 @@ $data['ov']['now'] = cs_secure($money_now);
 
 
 // Einzahlungen (Einnahmen)
-$data['sort']['date'] = cs_sort('cash','center',$start,0,1,$sort);
-$data['sort']['money'] = cs_sort('cash','center',$start,0,3,$sort);
+$data['sort']['date'] = cs_sort('cash', 'center', $start, 0, 1, $sort);
+$data['sort']['money'] = cs_sort('cash', 'center', $start, 0, 3, $sort);
 
 
 $where = "cash_inout = 'in'" . $and_user;
-$data['in'] = cs_sql_select(__FILE__,'cash','*',$where,$order,$start,$account['users_limit']);
+$data['in'] = cs_sql_select(__FILE__, 'cash', '*', $where, $order, $start, $account['users_limit']);
 $cash_loop = count($data['in']);
 
 for($run=0; $run<$cash_loop; $run++) {
 
-  $data['in'][$run]['date'] = cs_date('date',$data['in'][$run]['cash_time']);
+  $data['in'][$run]['date'] = cs_date('date', $data['in'][$run]['cash_time']);
 
   $data['in'][$run]['id'] = $data['in'][$run]['cash_id'];
   $text = $data['in'][$run]['cash_text'];
@@ -109,16 +109,16 @@ for($run=0; $run<$cash_loop; $run++) {
 
 
 // Auszahlungen
-$data['sort2']['date'] = cs_sort('cash','center',$start,0,1,$sort);
-$data['sort2']['money'] = cs_sort('cash','center',$start,0,3,$sort);
+$data['sort2']['date'] = cs_sort('cash', 'center', $start, 0, 1, $sort);
+$data['sort2']['money'] = cs_sort('cash', 'center', $start, 0, 3, $sort);
 
 $where = "cash_inout = 'out'";
-$data['out'] = cs_sql_select(__FILE__,'cash','*',$where,$order,$start,$account['users_limit']);
+$data['out'] = cs_sql_select(__FILE__, 'cash', '*', $where, $order, $start, $account['users_limit']);
 $cash_loop = count($data['out']);
 
 for($run=0; $run<$cash_loop; $run++) {
 
-  $data['out'][$run]['date'] = cs_date('date',$data['out'][$run]['cash_time']);
+  $data['out'][$run]['date'] = cs_date('date', $data['out'][$run]['cash_time']);
 
   $data['out'][$run]['id'] = $data['out'][$run]['cash_id'];
   $text = $data['out'][$run]['cash_text'];
@@ -132,4 +132,4 @@ for($run=0; $run<$cash_loop; $run++) {
   elseif ($inout == 'out') { $icon = 'red'; }
   $data['out'][$run]['in_out'] = cs_html_img('symbols/clansphere/' . $icon . '.gif');
 }
-echo cs_subtemplate(__FILE__,$data,'cash','center');
+echo cs_subtemplate(__FILE__, $data, 'cash', 'center');

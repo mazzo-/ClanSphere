@@ -3,11 +3,11 @@
 // $Id$
 
 $cs_lang = cs_translate('abcode');
-$data = array();
+$data = [];
 
 $select = "abcode_pattern, abcode_file";
 $where = "abcode_func = 'img'";
-$smileys = cs_sql_select(__FILE__,'abcode',$select,$where,0,0,0);
+$smileys = cs_sql_select(__FILE__, 'abcode', $select, $where, 0, 0, 0);
 
 if(isset($_POST['submit'])) {
   $error = 0;
@@ -32,7 +32,7 @@ if(isset($_POST['submit'])) {
     } else {
       $error++;
       $errormsg .= sprintf($cs_lang['error_pattern'], $_POST['file'][$run]) . cs_html_br(1);
-      $data['file'][$run]['run'] = isset($_POST['pattern'][$run]) ? $_POST['pattern'][$run] : '';
+      $data['file'][$run]['run'] = $_POST['pattern'][$run] ?? '';
     }
     $data['file'][$run]['name'] = $_POST['file'][$run];
     $data['file'][$run]['preview'] = cs_html_img('uploads/abcode/' . $_POST['file'][$run]);
@@ -50,8 +50,8 @@ else {
 }
 
 if(!isset($_POST['submit']) OR !empty($error)) {
-   $act_smileys = array();
-   $all_smileys = array();     
+   $act_smileys = [];
+   $all_smileys = [];     
    if(!empty($smileys)) {
       for($run=0; $run<count($smileys); $run++) {
       $act_smileys[] = $smileys[$run]['abcode_file'];
@@ -59,11 +59,11 @@ if(!isset($_POST['submit']) OR !empty($error)) {
     }    
     
     $pfad = "uploads/abcode";
-    $allowed = array('.gif', '.GIF', '.jpg', '.JPG', '.png', '.PNG', 'jpeg', 'JPEG');
+    $allowed = ['.gif', '.GIF', '.jpg', '.JPG', '.png', '.PNG', 'jpeg', 'JPEG'];
     if ($handle = opendir($pfad)) {
       while (false !== ($file = readdir($handle))) {
-        $ending = substr($file,-4);
-        if ($file{0} != '.' AND in_array($ending, $allowed)) {
+        $ending = substr($file, -4);
+        if ($file[0] != '.' AND in_array($ending, $allowed)) {
           $all_smileys[] = $file;
         }
       }
@@ -83,15 +83,15 @@ if(!isset($_POST['submit']) OR !empty($error)) {
 }
 else {
   for($run=0; $run<count($data['file']); $run++) {
-    $sql_cells = array('abcode_func', 'abcode_pattern', 'abcode_file', 'abcode_order');
-    $sql_saves = array('img', $data['file'][$run]['run'], $data['file'][$run]['name'], $data['file'][$run]['order']);
-    cs_sql_insert(__FILE__,'abcode',$sql_cells,$sql_saves);
+    $sql_cells = ['abcode_func', 'abcode_pattern', 'abcode_file', 'abcode_order'];
+    $sql_saves = ['img', $data['file'][$run]['run'], $data['file'][$run]['name'], $data['file'][$run]['order']];
+    cs_sql_insert(__FILE__, 'abcode', $sql_cells, $sql_saves);
   }
 
   cs_cache_delete('abcode_smileys');
   cs_cache_delete('abcode_content');
 
-  cs_redirect($cs_lang['changes_done'],'abcode','manage');
+  cs_redirect($cs_lang['changes_done'], 'abcode', 'manage');
 }
 
 if(empty($data['file'])) {
@@ -103,4 +103,4 @@ else {
   $data['if']['smileys'] = true;  
 }
 
-echo cs_subtemplate(__FILE__,$data,'abcode','import');
+echo cs_subtemplate(__FILE__, $data, 'abcode', 'import');

@@ -4,49 +4,49 @@
 
 $cs_lang = cs_translate('clansphere');
 
-$data = array();
+$data = [];
 
-$data['support'] = array(
-  0 => array(
+$data['support'] = [
+  0 => [
     'url' => 'board.clansphere.net',
     'name' => $cs_lang['name_board'],
     'text' => $cs_lang['text_board'],
-  ),
-  1 => array(
+  ],
+  1 => [
     'url' => 'bugs.clansphere.net',
     'name' => $cs_lang['name_bugs'],
     'text' => $cs_lang['text_bugs'],
-  ),
-  2 => array(
+  ],
+  2 => [
     'url' => 'contact.clansphere.net',
     'name' => $cs_lang['name_contact'],
     'text' => $cs_lang['text_contact'],
-  ),
-  3 => array(
+  ],
+  3 => [
     'url' => 'design.clansphere.net',
     'name' => $cs_lang['name_design'],
     'text' => $cs_lang['text_design'],
-  ),
-  4 => array(
+  ],
+  4 => [
     'url' => 'lang.clansphere.net',
     'name' => $cs_lang['name_lang'],
     'text' => $cs_lang['text_lang'],
-  ),
-  5 => array(
+  ],
+  5 => [
     'url' => 'mods.clansphere.net',
     'name' => $cs_lang['name_mods'],
     'text' => $cs_lang['text_mods'],
-  ),
-  6 => array(
+  ],
+  6 => [
     'url' => 'vcs.clansphere.net',
     'name' => $cs_lang['name_vcs'],
     'text' => $cs_lang['text_vcs'],
-  ),
-  7 => array(
+  ],
+  7 => [
     'url' => 'wiki.clansphere.net',
     'name' => $cs_lang['name_wiki'],
     'text' => $cs_lang['text_wiki'],
-  )
-);
+  ],
+];
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','support');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'support');

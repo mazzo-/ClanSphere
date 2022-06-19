@@ -22,7 +22,7 @@ $select = 'cat.categories_name AS categories_name, cat.categories_id AS categori
 $from = 'board boa INNER JOIN {pre}_categories cat ON boa.categories_id = cat.categories_id';
 $cs_board = cs_sql_select(__FILE__, $from, $select, $where);
 
-$data = array();
+$data = [];
 $data['count']['topics'] = 0;
 $data['pages']['list'] = '';
 $data['link']['board'] = cs_url('board', 'list');
@@ -53,7 +53,7 @@ if (empty($cs_board['board_name']) or $account['access_board'] < $cs_board['boar
   }
   elseif(empty($check_pw)) {
     global $cs_db;
-    $sec_pw = isset($_POST['sec_pw']) ? $_POST['sec_pw'] : 0;
+    $sec_pw = $_POST['sec_pw'] ?? 0;
     
     if ($cs_db['hash'] == 'md5') {
       $sec_pw = md5($sec_pw);
@@ -62,8 +62,8 @@ if (empty($cs_board['board_name']) or $account['access_board'] < $cs_board['boar
     }
     
     if ($sec_pw == $cs_board['board_pwd'] and !empty($account['users_id'])) {
-      $board_cells = array('users_id', 'board_id');
-      $board_save = array($account['users_id'], $cs_board['board_id']);
+      $board_cells = ['users_id', 'board_id'];
+      $board_save = [$account['users_id'], $cs_board['board_id']];
       cs_sql_insert(__FILE__, 'boardpws', $board_cells, $board_save);
       $check_pw = 1;
     } else {
@@ -79,7 +79,7 @@ if (empty($cs_board['board_name']) or $account['access_board'] < $cs_board['boar
 }
 
 if (!empty($cs_board['board_name']) and !empty($check_pw)) {
-  $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+  $start = $_REQUEST['start'] ?? 0;
   
   $data['count']['topics'] = $cs_board['board_threads'];
   $data['pages']['list'] = cs_pages('board', 'listcat', $cs_board['board_threads'], $start, $cs_board['board_id']);
@@ -128,7 +128,7 @@ if (!empty($cs_board['board_name']) and !empty($check_pw)) {
       
       if (!empty($thread['threads_ghost'])) {
         $data['threads'][$run]['headline'] = $headline;
-    $data['threads'][$run]['headline'] .= ' ' . cs_link(cs_icon('cancel'),'board','thread_remove','id=' . $thread['threads_id']);
+    $data['threads'][$run]['headline'] .= ' ' . cs_link(cs_icon('cancel'), 'board', 'thread_remove', 'id=' . $thread['threads_id']);
         $data['threads'][$run]['ghost_thread'] = cs_html_br(2);
     $data['threads'][$run]['ghost_thread'] .= cs_link($cs_lang['ghost_topic'], 'board', 'thread', 'where=' . $thread['threads_ghost_thread']);
         $data['threads'][$run]['ghost_board'] = ' - ' . cs_link($cs_lang['ghost_board'], 'board', 'listcat', 'id=' . $thread['threads_ghost_board']);
@@ -160,7 +160,7 @@ if (!empty($cs_board['board_name']) and !empty($check_pw)) {
       
       if (!empty($thread['starter_id'])) {
         $thread_starter = cs_sql_select(__FILE__, 'users', 'users_nick, users_active, users_delete', 'users_id = ' . $thread['starter_id'], 0, 0, 1);
-        $data['threads'][$run]['user'] = cs_user($thread['starter_id'],$thread_starter['users_nick'], $thread_starter['users_active'], $thread_starter['users_delete']);
+        $data['threads'][$run]['user'] = cs_user($thread['starter_id'], $thread_starter['users_nick'], $thread_starter['users_active'], $thread_starter['users_delete']);
       } else {
         $data['threads'][$run]['user'] = '';
       }
@@ -202,6 +202,6 @@ if (!empty($cs_board['board_name']) and !empty($check_pw)) {
     
 	$data['head']['message'] = cs_getmsg();
 	
-    echo cs_subtemplate(__FILE__, $data, 'board', 'listcat',1);
+    echo cs_subtemplate(__FILE__, $data, 'board', 'listcat', 1);
   }
 }

@@ -8,7 +8,7 @@ $cs_lang = cs_translate('quotes');
 require_once('mods/categories/functions.php');
 
 $quotes_id = $_REQUEST['id'];
-settype($quotes_id,'integer');
+settype($quotes_id, 'integer');
 
  $data['head']['mod'] = $cs_lang['mod_name'];
  $data['head']['action'] = $cs_lang['edit'];
@@ -18,7 +18,7 @@ settype($quotes_id,'integer');
 if(isset($_POST['submit'])) {
 
     $cs_quotes['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] : 
-  cs_categories_create('quotes',$_POST['categories_name']);
+  cs_categories_create('quotes', $_POST['categories_name']);
 
   $cs_quotes['quotes_headline'] = $_POST['quotes_headline'];
   $cs_quotes['quotes_text'] = $_POST['quotes_text'];
@@ -47,7 +47,7 @@ if(isset($_POST['submit'])) {
 }
 else {
   $cells = 'categories_id, quotes_headline, quotes_text, users_id, quotes_time';
-  $cs_quotes = cs_sql_select(__FILE__,'quotes',$cells,"quotes_id = '" . $quotes_id . "'");
+  $cs_quotes = cs_sql_select(__FILE__, 'quotes', $cells, "quotes_id = '" . $quotes_id . "'");
 }
 if(!isset($_POST['submit']) AND empty($error)) {
   $data['head']['body'] = $cs_lang['fill_obligated'];
@@ -85,7 +85,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   
   $data['lang']['headline'] = $cs_lang['headline'];
   $data['lang']['categories'] = $cs_lang['categories'];
-  $data['categories']['dropdown'] = cs_categories_dropdown('quotes',$cs_quotes['categories_id']);
+  $data['categories']['dropdown'] = cs_categories_dropdown('quotes', $cs_quotes['categories_id']);
     $data['abcode']['features'] = cs_abcode_features('quotes_text');
   $data['lang']['more'] = $cs_lang['more'];
   $data['lang']['nocom'] = $cs_lang['nocom'];
@@ -95,13 +95,13 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['lang']['options'] = $cs_lang['options'];
   $data['lang']['edit'] = $cs_lang['edit'];
   $data['lang']['reset'] = $cs_lang['reset'];
-  echo cs_subtemplate(__FILE__,$data,'quotes','edit');
+  echo cs_subtemplate(__FILE__, $data, 'quotes', 'edit');
   
 } else {
 
   $quotes_cells = array_keys($cs_quotes);
   $quotes_save = array_values($cs_quotes);
-  cs_sql_update(__FILE__,'quotes',$quotes_cells,$quotes_save,$quotes_id);
+  cs_sql_update(__FILE__, 'quotes', $quotes_cells, $quotes_save, $quotes_id);
   
    cs_redirect($cs_lang['changes_done'], 'quotes') ;
 } 

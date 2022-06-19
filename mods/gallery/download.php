@@ -4,12 +4,12 @@
 
 class zipfile
 {
-  var $datasec      = array();
-  var $ctrl_dir     = array();
-  var $eof_ctrl_dir = "\x50\x4b\x05\x06\x00\x00\x00\x00";
-  var $old_offset   = 0;
+  public $datasec      = [];
+  public $ctrl_dir     = [];
+  public $eof_ctrl_dir = "\x50\x4b\x05\x06\x00\x00\x00\x00";
+  public $old_offset   = 0;
 
-  function unix2DosTime($unixtime = 0)
+  public function unix2DosTime($unixtime = 0)
   {
     $timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);
     if ($timearray['year'] < 1980) 
@@ -26,7 +26,7 @@ class zipfile
         ($timearray['hours'] << 11) | ($timearray['minutes'] << 5) | ($timearray['seconds'] >> 1);
   }
 
-  function addFile($data, $name, $time = 0)
+  public function addFile($data, $name, $time = 0)
   {
     $name   = str_replace('\\', '/', $name);
 
@@ -79,7 +79,7 @@ class zipfile
     $this -> ctrl_dir[] = $cdrec;
   }
 
-  function file()
+  public function file()
   {
     $data  = implode('', $this -> datasec);
     $ctrldir = implode('', $this -> ctrl_dir);
@@ -99,11 +99,11 @@ class zipfile
 if (function_exists('gzcompress'))
 {
   $zip = isset($_REQUEST['zip']) ? '1' : 0;
-  $name = isset($_REQUEST['name']) ? $_REQUEST['name'] : 0;
+  $name = $_REQUEST['name'] ?? 0;
   if($zip == '1' AND $name !== '0')
   {
     $pattern = "=^[_a-z0-9-]+(\.[_a-z0-9-]+)?$=i";
-    if(!preg_match($pattern,$name))
+    if(!preg_match($pattern, $name))
     {
       die('Error: Invalid arguments passed');
     }
@@ -118,7 +118,7 @@ if (function_exists('gzcompress'))
       $dump_buffer = $zipfile -> file();
       $zipfilename = 'images.zip';
       $handle = fopen ($zipfilename, 'wb');
-      fwrite($handle,$dump_buffer);
+      fwrite($handle, $dump_buffer);
       fclose ($handle);
       header("Content-type: application/octet-stream");
       header("Content-disposition: attachment; filename=$zipfilename");

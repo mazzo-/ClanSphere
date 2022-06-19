@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('wars');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 
 require_once('mods/categories/functions.php');
 
@@ -29,16 +29,16 @@ if (isset($_POST['submit'])) {
   $cs_wars['wars_report'] = $_POST['wars_report'];
   $cs_wars['wars_report2'] = $_POST['wars_report2'];
   $cs_wars['wars_date'] = cs_datepost('date', 'unix');
-  $cs_wars['wars_close'] = isset($_POST['wars_close']) ? $_POST['wars_close'] : 0;
+  $cs_wars['wars_close'] = $_POST['wars_close'] ?? 0;
   $cs_wars['wars_topmatch'] = empty($_POST['wars_topmatch']) ? 0 : 1;  
   
   $old_cells = 'users_id, players_status, players_played, players_time';
   $old_players = cs_sql_select(__FILE__, 'players', $old_cells, 'wars_id = ' . $wars_id, 0, 0, 0);
-  $old_players = empty($old_players) ? array() : $old_players;
+  $old_players = empty($old_players) ? [] : $old_players;
   cs_sql_delete(__FILE__, 'players', $wars_id, 'wars_id');
   
   $players = empty($_POST['players']) ? 1 : (int)$_POST['players'];
-  $pcells = array('users_id', 'wars_id', 'players_status', 'players_played', 'players_time');
+  $pcells = ['users_id', 'wars_id', 'players_status', 'players_played', 'players_time'];
   
   function multiarray_search_2($array, $innerkey, $value)
   {
@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
         $played = '1';
         $time = cs_time();
       }
-      cs_sql_insert(__FILE__, 'players', $pcells, array($users_id, $wars_id, $status, $played, $time));
+      cs_sql_insert(__FILE__, 'players', $pcells, [$users_id, $wars_id, $status, $played, $time]);
     }
   }
   
@@ -164,7 +164,7 @@ if (!empty($error) or !isset($_POST['submit'])) {
   
   $data['wars']['date_sel'] = cs_dateselect('date', 'unix', $cs_wars['wars_date'], 1995);
   
-  $status = array();
+  $status = [];
   $status[0]['wars_status'] = 'upcoming';
   $status[0]['name'] = $cs_lang['upcoming'];
   $status[1]['wars_status'] = 'running';
@@ -188,7 +188,7 @@ if (!empty($error) or !isset($_POST['submit'])) {
   
   $data['wars']['id'] = $wars_id;
 
-  echo cs_subtemplate(__FILE__,$data,'wars','edit');
+  echo cs_subtemplate(__FILE__, $data, 'wars', 'edit');
 }
 else {
   settype($cs_wars['wars_score1'], 'integer');

@@ -11,11 +11,11 @@ function cs_login_cookies($userid = 0, $use_old_hash = 0) {
 
   if(!empty($userid) AND empty($use_old_hash)) {
     $pattern = '1234567890abcdefghijklmnpqrstuvwxyz';
-    for($i=0;$i<34;$i++) { $thishash .= $pattern{rand(0,34)}; }
+    for($i=0;$i<34;$i++) { $thishash .= $pattern[rand(0, 34)]; }
 
-    $cells = array('users_cookietime', 'users_cookiehash');
-    $content = array($thistime, $thishash);
-    cs_sql_update(__FILE__,'users',$cells,$content,$userid, 0, 0);
+    $cells = ['users_cookietime', 'users_cookiehash'];
+    $content = [$thistime, $thishash];
+    cs_sql_update(__FILE__, 'users', $cells, $content, $userid, 0, 0);
   }
   elseif(!empty($userid) AND $use_old_hash == true) {
     $thistime = $account['users_cookietime'];
@@ -34,27 +34,27 @@ function cs_login_cookies($userid = 0, $use_old_hash = 0) {
 
 global $cs_lang, $cs_main, $login;
 
-$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-$login   = array('mode' => FALSE, 'error' => '', 'cookie' => 0);
-$noacc   = array('users_id' => 0, 'users_pwd' => '', 'users_cookiehash' => '', 'users_cookietime' => 0);
+$login   = ['mode' => FALSE, 'error' => '', 'cookie' => 0];
+$noacc   = ['users_id' => 0, 'users_pwd' => '', 'users_cookiehash' => '', 'users_cookietime' => 0];
 $account = $noacc;
 
 # Send cookie only by http protocol (available in PHP 5.2.0 or higher)
-if(version_compare(phpversion(),'5.2.0','>'))
-  session_set_cookie_params(0,$cs_main['cookie']['path'],$cs_main['cookie']['domain'],FALSE,TRUE);
+if(version_compare(phpversion(), '5.2.0', '>'))
+  session_set_cookie_params(0, $cs_main['cookie']['path'], $cs_main['cookie']['domain'], FALSE, TRUE);
 else
-  session_set_cookie_params(0,$cs_main['cookie']['path'],$cs_main['cookie']['domain']);
+  session_set_cookie_params(0, $cs_main['cookie']['path'], $cs_main['cookie']['domain']);
 
 session_name('cs' . md5($cs_main['cookie']['domain'])); 
 session_start();
 
 # xsrf protection
 if($cs_main['xsrf_protection']===TRUE && !empty($_POST)) {
-  $needed_keys = isset($_SESSION['cs_xsrf_keys']) ? $_SESSION['cs_xsrf_keys'] : array();
-  $given_key = isset($_POST['cs_xsrf_key']) ? $_POST['cs_xsrf_key'] : '';
+  $needed_keys = $_SESSION['cs_xsrf_keys'] ?? [];
+  $given_key = $_POST['cs_xsrf_key'] ?? '';
   if(empty($given_key) || !in_array($given_key, $needed_keys)) {
-    $_SESSION['cs_xsrf_keys'] = array();
+    $_SESSION['cs_xsrf_keys'] = [];
     $referer = empty($_SERVER['HTTP_REFERER']) ? 'empty' : $_SERVER['HTTP_REFERER'];
 
     if(!empty($cs_main['developer']))
@@ -79,7 +79,7 @@ if(empty($_SESSION['users_id'])) {
     if(isset($_POST['cookie'])) {
       $login['cookie'] = $_POST['cookie'];
     }
-    $data['options'] = cs_sql_option(__FILE__,'users');
+    $data['options'] = cs_sql_option(__FILE__, 'users');
     $login_where = "users_nick = '" . cs_sql_escape($login['nick']) . "'";
     if($data['options']['login'] == 'email') {
       $login_where = "users_email = '" . cs_sql_escape($login['nick']) . "'";
@@ -94,7 +94,7 @@ if(empty($_SESSION['users_id'])) {
   }
 
   if(isset($login['method'])) {
-    $login_db = cs_sql_select(__FILE__,'users','*',$login_where);
+    $login_db = cs_sql_select(__FILE__, 'users', '*', $login_where);
 
     if(!empty($login_db['users_pwd']) AND ($login['method'] == 'cookie' OR $login_db['users_pwd'] == $login['securepw'])) {
       if(empty($login_db['users_active']) || !empty($login_db['users_delete']))
@@ -163,18 +163,18 @@ if(!empty($account['users_id'])) {
     $login['mode'] = FALSE;
   }
   elseif($time > ($account['users_laston'] + 30)) {
-    $cells = array('users_laston');
-    $content = array($time);
-    cs_sql_update(__FILE__,'users',$cells,$content,$account['users_id'], 0, 0);
+    $cells = ['users_laston'];
+    $content = [$time];
+    cs_sql_update(__FILE__, 'users', $cells, $content, $account['users_id'], 0, 0);
   }
 }
 else
-  $account = array('access_id' => 1, 'users_id' => 0, 'users_lang' => $cs_main['def_lang'], 'users_limit' => $cs_main['data_limit'],
-                   'users_timezone' => $cs_main['def_timezone'], 'users_dstime' => $cs_main['def_dstime'], 'access_clansphere' => 0);
+  $account = ['access_id' => 1, 'users_id' => 0, 'users_lang' => $cs_main['def_lang'], 'users_limit' => $cs_main['data_limit'],
+                   'users_timezone' => $cs_main['def_timezone'], 'users_dstime' => $cs_main['def_dstime'], 'access_clansphere' => 0, ];
 
-$gma = cs_sql_select(__FILE__,'access','*','access_id = ' . (int) $account['access_id'], 0,0,1, 'access_' . $account['access_id']);
+$gma = cs_sql_select(__FILE__, 'access', '*', 'access_id = ' . (int) $account['access_id'], 0, 0, 1, 'access_' . $account['access_id']);
 if(is_array($gma))
-  $account = array_merge($account,$gma);
+  $account = array_merge($account, $gma);
 
 if(empty($cs_main['maintenance_access']))
   $cs_main['maintenance_access'] = 3;

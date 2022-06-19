@@ -3,18 +3,18 @@
 // $Id$
 
 $cs_lang = cs_translate('board');
-$data = array();
+$data = [];
 
 
 $keywords = empty($_POST['keywords']) ? '' : $_POST['keywords'];
 $searchmode = empty($_POST['searchmode']) ? 1 : $_POST['searchmode'];
 $searcharea = empty($_POST['searcharea']) ? 'threads' : $_POST['searcharea'];
 $board_id = empty($_POST['board_id']) ? 0 : $_POST['board_id'];
-settype($board_id,'integer');
+settype($board_id, 'integer');
 $page = empty($_POST['page']) ? 0 : $_POST['page'];
-settype($page,'integer');
+settype($page, 'integer');
 $max_page = empty($_POST['max_page']) ? 0 : $_POST['max_page'];
-settype($max_page,'integer');
+settype($max_page, 'integer');
 $go_search = isset($_POST['search']) ? 1 : 0;
 
 if (!empty($_GET['search'])) {
@@ -41,12 +41,12 @@ elseif(isset($_POST['last'])) {
 
 $data['data']['keywords'] = $keywords;
 
-$checked = $searchmode == 1 ? array(1 => 1, 2 => 0) : array(1 => 0, 2 => 1);
+$checked = $searchmode == 1 ? [1 => 1, 2 => 0] : [1 => 0, 2 => 1];
 $check_it = 'checked="checked"';
 $data['check']['exact'] = empty($checked[1]) ? '' : $check_it;
 $data['check']['keywords'] = empty($checked[2]) ? '' : $check_it;
 
-$checked = $searcharea == 'threads' ? array(1 => 1, 2 => 0) : array(1 => 0, 2 => 1);
+$checked = $searcharea == 'threads' ? [1 => 1, 2 => 0] : [1 => 0, 2 => 1];
 $data['check']['threads'] = empty($checked[1]) ? '' : $check_it;
 $data['check']['comments'] = empty($checked[2]) ? '' : $check_it;
 
@@ -55,14 +55,14 @@ $tables = "board boa INNER JOIN {pre}_categories cat ON boa.categories_id = cat.
 $select = "boa.board_id AS board_id, boa.board_name AS board_name, cat.categories_name AS categories_name";
 $axx_where = "boa.board_access <= '" . $account['access_board'] . "' AND boa.board_pwd = ''";
 $sorting = "cat.categories_name ASC, boa.board_name ASC";
-$board_data = cs_sql_select(__FILE__,$tables,$select,$axx_where,$sorting,0,0);
+$board_data = cs_sql_select(__FILE__, $tables, $select, $axx_where, $sorting, 0, 0);
 
 $data['board']['options'] = '';
 if (!empty($board_data)) {
   foreach($board_data AS $board) {
     $sel = $board_id == $board['board_id'] ? 1 : 0;
     $content = $board['categories_name'] . ' -> ' . $board['board_name'];
-    $data['board']['options'] .= cs_html_option($content,$board['board_id'],$sel);
+    $data['board']['options'] .= cs_html_option($content, $board['board_id'], $sel);
   }
 }
 
@@ -86,14 +86,14 @@ if(!empty($go_search)) {
     $conditions = "com.comments_text LIKE '%" . $key_esc . "%'";
   }
   else {
-    $key_array = explode(' ',$key_esc);
+    $key_array = explode(' ', $key_esc);
     $conditions = '(';
     foreach($key_array AS $key) {
       if(strlen(trim($key)) > 2) {
         $conditions .= $searcharea == 'threads' ? "(thr.threads_headline LIKE '%" . $key . "%' OR thr.threads_text LIKE '%" . $key . "%') AND " : "com.comments_text LIKE '%" . $key . "%' AND ";
       }
     }
-    $conditions = substr($conditions,0,-5) . ')';
+    $conditions = substr($conditions, 0, -5) . ')';
   }
   if($key_check < 3 OR $conditions == ')' AND $searchmode != 1) {
     $data['if']['too_short'] = TRUE;
@@ -116,7 +116,7 @@ if(!empty($go_search)) {
       $order = 'com.comments_id DESC';
     }
     $conditions = $conditions . " AND boa.board_pwd = ''";
-    $count = cs_sql_count(__FILE__,$from,$conditions);
+    $count = cs_sql_count(__FILE__, $from, $conditions);
 
     if(empty($count)) {
       $data['if']['not_found'] = TRUE;
@@ -133,38 +133,38 @@ if(!empty($go_search)) {
       $data['hidden']['max_page'] = $all_pages;
 
       $data['page']['of'] = $cs_lang['page'] . ' ' . ($page + 1) . ' ' . $cs_lang['of'] . ' ' . ($all_pages + 1);
-      $data['count']['results'] = sprintf($cs_lang['found_matches'],$count);
+      $data['count']['results'] = sprintf($cs_lang['found_matches'], $count);
 
 
       $start = $page * $account['users_limit'];
-      $result = cs_sql_select(__FILE__,$from,$select,$conditions,$order,$start,$account['users_limit']);
-      $result = is_array($result) ? $result : array();
+      $result = cs_sql_select(__FILE__, $from, $select, $conditions, $order, $start, $account['users_limit']);
+      $result = is_array($result) ? $result : [];
       $run = 0;
       foreach($result AS $thread) {
 
-        $data['res'][$run]['category'] = cs_link(cs_secure($thread['categories_name']),'board','list','id=' . $thread['categories_id']);
-        $data['res'][$run]['board'] = cs_link(cs_secure($thread['board_name']),'board','listcat','id=' . $thread['board_id']);
+        $data['res'][$run]['category'] = cs_link(cs_secure($thread['categories_name']), 'board', 'list', 'id=' . $thread['categories_id']);
+        $data['res'][$run]['board'] = cs_link(cs_secure($thread['board_name']), 'board', 'listcat', 'id=' . $thread['board_id']);
 
         $headline = cs_secure($thread['threads_headline']);
-        $data['res'][$run]['thread'] = cs_link($headline,'board','thread','where=' . $thread['threads_id']);
+        $data['res'][$run]['thread'] = cs_link($headline, 'board', 'thread', 'where=' . $thread['threads_id']);
 
         $data['res'][$run]['target'] = '';
         if(!empty($thread['comments_id'])) {
-          $start = cs_sql_count(__FILE__,'comments',"comments_fid = '" . $thread['threads_id'] . "' AND comments_id < '" . $thread['comments_id'] . "' AND comments_mod = 'board'");
+          $start = cs_sql_count(__FILE__, 'comments', "comments_fid = '" . $thread['threads_id'] . "' AND comments_id < '" . $thread['comments_id'] . "' AND comments_mod = 'board'");
           $page = floor(++$start / $account['users_limit']) * $account['users_limit'];
           $go_target = 'where=' . $thread['threads_id'] . '&amp;start=' . $page . '#com' . $start;
-          $data['res'][$run]['target'] = cs_html_br(1) . cs_link($cs_lang['go_target'],'board','thread',$go_target);
+          $data['res'][$run]['target'] = cs_html_br(1) . cs_link($cs_lang['go_target'], 'board', 'thread', $go_target);
         }
 
         $data['res'][$run]['date'] = '';
         if(!empty($thread['last_action'])) {
-          $data['res'][$run]['date'] = cs_date('unix',$thread['last_action'],1);
+          $data['res'][$run]['date'] = cs_date('unix', $thread['last_action'], 1);
         }
         $data['res'][$run]['user'] = '';
         if(!empty($thread['users_nick'])) {
           $user = cs_secure($thread['users_nick']);
-          $cs_users = cs_sql_select(__FILE__,'users','users_active');
-          $data['res'][$run]['user'] = cs_html_br(1) . $cs_lang['from'] .' '. cs_user($thread['users_id'],$user, $cs_users['users_active']);
+          $cs_users = cs_sql_select(__FILE__, 'users', 'users_active');
+          $data['res'][$run]['user'] = cs_html_br(1) . $cs_lang['from'] .' '. cs_user($thread['users_id'], $user, $cs_users['users_active']);
         }
         $run++;
       }
@@ -172,4 +172,4 @@ if(!empty($go_search)) {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'board','search');
+echo cs_subtemplate(__FILE__, $data, 'board', 'search');

@@ -4,7 +4,7 @@
 
 require_once 'mods/clansphere/func_options.php';
 
-$data = array();
+$data = [];
 $i = 0;
 $modules = cs_checkdirs('mods');
 if(isset($_POST['submit'])) {
@@ -12,7 +12,7 @@ if(isset($_POST['submit'])) {
     if(isset($mod['navlist'])) {
       if(isset($_POST[$mod['tables'][0]])) {
         foreach($mod['navlist'] AS $navlist) {
-          $save = array();
+          $save = [];
           $save[$navlist] = $_POST[$mod['tables'][0]][$navlist];
           if(empty($save[$navlist])) {
             $save[$navlist] = 0;
@@ -29,7 +29,7 @@ else {
   foreach ($modules AS $mod) {
     if(isset($mod['navlist'])) {
       $cs_lang = cs_translate($mod['dir']);
-      $cs_option = cs_sql_option(__FILE__,$mod['tables'][0]);
+      $cs_option = cs_sql_option(__FILE__, $mod['tables'][0]);
       $data['mods'][$i]['mod'] = $mod['name'];
       $a =0;
       foreach($mod['navlist'] AS $navlist) {
@@ -43,4 +43,4 @@ else {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'modules','options');
+echo cs_subtemplate(__FILE__, $data, 'modules', 'options');

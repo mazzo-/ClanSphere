@@ -6,19 +6,19 @@ $cs_lang = cs_translate('members');
 
 if (!empty($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['label'] = $_POST['label'];
   
   require_once 'mods/clansphere/func_options.php';
   
   cs_optionsave('members', $save);
   
-  cs_redirect($cs_lang['success'],'options','roots');
+  cs_redirect($cs_lang['success'], 'options', 'roots');
   
 }
 
-$data = array();
-$data['op'] = cs_sql_option(__FILE__,'members');
+$data = [];
+$data['op'] = cs_sql_option(__FILE__, 'members');
 
 $data['lang']['mod_name'] = $cs_lang[$data['op']['label']];
 
@@ -27,4 +27,4 @@ $data['select']['memberemployees_select'] = $data['op']['label'] == 'employees' 
 $data['select']['teammates_select'] = $data['op']['label'] == 'teammates' ? 'selected="selected"': '';
 $data['select']['classmates_select'] = $data['op']['label'] == 'classmates' ? 'selected="selected"': '';
 
-echo cs_subtemplate(__FILE__,$data,'members','options');
+echo cs_subtemplate(__FILE__, $data, 'members', 'options');

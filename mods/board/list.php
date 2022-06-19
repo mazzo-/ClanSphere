@@ -9,9 +9,9 @@ $options = cs_sql_option(__FILE__, 'board');
 require 'mods/categories/functions.php';
 require_once 'mods/board/functions.php';
  
-$data = array();
+$data = [];
 
-$unread_array = array();
+$unread_array = [];
 
 if(!empty($account['users_id'])) {
 
@@ -26,7 +26,7 @@ if(!empty($account['users_id'])) {
           ' AND thr.threads_ghost = 0 GROUP BY thr.board_id';
   $values = 'thr.board_id AS board_id';
   $unread = cs_sql_select(__FILE__, $tables, $values, $needed, 0, 0, 0);
-  $unread = is_array($unread) ? $unread : array();
+  $unread = is_array($unread) ? $unread : [];
   foreach($unread AS $untop => $unboard) {
     $unread_array['' . $unboard['board_id'] . ''] = 0;
   }
@@ -61,7 +61,7 @@ for ($run_1 = 0; $run_1 < $count_categories; $run_1++) {
   $data['categories'][$run_1]['board'] = cs_sql_select(__FILE__, $from, $select, $where, $order, 0, 0);
 
   if (empty($data['categories'][$run_1]['board']))
-    $data['categories'][$run_1]['board'] = array();
+    $data['categories'][$run_1]['board'] = [];
 
   $data['categories'][$run_1]['blank'] = ''; 
   $data['categories'][$run_1]['iconwidth'] = 36; 
@@ -144,7 +144,7 @@ for ($run_1 = 0; $run_1 < $count_categories; $run_1++) {
     }
   } else {
     $data['categories'][$run_1]['subboard'] = $data['categories'][$run_1]['board'];
-    $data['categories'][$run_1]['board'] = array();
+    $data['categories'][$run_1]['board'] = [];
     $data['categories'][$run_1]['if']['small_subforums'] = true;
     $count_boards = count($data['categories'][$run_1]['subboard']);
     $count_boards_less = $count_boards - 1;
@@ -157,4 +157,4 @@ for ($run_1 = 0; $run_1 < $count_categories; $run_1++) {
 
 $data['head']['message'] = cs_getmsg();
 
-echo cs_subtemplate(__FILE__, $data, 'board', 'list',1);
+echo cs_subtemplate(__FILE__, $data, 'board', 'list', 1);

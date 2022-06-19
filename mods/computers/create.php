@@ -3,7 +3,7 @@
 // $Id$
 
 $cs_lang = cs_translate('computers');
-$data = array();
+$data = [];
 
 if(isset($_POST['submit'])) {
 
@@ -65,7 +65,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['com']['referer'] = empty($_SERVER['HTTP_REFERER']) ? 'center' : $_SERVER['HTTP_REFERER'];
 
-  echo cs_subtemplate(__FILE__,$data,'computers','create');
+  echo cs_subtemplate(__FILE__, $data, 'computers', 'create');
   
 }
 else {
@@ -74,9 +74,9 @@ else {
 
   $computers_cells = array_keys($cs_computers);
   $computers_save = array_values($cs_computers);
-  cs_sql_insert(__FILE__,'computers',$computers_cells,$computers_save);
+  cs_sql_insert(__FILE__, 'computers', $computers_cells, $computers_save);
   
   #$referrer = strpos($_POST['referer'],'manage') === false ? 'center' : 'manage';
   $referrer = $account['access_computers'] < 3 ? 'center' : 'manage';
-  cs_redirect($cs_lang['create_done'],'computers',$referrer);
+  cs_redirect($cs_lang['create_done'], 'computers', $referrer);
 } 

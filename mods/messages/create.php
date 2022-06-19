@@ -74,13 +74,13 @@ if (!empty($_POST['submit']) || !empty($_POST['preview'])) {
           $where = $where . ' OR ';
         }
         $z = cs_substr($temp[$run], 6);
-        $where .= "squ.squads_name = '" . cs_sql_escape(str_replace('Squad:','',$temp[$run])) . "'";
+        $where .= "squ.squads_name = '" . cs_sql_escape(str_replace('Squad:', '', $temp[$run])) . "'";
       } elseif($b == 'Clan:') {
         if(!empty($where)) {
           $where = $where . ' OR ';
         }
         $z = cs_substr($temp[$run], 5);
-        $where .= "cla.clans_name = '" . cs_sql_escape(str_replace('Clan:','',$temp[$run])) . "'";
+        $where .= "cla.clans_name = '" . cs_sql_escape(str_replace('Clan:', '', $temp[$run])) . "'";
       } else {
         if(!empty($where)) {
           $where .= ' OR ';
@@ -95,7 +95,7 @@ if (!empty($_POST['submit']) || !empty($_POST['preview'])) {
     $from .= 'LEFT JOIN {pre}_clans cla ON squ.clans_id = cla.clans_id';
     $select = 'usr.users_id AS users_id, usr.users_nick AS users_nick, usr.users_email AS users_email';
     $order = '';
-    $cs_messages = cs_sql_select(__FILE__,$from,$select,$where,0,0,0);
+    $cs_messages = cs_sql_select(__FILE__, $from, $select, $where, 0, 0, 0);
     $cs_messages_loop = count($cs_messages);
   
     if(empty($cs_messages_loop) OR empty($where)) {
@@ -103,7 +103,7 @@ if (!empty($_POST['submit']) || !empty($_POST['preview'])) {
       $errormsg .= $cs_lang['error_to'] . cs_html_br(1);
       $error_to = '1';
     } else {
-      $cs_messages = remove_dups($cs_messages,'users_nick');
+      $cs_messages = remove_dups($cs_messages, 'users_nick');
       $cs_messages_loop = count($cs_messages);
     }
   
@@ -116,7 +116,7 @@ if (!empty($_POST['submit']) || !empty($_POST['preview'])) {
     $errormsg .= $cs_lang['error_to'] . cs_html_br(1);
   }
   if (!empty($_POST['messages_subject'])) {
-    $_POST['messages_subject'] = preg_replace("=\<script\>(.*?)\</script\>=si","",$_POST['messages_subject']);
+    $_POST['messages_subject'] = preg_replace("=\<script\>(.*?)\</script\>=si", "", $_POST['messages_subject']);
   }
   if (!empty($_POST['messages_subject'])) {
     $messages_subject = $_POST['messages_subject'];
@@ -147,29 +147,29 @@ if (isset($_POST['submit']) && empty($messages_error)) {
     $message = cs_sql_select(__FILE__, $tables, 'u.users_nick AS users_nick', $where);
     
     if (!empty($message) && strpos($_POST['messages_to'], $message['users_nick']) !== false) {
-      cs_sql_update(__FILE__, 'messages', array('messages_view'), array(2), $messages_id);
+      cs_sql_update(__FILE__, 'messages', ['messages_view'], [2], $messages_id);
     }
   }
   
   for($run=0; $run<$cs_messages_loop; $run++) {
     $users_id_to = $cs_messages[$run]['users_id'];
-    $messages_cells = array('users_id','messages_time','messages_subject','messages_text',
-      'users_id_to','messages_show_receiver','messages_show_sender');
-    $messages_save = array($users_id,$time,$messages_subject,$messages_text,$users_id_to,
-      $messages_show_receiver,$messages_show_sender);
-    cs_sql_insert(__FILE__,'messages',$messages_cells,$messages_save);
+    $messages_cells = ['users_id','messages_time','messages_subject','messages_text',
+      'users_id_to','messages_show_receiver','messages_show_sender', ];
+    $messages_save = [$users_id,$time,$messages_subject,$messages_text,$users_id_to,
+      $messages_show_receiver,$messages_show_sender, ];
+    cs_sql_insert(__FILE__, 'messages', $messages_cells, $messages_save);
 
     $where = "users_id = '" . $users_id_to . "'";
     $select = 'users_id,autoresponder_subject,autoresponder_text,autoresponder_close,autoresponder_mail';
-    $autoresponder = cs_sql_select(__FILE__,'autoresponder',$select,$where);
+    $autoresponder = cs_sql_select(__FILE__, 'autoresponder', $select, $where);
     $auto_subject = $autoresponder['autoresponder_subject'];
     $auto_text = $autoresponder['autoresponder_text'];
     $auto_mail = $autoresponder['autoresponder_mail'];
 
     if(!empty($autoresponder['autoresponder_close'])) {
-      $messages_cells = array('users_id','messages_time','messages_subject','messages_text','users_id_to','messages_show_receiver');
-      $messages_save = array($users_id_to,$time,$auto_subject,$auto_text,$users_id,'1');
-      cs_sql_insert(__FILE__,'messages',$messages_cells,$messages_save);
+      $messages_cells = ['users_id','messages_time','messages_subject','messages_text','users_id_to','messages_show_receiver'];
+      $messages_save = [$users_id_to,$time,$auto_subject,$auto_text,$users_id,'1'];
+      cs_sql_insert(__FILE__, 'messages', $messages_cells, $messages_save);
     }
     if(!empty($autoresponder['autoresponder_mail']) && !empty($cs_messages[$run]['users_email'])) {
       
@@ -189,7 +189,7 @@ if (isset($_POST['submit']) && empty($messages_error)) {
       $message .= $cs_lang['mail_text_2'] . $cs_main['def_title'] . $cs_lang['mail_text_3'];
       $message .= $cs_contact['def_org'] . $cs_lang['mail_text_4'];
       
-      cs_mail($email,$title,$message);
+      cs_mail($email, $title, $message);
       
       if (!empty($lang_save)) {
         $cs_lang = $cs_lang_save;
@@ -198,10 +198,10 @@ if (isset($_POST['submit']) && empty($messages_error)) {
     }
   }
 
-  cs_redirect($cs_lang['msg_create_done'],'messages','center');
+  cs_redirect($cs_lang['msg_create_done'], 'messages', 'center');
 }
 
-$data = array();
+$data = [];
 $data['if']['preview'] = false;
 
 $data['lang']['body_create'] = empty($messages_error) ? nl2br($cs_lang['body_create']) : $cs_lang['error_occured'] . cs_html_br(1) . $errormsg;
@@ -212,9 +212,9 @@ if (isset($_POST['preview']) && empty($messages_error))
   $data['if']['preview'] = true;
 
   $data['var']['subject'] = cs_secure($_POST['messages_subject']);
-  $data['var']['date'] = cs_date('unix',$time,1);
+  $data['var']['date'] = cs_date('unix', $time, 1);
   $data['to'] = $cs_messages;
-  $data['var']['text'] = cs_secure($_POST['messages_text'],1,1);
+  $data['var']['text'] = cs_secure($_POST['messages_text'], 1, 1);
   
 }
 

@@ -7,7 +7,7 @@ $cs_lang = cs_translate('servers');
 cs_scriptload('servers', 'javascript', 'js/servers.js');
 include_once 'mods/servers/servers.class.php';
 
-$data = array();
+$data = [];
 $objServers = Servers::__getInstance();
 
 // Submit Post
@@ -80,10 +80,10 @@ elseif(!empty($servers_error)) {
 }
 
 if(!empty($servers_error) OR !isset($_POST['submit'])) {
-  $games_array = cs_sql_select(__FILE__,'games','games_name, games_id',0,0,0,0);
+  $games_array = cs_sql_select(__FILE__, 'games', 'games_name, games_id', 0, 0, 0, 0);
   $run=0;
   if(empty($games_array))
-  $data['games'] = array();
+  $data['games'] = [];
   else {
     foreach($games_array AS $games) {
       $data['games'][$run]['name'] = $games['games_name'];
@@ -93,10 +93,10 @@ if(!empty($servers_error) OR !isset($_POST['submit'])) {
     }
   }
 
-  $server_stats = array(
-  	array('name' => $cs_lang['no'], 'value' => '0'),
-  	array('name' => $cs_lang['yes'], 'value' => '1')
-  );
+  $server_stats = [
+  	['name' => $cs_lang['no'], 'value' => '0'],
+  	['name' => $cs_lang['yes'], 'value' => '1'],
+  ];
   $run=0;
   foreach($server_stats AS $stats) {
     $selected = ($stats['value'] == $data['create']['servers_stats']) ? 'selected="selected"' : '';
@@ -121,11 +121,11 @@ if(!empty($servers_error) OR !isset($_POST['submit'])) {
     $run++;
   }
 
-  $servers_type = array(
-  array('gtype' => $cs_lang['clanserver'], 'type' => '1', 'selected' => ''),
-  array('gtype' => $cs_lang['pubserver'], 'type' => '2', 'selected' => ''),
-  array('gtype' => $cs_lang['voiceserver'], 'type' => '3', 'selected' => '')
-  );
+  $servers_type = [
+  ['gtype' => $cs_lang['clanserver'], 'type' => '1', 'selected' => ''],
+  ['gtype' => $cs_lang['pubserver'], 'type' => '2', 'selected' => ''],
+  ['gtype' => $cs_lang['voiceserver'], 'type' => '3', 'selected' => ''],
+  ];
   $run=0;
   foreach($servers_type AS $type) {
     $selected = ($type['type'] == $data['create']['servers_type']) ? 'selected="selected"' : '';
@@ -143,10 +143,10 @@ if(!empty($servers_error) OR !isset($_POST['submit'])) {
   // Insert SQL Data
   $servers_cells = array_keys($data['create']);
   $servers_save = array_values($data['create']);
-  cs_sql_insert(__FILE__,'servers',$servers_cells,$servers_save);
+  cs_sql_insert(__FILE__, 'servers', $servers_cells, $servers_save);
 
   // Create Finish
-  cs_redirect($cs_lang['create_done'],'servers');
+  cs_redirect($cs_lang['create_done'], 'servers');
 }
 
-echo cs_subtemplate(__FILE__,$data,'servers','create');
+echo cs_subtemplate(__FILE__, $data, 'servers', 'create');

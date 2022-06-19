@@ -45,8 +45,8 @@ class GameQ_Protocol_quake2 extends GameQ_Protocol
         while ($this->p->getLength()) {
             $this->r->add(
                 $this->p->readString('\\'),
-                $this->p->readStringMulti(array('\\', "\x0a"), $delimfound)
-                );
+                $this->p->readStringMulti(['\\', "\x0a"], $delimfound)
+            );
                 
             if ($delimfound === "\x0a") {
                 break;

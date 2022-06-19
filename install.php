@@ -3,7 +3,7 @@
 // $Id$
 
 # Overwrite global settings by using the following array
-$cs_main = array( 'charset'         => 'UTF-8',
+$cs_main = [ 'charset'         => 'UTF-8',
                   'def_action'      => 'list',
                   'def_mod'         => 'install',
                   'def_title'       => 'ClanSphere Installation',
@@ -17,7 +17,7 @@ $cs_main = array( 'charset'         => 'UTF-8',
                   'img_ext'         => 'png',
                   'version_name'    => '',
                   'version_date'    => '',
-                  'zlib'            => false);
+                  'zlib'            => false, ];
 
 require_once 'system/core/functions.php';
 

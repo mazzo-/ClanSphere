@@ -6,7 +6,7 @@ $cs_lang = cs_translate('joinus');
 
 if(isset($_POST['submit'])) {
 
-  $save = array();
+  $save = [];
   $save['vorname']     = (int) $_POST['vorname'];
   $save['surname']     = (int) $_POST['surname'];
   $save['place']      = (int) $_POST['place'];
@@ -25,8 +25,8 @@ if(isset($_POST['submit'])) {
   cs_redirect($cs_lang['success'], 'options', 'roots');
 }
 
-$data = array();
-$data['op'] = cs_sql_option(__FILE__,'joinus');
+$data = [];
+$data['op'] = cs_sql_option(__FILE__, 'joinus');
 
 $data['op']['vorname'] = empty($data['op']['vorname']) ? $data['op']['vorname_no'] = 'checked="checked"' : $data['op']['vorname_yes'] = 'checked="checked"';
 $data['op']['surname'] = empty($data['op']['surname']) ? $data['op']['surname_no'] = 'checked="checked"' : $data['op']['surname_yes'] = 'checked="checked"';
@@ -40,4 +40,4 @@ $data['op']['webcon'] = empty($data['op']['webcon']) ? $data['op']['webcon_no'] 
 $data['op']['lanact'] = empty($data['op']['lanact']) ? $data['op']['lanact_no'] = 'checked="checked"' : $data['op']['lanact_yes'] = 'checked="checked"';
 $data['op']['more'] = empty($data['op']['more']) ? $data['op']['more_no'] = 'checked="checked"' : $data['op']['more_yes'] = 'checked="checked"';
 
-echo cs_subtemplate(__FILE__,$data,'joinus','options');
+echo cs_subtemplate(__FILE__, $data, 'joinus', 'options');

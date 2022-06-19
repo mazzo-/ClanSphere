@@ -51,17 +51,17 @@ function cs_sql_replace($replace) {
   else
   $engine = ' TYPE=' . $subtype . ' CHARACTER SET utf8';
 
-  $replace = str_replace('{optimize}','OPTIMIZE TABLE',$replace);
-  $replace = str_replace('{serial}','int(8) unsigned NOT NULL auto_increment',$replace);
-  $replace = str_replace('{engine}',$engine,$replace);
-  return preg_replace("=create index (\S+) on (\S+) (\S+)=si",'ALTER TABLE $2 ADD KEY $1 $3',$replace);
+  $replace = str_replace('{optimize}', 'OPTIMIZE TABLE', $replace);
+  $replace = str_replace('{serial}', 'int(8) unsigned NOT NULL auto_increment', $replace);
+  $replace = str_replace('{engine}', $engine, $replace);
+  return preg_replace("=create index (\S+) on (\S+) (\S+)=si", 'ALTER TABLE $2 ADD KEY $1 $3', $replace);
 }
 
 function cs_sql_version($cs_file) {
 
   global $cs_db;
   $subtype = empty($cs_db['subtype']) ? 'myisam' : strtolower($cs_db['subtype']);
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $sql_query = "SHOW TABLE STATUS LIKE '" . cs_sql_escape($cs_db['prefix'] . '_') . "%'";
   if($sql_data = $cs_db['con']->query($sql_query)) {
     $new_result = $sql_data->fetchAll(PDO::FETCH_ASSOC);

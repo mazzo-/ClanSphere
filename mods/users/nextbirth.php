@@ -3,15 +3,15 @@
 // $Id$
 
 $time_now = explode('-', date('Y-m-d'));
-$output = array();
+$output = [];
 
 $data = cs_cache_load('nextbirth');
 $cs_lang = cs_translate('users');
-$options = cs_sql_option(__FILE__,'users');
+$options = cs_sql_option(__FILE__, 'users');
 
 
 if(empty($data) OR $data['day'] != $time_now['2'].$time_now['1']) { 
-  $data = array();  // We need to reset the data array here, else new birthdays will be added to existing cached entries! 
+  $data = [];  // We need to reset the data array here, else new birthdays will be added to existing cached entries! 
 
   $nextday = cs_datereal('d', cs_time()+$options['nextbirth_time_interval']);
   $nextmonth = cs_datereal('m', cs_time()+$options['nextbirth_time_interval']);
@@ -22,7 +22,7 @@ if(empty($data) OR $data['day'] != $time_now['2'].$time_now['1']) {
   $select = 'users_id, users_nick, users_age';
   $where = "users_hidden NOT LIKE '%users_age%' AND users_active = 1 ";
   $where .= ($nextmonth == $time_now['1']) ? " AND users_age LIKE '%-". $time_now['1'] ."-%'" : "AND (users_age LIKE '%-". $time_now['1'] ."-%' OR users_age LIKE '%-". $nextmonth ."-%')";
-  $cs_users = cs_sql_select(__FILE__,'users',$select,$where,'users_age',0,0);
+  $cs_users = cs_sql_select(__FILE__, 'users', $select, $where, 'users_age', 0, 0);
   
   if(!empty($cs_users)) {
     $run=0;
@@ -62,7 +62,7 @@ else {
     $output['users'][$run]['month'] = $data['users'][$run]['users_month'];
     $output['users'][$run]['year'] = $data['users'][$run]['users_year'];
     $output['users'][$run]['user'] = cs_user($data['users'][$run]['users_id'], $data['users'][$run]['users_nick']);
-    $output['users'][$run]['messageurl'] = cs_url('messages','create','to_id='.$data['users'][$run]['users_id']);
+    $output['users'][$run]['messageurl'] = cs_url('messages', 'create', 'to_id='.$data['users'][$run]['users_id']);
   }
-  echo cs_subtemplate(__FILE__,$output,'users','nextbirth');
+  echo cs_subtemplate(__FILE__, $output, 'users', 'nextbirth');
 }

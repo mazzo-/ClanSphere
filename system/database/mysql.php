@@ -107,7 +107,7 @@ function cs_sql_option($cs_file, $mod) {
 
   global $cs_db;
   global $cs_template;
-  static $options = array();
+  static $options = [];
 
   if (empty($options[$mod])) {
 
@@ -126,11 +126,11 @@ function cs_sql_option($cs_file, $mod) {
         if(count($cs_template)) {
             foreach($cs_template AS $navlist => $value) {
           if($navlist == $mod) {
-              $new_result = array_merge($new_result,$value);
+              $new_result = array_merge($new_result, $value);
               }
             }
           }
-      $options[$mod] = isset($new_result) ? $new_result : 0;
+      $options[$mod] = $new_result ?? 0;
 
       cs_cache_save('op_' . $mod, $options[$mod]);
     }
@@ -144,7 +144,7 @@ function cs_sql_query($cs_file, $sql_query, $more = 0) {
   global $cs_db;
   $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if ($sql_data = mysql_query($sql_query, $cs_db['con'])) {
-    $result = array('affected_rows' => mysql_affected_rows($cs_db['con']));
+    $result = ['affected_rows' => mysql_affected_rows($cs_db['con'])];
     if(!empty($more)) {
       while ($sql_result = mysql_fetch_assoc($sql_data)) {
         $result['more'][] = $sql_result;
@@ -173,10 +173,10 @@ function cs_sql_replace($replace) {
   else
   $engine = ' TYPE=' . $subtype . ' CHARACTER SET utf8';
 
-  $replace = str_replace('{optimize}','OPTIMIZE TABLE',$replace);
-  $replace = str_replace('{serial}','int(8) unsigned NOT NULL auto_increment',$replace);
-  $replace = str_replace('{engine}',$engine,$replace);
-  return preg_replace("=create index (\S+) on (\S+) (\S+)=si",'ALTER TABLE $2 ADD KEY $1 $3',$replace);
+  $replace = str_replace('{optimize}', 'OPTIMIZE TABLE', $replace);
+  $replace = str_replace('{serial}', 'int(8) unsigned NOT NULL auto_increment', $replace);
+  $replace = str_replace('{engine}', $engine, $replace);
+  return preg_replace("=create index (\S+) on (\S+) (\S+)=si", 'ALTER TABLE $2 ADD KEY $1 $3', $replace);
 }
 
 function cs_sql_select($cs_file, $sql_table, $sql_select, $sql_where = 0, $sql_order = 0, $first = 0, $max = 1, $cache = 0)
@@ -256,7 +256,7 @@ function cs_sql_version($cs_file) {
 
   global $cs_db;
   $subtype = empty($cs_db['subtype']) ? 'myisam' : strtolower($cs_db['subtype']);
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $sql_query = "SHOW TABLE STATUS LIKE '" . cs_sql_escape($cs_db['prefix'] . '_') . "%'";
   $sql_data = mysql_query($sql_query, $cs_db['con']) or cs_error_sql($cs_file, 'cs_sql_version', cs_sql_error(0, $sql_query));
   while($row = mysql_fetch_assoc($sql_data)) {

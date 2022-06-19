@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('contact');
 
-$data = array();
+$data = [];
 
 $filename = 'uploads/imprint/imprint.txt';
 $imp_form = 1;
@@ -28,7 +28,7 @@ if(isset($_POST['submit'])) {
     cs_unlink('imprint', 'imprint.txt');
 
     $fp = fopen ($filename, "w");
-    chmod($filename,0777);
+    chmod($filename, 0777);
     $imp_time = cs_time();
     $content  = $imp_time;
     $content .= '{laststandbreak}';
@@ -41,7 +41,7 @@ if(isset($_POST['submit'])) {
     fclose ($fp);
 
   if($account['access_wizard'] == 5) {
-    $wizard = cs_sql_count(__FILE__,'options',"options_name = 'done_cont' AND options_value = '1'");
+    $wizard = cs_sql_count(__FILE__, 'options', "options_name = 'done_cont' AND options_value = '1'");
     if(empty($wizard)) {
       $data['if']['wizzard'] = TRUE;
     }
@@ -49,7 +49,7 @@ if(isset($_POST['submit'])) {
 }
 if(!empty($imp_form)) {
 
-  $data = array();
+  $data = [];
   $data['imprint']['content'] = file_exists($filename) ? $imprint[1] : '';
 
   if(empty($cs_main['rte_html'])) {
@@ -60,7 +60,7 @@ if(!empty($imp_form)) {
   else {
     $data['if']['abcode'] = FALSE;
     $data['if']['rte_html'] = TRUE;
-    $data['rte']['html'] = cs_rte_html('imprint',$data['imprint']['content']);
+    $data['rte']['html'] = cs_rte_html('imprint', $data['imprint']['content']);
   }
 
   $data['if']['done']     = FALSE;
@@ -68,6 +68,6 @@ if(!empty($imp_form)) {
   $data['if']['wizzard']  = FALSE;
 }
 
-$data['url']['contact_imp_edit'] = cs_url('contact','imp_edit');
+$data['url']['contact_imp_edit'] = cs_url('contact', 'imp_edit');
 
-echo cs_subtemplate(__FILE__,$data,'contact','imp_edit');
+echo cs_subtemplate(__FILE__, $data, 'contact', 'imp_edit');

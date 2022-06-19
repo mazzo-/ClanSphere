@@ -3,7 +3,7 @@
 // $Id$
 
 $cs_lang = cs_translate('ranks');
-$data = array();
+$data = [];
 
 $cs_ranks['ranks_name'] = '';
 $cs_ranks['squads_id'] = '';
@@ -29,7 +29,7 @@ if(isset($_POST['submit'])) {
     $error .= $cs_lang['no_img'] . cs_html_br(1);
   
   $where = "ranks_name = '" . cs_sql_escape($cs_ranks['ranks_name']) . "'";
-  $search = cs_sql_count(__FILE__,'ranks',$where);
+  $search = cs_sql_count(__FILE__, 'ranks', $where);
   if(!empty($search))
     $error .= $cs_lang['rank_exists'] . cs_html_br(1);
 }
@@ -43,16 +43,16 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['ranks'] = $cs_ranks;
 
-  $data_squads = cs_sql_select(__FILE__,'squads','squads_name,squads_id',0,'squads_name',0,0);
+  $data_squads = cs_sql_select(__FILE__, 'squads', 'squads_name,squads_id', 0, 'squads_name', 0, 0);
   $data['squads'] = cs_dropdownsel($data_squads, $cs_ranks['squads_id'], 'squads_id');
 
- echo cs_subtemplate(__FILE__,$data,'ranks','create');
+ echo cs_subtemplate(__FILE__, $data, 'ranks', 'create');
 }
 else {
 
   $ranks_cells = array_keys($cs_ranks);
   $ranks_save = array_values($cs_ranks);
- cs_sql_insert(__FILE__,'ranks',$ranks_cells,$ranks_save);
+ cs_sql_insert(__FILE__, 'ranks', $ranks_cells, $ranks_save);
   
- cs_redirect($cs_lang['create_done'],'ranks');
+ cs_redirect($cs_lang['create_done'], 'ranks');
 }

@@ -5,9 +5,9 @@
 $cs_lang = cs_translate('squads');
 $cs_post = cs_post('start,sort');
 $cs_get = cs_get('start,sort');
-$data = array();
+$data = [];
 
-$op_squads = cs_sql_option(__FILE__,'squads');
+$op_squads = cs_sql_option(__FILE__, 'squads');
 
 $data['if']['squad_to_leave'] = FALSE;
 
@@ -22,13 +22,13 @@ $cs_sort[3] = 'mem.members_task DESC';
 $cs_sort[4] = 'mem.members_task ASC';
 $order = $cs_sort[$sort];
 $own = "users_id = '" . $account['users_id'] . "'";
-$squads_count = cs_sql_count(__FILE__,'members',$own);
+$squads_count = cs_sql_count(__FILE__, 'members', $own);
 
 
 $data['head']['mod'] = $cs_lang[$op_squads['label'].'s'];
 $data['lang']['new_label'] = $cs_lang['new_'.$op_squads['label']];
 $data['head']['count'] = $squads_count;
-$data['head']['pages'] = cs_pages('squads','center',$squads_count,$start,0,$sort);
+$data['head']['pages'] = cs_pages('squads', 'center', $squads_count, $start, 0, $sort);
 $data['head']['getmsg'] = cs_getmsg();
 
 $data['lang']['join_label'] = $cs_lang['join_'.$op_squads['label']];
@@ -37,14 +37,14 @@ if(!empty($squads_count)) {
   $data['lang']['leave_label'] = $cs_lang['leave_'.$op_squads['label']];
 }
 
-$data['sort']['squad_name'] = cs_sort('squads','center',$start,0,1,$sort);
+$data['sort']['squad_name'] = cs_sort('squads', 'center', $start, 0, 1, $sort);
 $data['lang']['label'] = $cs_lang[$op_squads['label']];
-$data['sort']['members_task'] = cs_sort('squads','center',$start,0,3,$sort);
+$data['sort']['members_task'] = cs_sort('squads', 'center', $start, 0, 3, $sort);
 
 $select = 'sqd.squads_name AS squads_name, sqd.squads_id AS squads_id, mem.members_task AS members_task, mem.members_admin AS members_admin';
 $from = 'members mem INNER JOIN {pre}_squads sqd ON mem.squads_id = sqd.squads_id';
 $where = "mem.users_id = '" . $account['users_id'] . "'";
-$data['squads'] = cs_sql_select(__FILE__,$from,$select,$where,$order,$start,$account['users_limit']);
+$data['squads'] = cs_sql_select(__FILE__, $from, $select, $where, $order, $start, $account['users_limit']);
 $squads_loop = count($data['squads']);
 
 
@@ -63,4 +63,4 @@ for($run=0; $run<$squads_loop; $run++) {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'squads','center');
+echo cs_subtemplate(__FILE__, $data, 'squads', 'center');

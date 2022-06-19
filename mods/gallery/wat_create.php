@@ -6,12 +6,12 @@ $cs_lang = cs_translate('gallery');
 
 $files_gl = cs_files();
 
-$data = array();
+$data = [];
 
 $img_max['width'] = 200;
 $img_max['height'] = 200;
 $img_max['size'] = 76800;
-$img_filetypes = array('gif','png');
+$img_filetypes = ['gif','png'];
 
 $cs_categories['categories_name'] = '';
 $cs_categories['categories_mod'] = 'gallery-watermark';
@@ -48,7 +48,7 @@ if(isset($_POST['submit'])) {
 
   if(!empty($cs_categories['categories_name'])) {
     $where = "categories_name = '" . cs_sql_escape($cs_categories['categories_name']) . "' AND categories_mod = 'gallery-watermark'";
-    $check_name = cs_sql_count(__FILE__,'categories',$where);
+    $check_name = cs_sql_count(__FILE__, 'categories', $where);
     if(!empty($check_name))
       $error .= $cs_lang['watermark_exists'] . cs_html_br(1);
   } else {
@@ -78,23 +78,23 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $matches[2] .= $cs_lang['filetypes'] . $return_types;
   $data['picup']['clip'] = cs_abcode_clip($matches);
 
- echo cs_subtemplate(__FILE__,$data,'gallery','wat_create');
+ echo cs_subtemplate(__FILE__, $data, 'gallery', 'wat_create');
 }
 else {
 
   $categories_cells = array_keys($cs_categories);
   $categories_save = array_values($cs_categories);
- cs_sql_insert(__FILE__,'categories',$categories_cells,$categories_save);
+ cs_sql_insert(__FILE__, 'categories', $categories_cells, $categories_save);
 
   if(!empty($files_gl['picture']['tmp_name'])) {
     $id = cs_sql_insertid(__FILE__);
     $filename = 'watermark-' . $id . '.' . $ext;
-   cs_upload('categories',$filename,$files_gl['picture']['tmp_name']);
+   cs_upload('categories', $filename, $files_gl['picture']['tmp_name']);
   
-    $categories2_cells = array('categories_picture');
-    $categories2_save = array($filename);      
-   cs_sql_update(__FILE__,'categories',$categories2_cells,$categories2_save,$id);
+    $categories2_cells = ['categories_picture'];
+    $categories2_save = [$filename];      
+   cs_sql_update(__FILE__, 'categories', $categories2_cells, $categories2_save, $id);
   }
   
- cs_redirect($cs_lang['create_done'],'gallery','wat_manage');
+ cs_redirect($cs_lang['create_done'], 'gallery', 'wat_manage');
 }

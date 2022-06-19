@@ -4,10 +4,10 @@
 
 $cs_lang = cs_translate('buddys');
 
-$data = array();
+$data = [];
 
 $buddys_id = $_GET['id'];
-settype($buddys_id,'integer');
+settype($buddys_id, 'integer');
 
 if(!isset($_POST['submit']) AND !isset($_POST['preview'])) {
   $data['lang']['body'] = $cs_lang['body_edit'];
@@ -22,7 +22,7 @@ if(isset($_POST['submit']) OR isset($_POST['preview'])) {
 }
 else {
   $cells = 'buddys_notice';
-  $cs_buddys = cs_sql_select(__FILE__,'buddys',$cells,"buddys_id = '" . $buddys_id . "'");
+  $cs_buddys = cs_sql_select(__FILE__, 'buddys', $cells, "buddys_id = '" . $buddys_id . "'");
 }
 
 if(isset($_POST['preview'])) 
@@ -32,7 +32,7 @@ if(isset($_POST['preview']))
   $data['if']['form']     = TRUE;
   $data['if']['done']     = FALSE;
   
-  $data['edit']['buddys_notice']  = cs_secure($cs_buddys['buddys_notice'],1,1);
+  $data['edit']['buddys_notice']  = cs_secure($cs_buddys['buddys_notice'], 1, 1);
   $data['edit']['id']             = $buddys_id;
 
 }
@@ -54,7 +54,7 @@ else
 {
   
   $buddys_id = $_POST['id'];
-  settype($buddys_id,'integer');
+  settype($buddys_id, 'integer');
   
   $data['if']['preview']  = FALSE;
   $data['if']['form']     = FALSE;
@@ -62,10 +62,10 @@ else
   
   $buddys_cells = array_keys($cs_buddys);
   $buddys_save = array_values($cs_buddys);
-  cs_sql_update(__FILE__,'buddys',$buddys_cells,$buddys_save,$buddys_id);
+  cs_sql_update(__FILE__, 'buddys', $buddys_cells, $buddys_save, $buddys_id);
   
-  cs_redirect($cs_lang['changes_done'], 'buddys','center') ;
+  cs_redirect($cs_lang['changes_done'], 'buddys', 'center') ;
 
 } 
 
-echo cs_subtemplate(__FILE__,$data,'buddys','edit');
+echo cs_subtemplate(__FILE__, $data, 'buddys', 'edit');

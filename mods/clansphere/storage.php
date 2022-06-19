@@ -109,4 +109,4 @@ $data['storage']['space_up_percent'] = $perc_up . ' %';
 $data['storage']['space_temp'] = cs_filesize($space_temp);
 $data['storage']['space_temp_percent'] = $perc_temp . ' %';
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','storage');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'storage');

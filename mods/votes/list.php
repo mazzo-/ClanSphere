@@ -20,7 +20,7 @@ $votes_access = $account['access_votes'];
 $where = "votes_access <= '" . $votes_access . "'";
 $from = 'votes';
 $select = 'votes_id, votes_question, votes_election, votes_start, votes_end';
-$cs_votes = cs_sql_select(__FILE__,$from,$select,$where,$order,$start,$account['users_limit']);
+$cs_votes = cs_sql_select(__FILE__, $from, $select, $where, $order, $start, $account['users_limit']);
 $votes_loop = count($cs_votes);
 $cs_votes_archiv = $cs_votes;
 $votes_id = $cs_votes[0]['votes_id'];
@@ -32,26 +32,26 @@ if(!empty($votes_loop))
   {
     $where = "voted_mod = 'votes' AND voted_fid = '" . $votes_id . "' AND users_id = '" . $users_id . "'";
   }
-  $checkit_userip = cs_sql_count(__FILE__,'voted',$where);
+  $checkit_userip = cs_sql_count(__FILE__, 'voted', $where);
 }
 
 $from = 'voted';
 $select = 'voted_id, users_id, voted_ip, voted_answer, voted_fid';
 $where = "voted_mod = 'votes'";
-$cs_voted = cs_sql_select(__FILE__,$from,$select,$where,'','0','0');
+$cs_voted = cs_sql_select(__FILE__, $from, $select, $where, '', '0', '0');
 $voted_loop = count($cs_voted);
 
 $data['head']['count']  = $votes_loop;
-$data['head']['pages']  = cs_pages('votes','list',$votes_loop,$start,0,$sort);
+$data['head']['pages']  = cs_pages('votes', 'list', $votes_loop, $start, 0, $sort);
 $data['head']['getmsg']    = cs_getmsg();
 
-$data['sort']['question']  = cs_sort('votes','list',$start,0,3,$sort);
-$data['sort']['ends_on']  = cs_sort('votes','list',$start,0,1,$sort);
+$data['sort']['question']  = cs_sort('votes', 'list', $start, 0, 3, $sort);
+$data['sort']['ends_on']  = cs_sort('votes', 'list', $start, 0, 1, $sort);
 
 $from = 'comments';
 $select = 'comments_fid';
 $where = "comments_mod = 'votes'";
-$cs_comments = cs_sql_select(__FILE__,$from,$select,$where,'','0','0');
+$cs_comments = cs_sql_select(__FILE__, $from, $select, $where, '', '0', '0');
 $comments_loop = count($cs_comments);
 
 $com_count = 0;
@@ -90,10 +90,10 @@ for($run=0; $run<$votes_loop; $run++)
     }
   }
 
-  $data['votes'][$run]['question_link'] = cs_link($question,'votes','view','where=' . $cs_votes_archiv[$run]['votes_id']);
+  $data['votes'][$run]['question_link'] = cs_link($question, 'votes', 'view', 'where=' . $cs_votes_archiv[$run]['votes_id']);
   $data['votes'][$run]['com_count'] = $com_count;
   $data['votes'][$run]['elect_count'] = $answers_count;
-  $data['votes'][$run]['ends_on'] = cs_date('unix',$cs_votes_archiv[$run]['votes_end'],1);
+  $data['votes'][$run]['ends_on'] = cs_date('unix', $cs_votes_archiv[$run]['votes_end'], 1);
 }
 
-echo cs_subtemplate(__FILE__,$data,'votes');
+echo cs_subtemplate(__FILE__, $data, 'votes');

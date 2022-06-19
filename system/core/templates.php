@@ -4,7 +4,7 @@
 
 function cs_revert_script_braces($hits) {
   $hits[3] = empty($hits[3]) ? '' : $hits[3];
-  return '<script' . $hits[1] . '>' . str_replace(array('&#123;', '&#125;'), array('{', '}'), $hits[2]) . $hits[3] . '</script>';
+  return '<script' . $hits[1] . '>' . str_replace(['&#123;', '&#125;'], ['{', '}'], $hits[2]) . $hits[3] . '</script>';
 }
 
 function cs_looptemplate($source, $string, $data)
@@ -14,7 +14,7 @@ function cs_looptemplate($source, $string, $data)
     if (empty($subdata) or isset($subdata[0]) and is_array($subdata[0]))
     {
       $pattern = "=(.*){loop:" . $subname . "}(.*?){stop:" . $subname . "}(.*)=si";
-      $content = array();
+      $content = [];
       preg_match_all($pattern, $string, $content);
       if (isset($content[1][0]) and isset($content[2][0]) and isset($content[3][0]))
       {
@@ -26,7 +26,7 @@ function cs_looptemplate($source, $string, $data)
             $new_content = cs_conditiontemplate($content[2][0], $loopdata);
             foreach ($loopdata as $name => $value)
             {
-              $new_content = !is_array($value) ? str_replace('{' . $subname . ':' . $name . '}', $value, $new_content) : $new_content = cs_looptemplate($source, $new_content, array($name => $value));
+              $new_content = !is_array($value) ? str_replace('{' . $subname . ':' . $name . '}', $value, $new_content) : $new_content = cs_looptemplate($source, $new_content, [$name => $value]);
             }
             $string .= $new_content;
           }
@@ -55,7 +55,7 @@ function cs_conditiontemplate($string, $data)
     return $string;
 
     foreach ($data['if'] as $condition => $value) {
-    $replace = array('', '\\1');
+    $replace = ['', '\\1'];
     $string = preg_replace("={if:" . $condition . "}(.*?){stop:" . $condition . "}=si", $replace[$value], $string);
     $string = preg_replace("={unless:" . $condition . "}(.*?){stop:" . $condition . "}=si", $replace[!$value], $string);
   }
@@ -81,7 +81,7 @@ function cs_subtemplate($source, $data, $mod, $action = 'list', $navfiles = 0)
 {
   global $account, $cs_lang, $cs_main;
   $cs_lang = cs_translate($mod);
-  $data = is_array($data) ? $data : array();
+  $data = is_array($data) ? $data : [];
 
   $string = cs_cache_theme($mod, $action, $navfiles);
   $string = cs_conditiontemplate($string, $data);
@@ -129,7 +129,7 @@ function cs_xsrf_protection_field($matches) {
   global $cs_main;
   static $xsrf_key;
   if(!isset($_SESSION['cs_xsrf_keys']) || !is_array($_SESSION['cs_xsrf_keys'])) {
-    $_SESSION['cs_xsrf_keys'] = array();
+    $_SESSION['cs_xsrf_keys'] = [];
   }
   if(empty($xsrf_key)) {
     
@@ -148,13 +148,13 @@ function cs_wrap_templatefile($matches)
 {
   global $cs_main;
   $nav = $matches[0] . '_' . $matches[1];
-  $exceptions = array('clansphere_navmeta');
+  $exceptions = ['clansphere_navmeta'];
   if(!in_array($nav, $exceptions)) {
     if(isset($cs_main['ajax']) AND $cs_main['ajax']) {
-      $spans = array('count_navday','count_navone','count_navall','count_navmon','count_navusr','count_navyes','clansphere_navtime');
+      $spans = ['count_navday','count_navone','count_navall','count_navmon','count_navusr','count_navyes','clansphere_navtime'];
 
-      $id = str_replace('=','-', implode('-', $matches));
-      $el = !in_array($nav,$spans) ? 'div' : 'span';
+      $id = str_replace('=', '-', implode('-', $matches));
+      $el = !in_array($nav, $spans) ? 'div' : 'span';
       return "<{$el} id=\"cs_navlist_{$id}\" class=\"cs_navlist\">" . cs_templatefile($matches) . "</{$el}>";
     }
   }
@@ -163,7 +163,7 @@ function cs_wrap_templatefile($matches)
 
 function cs_template_info($template) {
   global $cs_main;
-  $tpl_navlist = array();
+  $tpl_navlist = [];
   if(file_exists('templates/' . $template . '/info.php')) {
     require_once 'templates/' . $template . '/info.php';
     if(isset($mod_info['navlist'])) {
@@ -205,7 +205,7 @@ function cs_filecontent($file, $param = NULL, $value = NULL)
   global $account, $cs_main;
 
   if($param != NULL) {
-    $backup = isset($_GET[$param]) ? $_GET[$param] : NULL;
+    $backup = $_GET[$param] ?? NULL;
     $_GET[$param] = $value;
   }
 
@@ -235,10 +235,10 @@ function cs_getmsg()
   if (!isset($_SESSION['message']) || empty($_SESSION['message']))
     return '';
 
-  $data = array();
+  $data = [];
 
   if (!empty($_SESSION['messageadd'])) {
-    $add = explode(',',$_SESSION['messageadd'],2);
+    $add = explode(',', $_SESSION['messageadd'], 2);
     $data['msg']['icon'] = empty($add[0]) ? '' : cs_icon($add[0]);
     $data['msg']['id'] = empty($add[1]) ? 'msg_normal' : $add[1];
     unset($_SESSION['messageadd']);
@@ -258,7 +258,7 @@ function cs_redirect($message, $mod, $action = 'manage', $more = '', $id = 0, $i
       cs_redirectmsg($message, $id, $icon);
   }
 
-  $persistent_params = array('xhr', 'xhr_navlists');
+  $persistent_params = ['xhr', 'xhr_navlists'];
 
   $more = explode('#', $more);
 
@@ -301,7 +301,7 @@ function cs_scriptload($mod, $type, $file, $top = 0, $media = 'screen') {
   global $cs_main;
   $script = '';
   if(!isset($cs_main['scriptload']))
-    $cs_main['scriptload'] = array('javascript' => '', 'stylesheet' => '');
+    $cs_main['scriptload'] = ['javascript' => '', 'stylesheet' => ''];
 
   if(strpos($file, '://') === false)
     $target = $cs_main['php_self']['dirname'] . 'mods/' . $mod . '/' . $file;
@@ -387,9 +387,9 @@ function cs_template($cs_micro, $tpl_file = 'index.htm')
   if (!empty($account['users_tpl']))
     $cs_main['template'] = $account['users_tpl'];
   if (!empty($_GET['template']))
-    $cs_main['template'] = str_replace(array('.','/'),'',$_GET['template']);
+    $cs_main['template'] = str_replace(['.','/'], '', $_GET['template']);
   if (!empty($_SESSION['tpl_preview']))
-    $cs_main['template'] = str_replace(array('.','/'),'',$_SESSION['tpl_preview']);
+    $cs_main['template'] = str_replace(['.','/'], '', $_SESSION['tpl_preview']);
   if ($tpl_file == 'error.htm')
     $cs_main['template'] = 'install';
   if ($cs_main['template'] != $cs_main['def_tpl'] AND !is_dir('templates/' . $cs_main['template']))
@@ -407,7 +407,7 @@ function cs_template($cs_micro, $tpl_file = 'index.htm')
   }
 
   # Initalize array of upcoming additions and get show content
-  $replace = array('func:body_add' => '');
+  $replace = ['func:body_add' => ''];
   $replace['func:show'] = '<div id="csp_content">' . cs_contentload($cs_main['show']) . '</div>';
 
   if (isset($cs_main['ajax']) AND $cs_main['ajax'] == 2 OR (!empty($account['users_ajax']) AND !empty($account['access_ajax'])))
@@ -444,7 +444,7 @@ function cs_template($cs_micro, $tpl_file = 'index.htm')
   }
   if (!empty($cs_main['debug']))
   {
-    $data = array('data');
+    $data = ['data'];
     $data['data']['log_sql'] = $logsql;
     $data['data']['php_errors'] = $cs_logs['php_errors'];
     $data['data']['csp_errors'] = $cs_logs['errors'];

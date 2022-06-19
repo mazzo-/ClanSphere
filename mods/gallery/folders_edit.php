@@ -12,8 +12,8 @@ $cs_get = cs_get('id');
 $folders_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $folders_id = $cs_post['id'];
 
-$option = cs_sql_option(__FILE__,'categories');
-$img_filetypes = array('gif','jpg','png');
+$option = cs_sql_option(__FILE__, 'categories');
+$img_filetypes = ['gif','jpg','png'];
 
 require_once('mods/gallery/functions.php');
 
@@ -21,10 +21,10 @@ require_once('mods/gallery/functions.php');
 $select = 'folders_id, sub_id, folders_name, folders_order, folders_position, ';
 $select .= 'folders_url, folders_text, folders_access, folders_picture, folders_advanced';
 $where = "folders_mod='gallery' AND folders_id ='" . $folders_id . "'";
-$folders = cs_sql_select(__FILE__,'folders',$select,$where);
+$folders = cs_sql_select(__FILE__, 'folders', $select, $where);
 
 $advanced = empty($folders['folders_advanced']) ? '0,0,0,0' : $folders['folders_advanced'];
-$advanced = explode(",",$advanced);
+$advanced = explode(",", $advanced);
 $adv_vote = $advanced[0];
 $adv_close = $advanced[1];
 $adv_dl = $advanced[2];
@@ -41,12 +41,12 @@ if(isset($_POST['submit'])) {
   $folders['folders_position'] = $_POST['folders_position'];
   $folders['folders_picture'] = $_POST['folders_picture'];
   
-    $adv_vote = isset($_POST['adv_vote']) ? $_POST['adv_vote'] : 0;
-    $adv_close = isset($_POST['adv_close']) ? $_POST['adv_close'] : 0;
-    $adv_dl = isset($_POST['adv_download']) ? $_POST['adv_download'] : 0;
-    $adv_dlo = isset($_POST['adv_download_original']) ? $_POST['adv_download_original'] : 0;  
-  $advanced = array($adv_vote,$adv_close,$adv_dl,$adv_dlo);
-  $folders['folders_advanced'] = implode(",",$advanced);
+    $adv_vote = $_POST['adv_vote'] ?? 0;
+    $adv_close = $_POST['adv_close'] ?? 0;
+    $adv_dl = $_POST['adv_download'] ?? 0;
+    $adv_dlo = $_POST['adv_download_original'] ?? 0;  
+  $advanced = [$adv_vote,$adv_close,$adv_dl,$adv_dlo];
+  $folders['folders_advanced'] = implode(",", $advanced);
   
   $error = '';
 
@@ -76,7 +76,7 @@ if(isset($_POST['submit'])) {
   }
   $where = "folders_name = '" . cs_sql_escape($folders['folders_name']) . "'";
   $where .= " AND folders_mod = 'gallery' AND folders_id != '" . $folders_id . "'";
-  $search = cs_sql_count(__FILE__,'folders',$where);
+  $search = cs_sql_count(__FILE__, 'folders', $where);
   if(!empty($search)) {
     $error .= $cs_lang['cat_exists'] . cs_html_br(1);
   }
@@ -90,13 +90,13 @@ elseif(!empty($error))
 if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['data'] = $folders;
-  $data['data']['folders_select'] = make_folders_select('sub_id',$folders['sub_id'],'0','gallery',1,$folders_id);
+  $data['data']['folders_select'] = make_folders_select('sub_id', $folders['sub_id'], '0', 'gallery', 1, $folders_id);
   
   $levels = 0;
   $data['data']['folders_access'] = '';
   while($levels < 6) {
     $folders['folders_access'] == $levels ? $sel = 1 : $sel = 0;
-    $data['data']['folders_access'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $data['data']['folders_access'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
   
@@ -130,7 +130,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['hidden']['folders_picture'] = $folders['folders_picture'];
   $data['hidden']['folders_id'] = $folders_id;
   
-  echo cs_subtemplate(__FILE__,$data,'gallery','folders_edit');
+  echo cs_subtemplate(__FILE__, $data, 'gallery', 'folders_edit');
 }
 else {
 
@@ -140,14 +140,14 @@ else {
   }
   if(!empty($files_gl['picture']['tmp_name'])) {
     $filename = 'picture-' . $folders_id . '.' . $extension;
-    cs_upload('folders',$filename,$files_gl['picture']['tmp_name']);
+    cs_upload('folders', $filename, $files_gl['picture']['tmp_name']);
 
     $folders['folders_picture'] = $filename;
   }
 
   $folder_cells = array_keys($folders);
   $folder_save = array_values($folders);
-  cs_sql_update(__FILE__,'folders',$folder_cells,$folder_save,$folders_id);
+  cs_sql_update(__FILE__, 'folders', $folder_cells, $folder_save, $folders_id);
 
-  cs_redirect($cs_lang['changes_done'],'gallery','folders_manage');
+  cs_redirect($cs_lang['changes_done'], 'gallery', 'folders_manage');
 }

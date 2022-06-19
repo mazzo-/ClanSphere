@@ -30,14 +30,14 @@ if(!empty($sql_infos['tables'])) {
 else
   $data['sqlinfo']['usage'] = '-';
 
-$data['roots']['optimize_tables_url'] = cs_url('database','optimize');
-$data['roots']['import_url'] = cs_url('database','import');
-$data['roots']['export_url'] = cs_url('database','export');
-$data['roots']['statistic_url'] = cs_url('database','statistic');
+$data['roots']['optimize_tables_url'] = cs_url('database', 'optimize');
+$data['roots']['import_url'] = cs_url('database', 'import');
+$data['roots']['export_url'] = cs_url('database', 'export');
+$data['roots']['statistic_url'] = cs_url('database', 'statistic');
 
 // integrity checks
 $errors = '';
-$static = array();
+$static = [];
 $modules = cs_checkdirs('mods');
 $names = array_flip($sql_infos['names']);
 $count = count($names);
@@ -77,4 +77,4 @@ foreach($names AS $missing)
 
 $data['integrity']['errors'] = empty($errors) ? $cs_lang['db_check_passed'] : $errors;
 
-echo cs_subtemplate(__FILE__,$data,'database','roots');
+echo cs_subtemplate(__FILE__, $data, 'database', 'roots');

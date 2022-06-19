@@ -25,7 +25,7 @@ if(isset($_POST['submit'])) {
     $errormsg .= $cs_lang['captcha_false'] . cs_html_br(1);
   }
 
-  $search_email = cs_sql_count(__FILE__,'users',"users_email = '" . cs_sql_escape($sendpw['email']) . "'");
+  $search_email = cs_sql_count(__FILE__, 'users', "users_email = '" . cs_sql_escape($sendpw['email']) . "'");
   if(empty($search_email)) {
     $error++;
     $errormsg .= $cs_lang['email_unknown'] . cs_html_br(1);
@@ -34,14 +34,14 @@ if(isset($_POST['submit'])) {
   if(!empty($sendpw['email_send']) AND empty($error)) {
     $sendpw['key'] = $_POST['key'];
     $sendpw['new_pwd'] = $_POST['new_pwd'];
-    $pwd2 = str_replace(' ','',$sendpw['new_pwd']);
+    $pwd2 = str_replace(' ', '', $sendpw['new_pwd']);
     $pwdchars = strlen($pwd2);
     if($pwdchars<4) {
       $error++;
       $errormsg .= $cs_lang['short_pwd'] . cs_html_br(1);
     }
-    $key2 = cs_sql_select(__FILE__,'users','users_pwd,users_id',"users_email = '" . cs_sql_escape($sendpw['email']) . "'");
-    $key = substr($key2['users_pwd'],4,16);
+    $key2 = cs_sql_select(__FILE__, 'users', 'users_pwd,users_id', "users_email = '" . cs_sql_escape($sendpw['email']) . "'");
+    $key = substr($key2['users_pwd'], 4, 16);
     if($key != $sendpw['key']) {
       $error++;
       $errormsg .= $cs_lang['error_key'] . cs_html_br(1);
@@ -55,9 +55,9 @@ if(isset($_POST['submit'])) {
       elseif($cs_db['hash'] == 'sha1') { 
         $sec_pwd = sha1($sendpw['new_pwd']);
       }
-      $cells = array('users_pwd');
-      $content = array($sec_pwd);
-      cs_sql_update(__FILE__,'users',$cells,$content,$key2['users_id']);
+      $cells = ['users_pwd'];
+      $content = [$sec_pwd];
+      cs_sql_update(__FILE__, 'users', $cells, $content, $key2['users_id']);
       $success = 1;
     }
     else {
@@ -66,8 +66,8 @@ if(isset($_POST['submit'])) {
   }
   elseif(empty($error)) {
     $checked = 1;
-    $key2 = cs_sql_select(__FILE__,'users','users_pwd, users_nick',"users_email = '" . cs_sql_escape($sendpw['email']) . "'");
-    $key = substr($key2['users_pwd'],4,16);
+    $key2 = cs_sql_select(__FILE__, 'users', 'users_pwd, users_nick', "users_email = '" . cs_sql_escape($sendpw['email']) . "'");
+    $key = substr($key2['users_pwd'], 4, 16);
 
     $ip = cs_getip();
     $cs_contact = cs_sql_option(__FILE__, 'contact');
@@ -78,7 +78,7 @@ if(isset($_POST['submit'])) {
     $content .= $cs_lang['mail_spw_ip'] . $ip;
     $content .= $cs_lang['mail_spw_ask'] . $cs_contact['def_mail'] . $cs_lang['mail_spw_end'];
 
-    cs_mail($sendpw['email'],$cs_lang['mail_spw_head'],$content);
+    cs_mail($sendpw['email'], $cs_lang['mail_spw_head'], $content);
   }
 }
 else { 
@@ -101,7 +101,7 @@ else {
   $data['head']['body_text'] = $cs_lang['sendpw_done'];
 }
 
-echo cs_subtemplate(__FILE__,$data,'users','head');
+echo cs_subtemplate(__FILE__, $data, 'users', 'head');
 
 if(empty($success)) {
 
@@ -113,7 +113,7 @@ if(empty($success)) {
   $data['lang']['options'] = $cs_lang['options'];
   $data['lang']['save'] = $cs_lang['save'];
   $data['lang']['reset'] = $cs_lang['reset'];
-  echo cs_subtemplate(__FILE__,$data,'users','sendpw_2');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'sendpw_2');
   }
   else {
     $data['lang']['email'] = $cs_lang['email'];
@@ -124,8 +124,8 @@ if(empty($success)) {
 
     $data['captcha']['img'] = cs_captchashow();
 
-    echo cs_subtemplate(__FILE__,$data,'users','sendpw_1');
+    echo cs_subtemplate(__FILE__, $data, 'users', 'sendpw_1');
   }
 }
 else
-  cs_redirect('','users','login');
+  cs_redirect('', 'users', 'login');

@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('boardranks');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 
 $boardranks_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id'])) $boardranks_id = $cs_post['id'];
@@ -26,7 +26,7 @@ if(isset($_POST['submit'])) {
   
 } else {
   
-  $cs_boardranks = cs_sql_select(__FILE__,'boardranks','boardranks_min, boardranks_name',"boardranks_id ='" . $boardranks_id . "'");
+  $cs_boardranks = cs_sql_select(__FILE__, 'boardranks', 'boardranks_min, boardranks_name', "boardranks_id ='" . $boardranks_id . "'");
   $boardranks_min = $cs_boardranks['boardranks_min'];
   $boardranks_name = $cs_boardranks['boardranks_name'];
 }
@@ -42,14 +42,14 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['boardranks']['name'] = $boardranks_name;
   $data['boardranks']['id'] = $boardranks_id;
   
-  echo cs_subtemplate(__FILE__,$data,'boardranks','edit');
+  echo cs_subtemplate(__FILE__, $data, 'boardranks', 'edit');
   
 }
 else {
   
-  $cells = array('boardranks_min','boardranks_name');
-  $content = array($boardranks_min,$boardranks_name);
-  cs_sql_update(__FILE__,'boardranks',$cells,$content,$boardranks_id);
+  $cells = ['boardranks_min','boardranks_name'];
+  $content = [$boardranks_min,$boardranks_name];
+  cs_sql_update(__FILE__, 'boardranks', $cells, $content, $boardranks_id);
   
-  cs_redirect($cs_lang['changes_done'],'boardranks');
+  cs_redirect($cs_lang['changes_done'], 'boardranks');
 }

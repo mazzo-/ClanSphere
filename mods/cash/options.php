@@ -11,7 +11,7 @@ if(isset($_POST['submit'])) {
   
   require_once 'mods/clansphere/func_options.php';
   
-  $save = array();
+  $save = [];
   $save['month_out'] = $opt['month_out'];
   $save['currency']  = $opt['currency'];
   
@@ -21,10 +21,10 @@ if(isset($_POST['submit'])) {
 
 } else {
   
-  $data = array();
+  $data = [];
   
   $data['op'] = cs_sql_option(__FILE__, 'cash');
   settype($data['op']['month_out'], 'float');
 
-  echo cs_subtemplate(__FILE__,$data,'cash','options');
+  echo cs_subtemplate(__FILE__, $data, 'cash', 'options');
 }

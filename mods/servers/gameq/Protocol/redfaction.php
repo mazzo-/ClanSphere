@@ -45,12 +45,12 @@ class GameQ_Protocol_redfaction extends GameQ_Protocol
         $this->p->read();
 
         // Data
-        $this->r->add('servername',  $this->p->readString());
-        $this->r->add('gametype',    $this->p->readInt8());
+        $this->r->add('servername', $this->p->readString());
+        $this->r->add('gametype', $this->p->readInt8());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('map',         $this->p->readString());
+        $this->r->add('map', $this->p->readString());
         $this->p->read();
-        $this->r->add('dedicated',   $this->p->readInt8());
+        $this->r->add('dedicated', $this->p->readInt8());
     }
 }

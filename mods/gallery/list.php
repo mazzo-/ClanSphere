@@ -7,7 +7,7 @@ require_once('mods/gallery/functions.php');
 
 $options = cs_sql_option(__FILE__, 'gallery');
 
-$data = array();
+$data = [];
 $data['options'] = $options;
 
 $rows = $options['rows'];
@@ -207,13 +207,13 @@ if (empty($folders_id)) {
             
             if ($cs_gallery_voted[$run]['gallery_id'] !== $cs_gallery_voted[$run3]['gallery_id']) {
               $w = $x[$cs_gallery_voted[$run]['gallery_id']] / $y[$cs_gallery_voted[$run]['gallery_id']];
-              $z[$run4] = array("gallery_id" => $cs_gallery_voted[$run]['gallery_id'], "voted_answer" => $w);
+              $z[$run4] = ["gallery_id" => $cs_gallery_voted[$run]['gallery_id'], "voted_answer" => $w];
               $run4++;
             }
           } else {
             $run4 = 0;
             $w = $x[$cs_gallery_voted[$run]['gallery_id']] / $y[$cs_gallery_voted[$run]['gallery_id']];
-            $z[$run4] = array("gallery_id" => $cs_gallery_voted[$run]['gallery_id'], "voted_answer" => $w);
+            $z[$run4] = ["gallery_id" => $cs_gallery_voted[$run]['gallery_id'], "voted_answer" => $w];
             $run4++;
           }
         }
@@ -242,11 +242,11 @@ if (empty($folders_id)) {
   $vote_1['0']['vote'] = empty($data['vote']) ? '' : '1';
   $data['vote_1'] = !empty($vote_1['0']['vote']) ? $vote_1 : '';
   $data['tmp']['no_cat'] = empty($no_cat) ? '' : cs_subtemplate(__FILE__, $no_cat, 'usersgallery', 'users_error_1');
-  $data['cat'] = !empty($cat) ? $cat : array();
+  $data['cat'] = !empty($cat) ? $cat : [];
   
   if (empty($cat)) {
-    $data['top_views_1'] = array();
-    $data['last_update_1'] = array();
+    $data['top_views_1'] = [];
+    $data['last_update_1'] = [];
   }
   
   echo cs_subtemplate(__FILE__, $data, 'gallery', 'list');

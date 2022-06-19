@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('gallery');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 
 $picture_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $picture_id = $cs_post['id'];
@@ -63,11 +63,11 @@ if(isset($_POST['preview']) AND empty($error)) {
     $data['print']['url'] = $host . "mods/gallery/print_now.php?pic=" . $picture_id . "&amp;size=" . $width;
     $data['if']['extension'] = TRUE;
   } else {
-    $data['print']['img'] = cs_html_img("mods/gallery/image.php?pic=" . $picture_id,$height,$width,'',$picture_id);
+    $data['print']['img'] = cs_html_img("mods/gallery/image.php?pic=" . $picture_id, $height, $width, '', $picture_id);
     $data['if']['extension'] = FALSE;
   }
 }
 
 $data['picture']['id'] = $picture_id;
 
-echo cs_subtemplate(__FILE__,$data,'gallery','print');
+echo cs_subtemplate(__FILE__, $data, 'gallery', 'print');

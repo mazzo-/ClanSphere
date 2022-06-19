@@ -3,7 +3,7 @@
 // $Id$
 
 # Overwrite global settings by using the following array
-$cs_main = array('init_sql' => true, 'init_tpl' => false, 'init_mod' => true);
+$cs_main = ['init_sql' => true, 'init_tpl' => false, 'init_mod' => true];
 
 chdir('../../');
 
@@ -30,7 +30,7 @@ if(!empty($_REQUEST['pic']) OR !empty($_REQUEST['thumb']))
   $select  = 'gallery_watermark, gallery_watermark_pos, gallery_name, gallery_time, ';
   $select .= 'gallery_count, gallery_count_downloads, gallery_access';
   $where = "gallery_id = '" . cs_sql_escape($where) . "'";
-  $cs_gallery = cs_sql_select(__FILE__,$from,$select,$where);
+  $cs_gallery = cs_sql_select(__FILE__, $from, $select, $where);
   $gallery_loop = count($cs_gallery);
   
   if ($account['access_gallery'] < $cs_gallery['gallery_access']) {
@@ -38,7 +38,7 @@ if(!empty($_REQUEST['pic']) OR !empty($_REQUEST['thumb']))
   }
 
   $position = $cs_gallery['gallery_watermark_pos'];
-  $temp_pos = empty($position) ? array(0,1) : explode("|--@--|", $position);
+  $temp_pos = empty($position) ? [0,1] : explode("|--@--|", $position);
   $position = $temp_pos[0];
   $transparenz = $temp_pos[1];
   $name = $cs_gallery['gallery_name'];
@@ -49,9 +49,9 @@ if(!empty($_REQUEST['pic']) OR !empty($_REQUEST['thumb']))
   if(!empty($_REQUEST['pic']))
   {
     $gallery_count = $gallery_count + 1;
-    $gallery_cells = array('gallery_count');
-    $gallery_save = array($gallery_count);
-    cs_sql_update(__FILE__,'gallery',$gallery_cells,$gallery_save,$_REQUEST['pic']);
+    $gallery_cells = ['gallery_count'];
+    $gallery_save = [$gallery_count];
+    cs_sql_update(__FILE__, 'gallery', $gallery_cells, $gallery_save, $_REQUEST['pic']);
   }
 }
 if(!empty($_REQUEST['usersthumb'])) {
@@ -59,7 +59,7 @@ if(!empty($_REQUEST['usersthumb'])) {
   $from = 'usersgallery';
   $select = 'usersgallery_name, usersgallery_time, usersgallery_count, usersgallery_count_downloads';
   $where = "usersgallery_id = '" . cs_sql_escape($where) . "'";
-  $cs_gallery = cs_sql_select(__FILE__,$from,$select,$where);
+  $cs_gallery = cs_sql_select(__FILE__, $from, $select, $where);
   $gallery_loop = count($cs_gallery);
 
   $name = $cs_gallery['usersgallery_name'];
@@ -73,7 +73,7 @@ if(!empty($_REQUEST['userspic'])) {
   $from = 'usersgallery';
   $select = 'usersgallery_name, usersgallery_time, usersgallery_count, usersgallery_count_downloads';
   $where = "usersgallery_id = '" . cs_sql_escape($where) . "'";
-  $cs_gallery = cs_sql_select(__FILE__,$from,$select,$where);
+  $cs_gallery = cs_sql_select(__FILE__, $from, $select, $where);
   $gallery_loop = count($cs_gallery);
 
   $name = $cs_gallery['usersgallery_name'];
@@ -82,43 +82,43 @@ if(!empty($_REQUEST['userspic'])) {
   $gallery_count_downloads = $cs_gallery['usersgallery_count_downloads'];
 
   $gallery_count = $gallery_count + 1;
-  $gallery_cells = array('usersgallery_count');
-  $gallery_save = array($gallery_count);
-  cs_sql_update(__FILE__,'usersgallery',$gallery_cells,$gallery_save,$_REQUEST['userspic']);
+  $gallery_cells = ['usersgallery_count'];
+  $gallery_save = [$gallery_count];
+  cs_sql_update(__FILE__, 'usersgallery', $gallery_cells, $gallery_save, $_REQUEST['userspic']);
 }
 
 class PictureEngine
 {
-  var $image;
-  var $width;
-  var $height;
-  var $Transformation;
+  public $image;
+  public $width;
+  public $height;
+  public $Transformation;
 
-  function PictureEngine(&$image)
+  public function PictureEngine(&$image)
   {
     $this->data($image);
     $this->Transformation = new Transformation($this->image);
   }
 
-  function data(&$image)
+  public function data(&$image)
   {
     $this->image = &$image;
     $this->width = imagesx($this->image);
     $this->height = imagesy($this->image);
   }
 
-  function Dump()
+  public function Dump()
   {
     header("Content-type: image/jpeg");
-    Imagejpeg($this->image,null,100);
+    Imagejpeg($this->image, null, 100);
   }
 
-  function Dump_down($count)
+  public function Dump_down($count)
   {
     $gallery_count_downloads = $count + 1;
-    $gallery_cells = array('gallery_count_downloads');
-    $gallery_save = array($gallery_count_downloads);
-    cs_sql_update(__FILE__,'gallery',$gallery_cells,$gallery_save,$_REQUEST['pic']);
+    $gallery_cells = ['gallery_count_downloads'];
+    $gallery_save = [$gallery_count_downloads];
+    cs_sql_update(__FILE__, 'gallery', $gallery_cells, $gallery_save, $_REQUEST['pic']);
 
     # disable browser / proxy caching
     header("Cache-Control: max-age=0, no-cache, no-store, must-revalidate");
@@ -128,7 +128,7 @@ class PictureEngine
     header("Accept-Ranges: bytes");
     header("Content-type: image/jpg");
     header("Content-Disposition: attachment; filename=image.jpg");
-    echo @readfile(Imagejpeg($this->image,null,100),"r");
+    echo @readfile(Imagejpeg($this->image, null, 100), "r");
     exit;
   }
 }
@@ -136,12 +136,12 @@ class PictureEngine
 class Transformation extends PictureEngine
 {
 
-  function Transformation (&$image)
+  public function Transformation (&$image)
   {
     $this->data($image);
   }
 
-  function Scale($maxwidth = 500, $maxheight = 10000)
+  public function Scale($maxwidth = 500, $maxheight = 10000)
   {
     $this->data($this->image);
     $xFactor = $this->width / $maxwidth;
@@ -165,7 +165,7 @@ class Transformation extends PictureEngine
     $this->data($this->image);
   }
 
-  function watermark($watermark,$transparenz = 20,$filename,$position)
+  public function watermark($watermark, $transparenz = 20, $filename, $position)
   {
     $this->data($this->image);
     $transparenz = 100 - $transparenz;
@@ -212,13 +212,13 @@ class Transformation extends PictureEngine
     }
 
     imagecolortransparent($watermark, imagecolorat($watermark, 0, 0));
-    imagecopymerge($dst, $this->image, 0, 0, 0, 0, $this->width, $this->height,100);
-    imagecopymerge($dst, $watermark, $pos_x, $pos_y, 0, 0,$info_watermark[0],$info_watermark[1],$transparenz);
+    imagecopymerge($dst, $this->image, 0, 0, 0, 0, $this->width, $this->height, 100);
+    imagecopymerge($dst, $watermark, $pos_x, $pos_y, 0, 0, $info_watermark[0], $info_watermark[1], $transparenz);
     imagedestroy($this->image);
     $this->image = $dst;
     $this->data($this->image);
   }
-  function rotate($degrees=0)
+  public function rotate($degrees=0)
   {
     $this->data($this->image);
     $rotate = imagerotate($this->image, $degrees, 0);
@@ -249,7 +249,7 @@ if(extension_loaded('gd') AND isset($_REQUEST['pic']))
 
   if(!empty($cs_gallery['gallery_watermark']))
   {
-    $im->Transformation->watermark('../../uploads/categories/' . $cs_gallery['gallery_watermark'],$transparenz,$cs_gallery['gallery_watermark'],$position);
+    $im->Transformation->watermark('../../uploads/categories/' . $cs_gallery['gallery_watermark'], $transparenz, $cs_gallery['gallery_watermark'], $position);
   }
   if(isset($_REQUEST['size']))
   {
@@ -290,7 +290,7 @@ if(extension_loaded('gd') AND isset($_REQUEST['userspic']))
 
   if(!empty($cs_gallery['gallery_watermark']))
   {
-    $im->Transformation->watermark('../../uploads/categories/' . $cs_gallery['gallery_watermark'],$transparenz,$cs_gallery['gallery_watermark'],$position);
+    $im->Transformation->watermark('../../uploads/categories/' . $cs_gallery['gallery_watermark'], $transparenz, $cs_gallery['gallery_watermark'], $position);
   }
   if(isset($_REQUEST['size']))
   {
@@ -315,7 +315,7 @@ if(extension_loaded('gd') AND isset($_REQUEST['userspic']))
 if(!extension_loaded('gd') AND isset($_REQUEST['pic']))
 {
   $pic = "../../uploads/gallery/pics/" . $name;
-  $data = fopen($pic,'r');
+  $data = fopen($pic, 'r');
   echo fread($data, filesize($pic));
 }
 
@@ -339,9 +339,9 @@ if(extension_loaded('gd') AND isset($_REQUEST['thumb']))
   $time = cs_time();
   $time = $time - (60 * 60 * 24);
   if($gallery_time >= $time) {
-    $im->Transformation->watermark('../../symbols/gallery/new.png','40','new.png','1');
+    $im->Transformation->watermark('../../symbols/gallery/new.png', '40', 'new.png', '1');
   }
-  $im->Transformation->Scale($options['thumbs'],'100');
+  $im->Transformation->Scale($options['thumbs'], '100');
   $im->dump();
 }
 
@@ -349,7 +349,7 @@ if(!extension_loaded('gd') AND isset($_REQUEST['thumb']))
 {
   $thumb_file = $name;
   $thumb = "../../uploads/gallery/thumbs/Thumb_" . $thumb_file;
-  $data = fopen($thumb,'r');
+  $data = fopen($thumb, 'r');
   echo fread($data, filesize($thumb));
 }
 
@@ -373,7 +373,7 @@ if(extension_loaded('gd') AND isset($_REQUEST['picname']))
   if($im == true)
   {
     $size = '80';
-    $im->Transformation->Scale($size,$size);
+    $im->Transformation->Scale($size, $size);
     $im->dump();
   }
 }
@@ -399,7 +399,7 @@ if(extension_loaded('gd') AND isset($_REQUEST['boardpic']))
     if(isset($_REQUEST['boardthumb']))
     {
       $size = '80';
-      $im->Transformation->Scale($size,$size);
+      $im->Transformation->Scale($size, $size);
     }
     $im->dump();
   }
@@ -426,8 +426,8 @@ if(extension_loaded('gd') AND isset($_REQUEST['usersthumb']))
   $time = $time - (60 * 60 * 24);
   if($gallery_time >= $time)
   {
-    $im->Transformation->watermark('../../symbols/gallery/new.png','40','new.png','1');
+    $im->Transformation->watermark('../../symbols/gallery/new.png', '40', 'new.png', '1');
   }
-  $im->Transformation->Scale('100','100');
+  $im->Transformation->Scale('100', '100');
   $im->dump();
 }

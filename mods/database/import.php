@@ -12,7 +12,7 @@ $install_sql = 0;
 $actions = '';
 $sql_content = '';
 
-if(isset($files['update']['name']) AND preg_match("=^(.*?)\.sql$=si",$files['update']['name'])) {
+if(isset($files['update']['name']) AND preg_match("=^(.*?)\.sql$=si", $files['update']['name'])) {
   if($files['update']['name'] == 'install.sql') {
     $install_sql++;
   } else {
@@ -26,14 +26,14 @@ elseif(!empty($_POST['text'])) {
 
 if(!empty($sql_content)) {
 
-  $sql_update = str_replace('{time}',cs_time(),$sql_content);
+  $sql_update = str_replace('{time}', cs_time(), $sql_content);
   $sql_update = cs_sql_replace($sql_update);
-  $sql_update = str_replace('\;','{serial}',$sql_update);
-  $sql_array = explode(';',$sql_update);
+  $sql_update = str_replace('\;', '{serial}', $sql_update);
+  $sql_array = explode(';', $sql_update);
   cs_abcode_load();
   
   foreach($sql_array AS $sql_query) {
-    $sql_query = trim(str_replace('{serial}',';',$sql_query));
+    $sql_query = trim(str_replace('{serial}', ';', $sql_query));
     if(!empty($sql_query)) {
       $sql_lower = strtolower($sql_query);
       $look_up = 0;
@@ -44,8 +44,8 @@ if(!empty($sql_content)) {
         $para[1] = 'green';
         $info = $check['affected_rows'];
         if(!empty($look_up) AND isset($check['more'][0])) {
-          $hide = array('users_pwd', 'users_cookiehash');
-          $explains = array();
+          $hide = ['users_pwd', 'users_cookiehash'];
+          $explains = [];
           foreach($check['more'][0] AS $key => $value) {
             $explains['keys'][]['name'] = $key;
           }
@@ -100,13 +100,13 @@ if(!empty($actions)) {
 if(empty($sql_content) OR !empty($error)) {
 
   $data['if']['sql_content'] = false;
-  $data['action']['form'] = cs_url('database','import');
+  $data['action']['form'] = cs_url('database', 'import');
   $data['import']['sql_text'] = $sql_content;
 }
 else {
  $data['if']['sql_content'] = true;
-  $data['link']['continue'] = cs_url('database','roots');
+  $data['link']['continue'] = cs_url('database', 'roots');
   $data['import']['sql_text'] = '';
 }
 
-echo cs_subtemplate(__FILE__,$data,'database','import');
+echo cs_subtemplate(__FILE__, $data, 'database', 'import');

@@ -48,8 +48,8 @@ class GameQ_Protocol_unreal2 extends GameQ_Protocol
             if ($id === 0) break;
 
             $this->r->addPlayer('id', $id);
-            $this->r->addPlayer('name',  $this->_readUnrealString());
-            $this->r->addPlayer('ping',  $this->p->readInt32());
+            $this->r->addPlayer('name', $this->_readUnrealString());
+            $this->r->addPlayer('ping', $this->p->readInt32());
             $this->r->addPlayer('score', $this->p->readInt32());
             $this->p->skip(4);
         }
@@ -89,22 +89,22 @@ class GameQ_Protocol_unreal2 extends GameQ_Protocol
         // Header
         $this->header("\x00");
 
-        $this->r->add('serverid',    $this->p->readInt32());          // 0
-        $this->r->add('serverip',    $this->p->readPascalString(1));  // empty
-        $this->r->add('gameport',    $this->p->readInt32());
-        $this->r->add('queryport',   $this->p->readInt32());          // 0
-        $this->r->add('servername',  $this->p->readPascalString(1));
-        $this->r->add('mapname',     $this->p->readPascalString(1));
-        $this->r->add('gametype',    $this->p->readPascalString(1));
+        $this->r->add('serverid', $this->p->readInt32());          // 0
+        $this->r->add('serverip', $this->p->readPascalString(1));  // empty
+        $this->r->add('gameport', $this->p->readInt32());
+        $this->r->add('queryport', $this->p->readInt32());          // 0
+        $this->r->add('servername', $this->p->readPascalString(1));
+        $this->r->add('mapname', $this->p->readPascalString(1));
+        $this->r->add('gametype', $this->p->readPascalString(1));
         $this->r->add('playercount', $this->p->readInt32());
-        $this->r->add('maxplayers',  $this->p->readInt32());
-        $this->r->add('ping',        $this->p->readInt32());          // 0
+        $this->r->add('maxplayers', $this->p->readInt32());
+        $this->r->add('ping', $this->p->readInt32());          // 0
 
         // UT2004 only
         // Check if the buffer contains enough bytes
         if ($this->p->getLength() > 6) {
-            $this->r->add('flags',   $this->p->readInt32());
-            $this->r->add('skill',   $this->p->readInt16());
+            $this->r->add('flags', $this->p->readInt32());
+            $this->r->add('skill', $this->p->readInt16());
         }
     }
 
@@ -136,7 +136,7 @@ class GameQ_Protocol_unreal2 extends GameQ_Protocol
         // The string is UCS-2, this approximates converting to latin-1
         $str = '';
         for ($i = 0, $ii = strlen($encstr); $i < $ii; $i += 2) {
-            $str .= $encstr{$i};
+            $str .= $encstr[$i];
         }
         
         return $str;

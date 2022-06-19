@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('notifymods');
 
-$data = array();
+$data = [];
 
 $data['nm']['users_id'] = 0;
 
@@ -31,7 +31,7 @@ if(isset($_POST['submit'])) {
     $data['nm']['users_id'] = $users_data['users_id'];
 
   $check = 'notifymods_user = ' . $data['nm']['users_id'];
-  $find_user = cs_sql_count(__FILE__,'notifymods',$check);
+  $find_user = cs_sql_count(__FILE__, 'notifymods', $check);
   if(!empty($find_user)) {
   $error++;
   $errormsg .= $cs_lang['user_exists'] . cs_html_br(1);
@@ -55,8 +55,8 @@ elseif(!empty($error)) {
 
 if(!empty($error) OR !isset($_POST['submit'])) {
   
-  $users = cs_sql_select(__FILE__,'users','users_nick, users_id','users_active = 1 AND users_delete = 0','users_nick ASC',0,0);
-  $data['nm']['users_dropdown'] = cs_dropdown('users_id','users_nick',$users,$data['nm']['users_id']);
+  $users = cs_sql_select(__FILE__, 'users', 'users_nick, users_id', 'users_active = 1 AND users_delete = 0', 'users_nick ASC', 0, 0);
+  $data['nm']['users_dropdown'] = cs_dropdown('users_id', 'users_nick', $users, $data['nm']['users_id']);
   
   $data['nm']['notifymods_gbook'] = $data['nm']['notifymods_gbook'] == 1 ? 'checked="checked"' : '';
   $data['nm']['notifymods_joinus'] = $data['nm']['notifymods_joinus'] == 1 ? 'checked="checked"' : '';
@@ -67,10 +67,10 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['users']['nick'] = $users_nick;
 
 } else {
-  $sql_cells = array('notifymods_user', 'notifymods_gbook', 'notifymods_joinus', 'notifymods_fightus', 'notifymods_files', 'notifymods_board');
-  $sql_content = array($data['nm']['users_id'], $data['nm']['notifymods_gbook'], $data['nm']['notifymods_joinus'], $data['nm']['notifymods_fightus'], $data['nm']['notifymods_files'], $data['nm']['notifymods_board']);
-  cs_sql_insert(__FILE__,'notifymods',$sql_cells, $sql_content);
+  $sql_cells = ['notifymods_user', 'notifymods_gbook', 'notifymods_joinus', 'notifymods_fightus', 'notifymods_files', 'notifymods_board'];
+  $sql_content = [$data['nm']['users_id'], $data['nm']['notifymods_gbook'], $data['nm']['notifymods_joinus'], $data['nm']['notifymods_fightus'], $data['nm']['notifymods_files'], $data['nm']['notifymods_board']];
+  cs_sql_insert(__FILE__, 'notifymods', $sql_cells, $sql_content);
   
-  cs_redirect($cs_lang['create_done'],'notifymods');
+  cs_redirect($cs_lang['create_done'], 'notifymods');
 } 
-  echo cs_subtemplate(__FILE__,$data,'notifymods','create');
+  echo cs_subtemplate(__FILE__, $data, 'notifymods', 'create');

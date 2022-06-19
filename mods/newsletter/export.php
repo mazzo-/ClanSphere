@@ -6,8 +6,8 @@ $cs_lang = cs_translate('newsletter');
 
 include_once 'mods/newsletter/functions.php';
 
-$data = array();
-$cs_nl = array();
+$data = [];
+$cs_nl = [];
 
 $cs_nl['newsletter_to'] = '';
 $cs_nl['users_id'] = $account['users_id'];
@@ -35,7 +35,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['nl']['to_dropdown'] = cs_newsletter_to($cs_nl['newsletter_to']);
 
- echo cs_subtemplate(__FILE__,$data,'newsletter','export');
+ echo cs_subtemplate(__FILE__, $data, 'newsletter', 'export');
 
 }
 else {

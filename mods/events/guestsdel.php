@@ -30,7 +30,7 @@ if(isset($_GET['agree'])) {
     $subject  = $cs_lang['evg_mail_subject'] . ': ' . $event['events_name'];
     $message  = $cs_lang['evg_mail_reasons'] . $cs_lang['evg_mail_deletes'] . "\n\n";
     $message .= $cs_lang['event'] . ': ' . $event['events_name'] . "\n";
-    $message .= $cs_lang['date'] . ': ' . cs_date('unix',$event['events_time'],1) . "\n";
+    $message .= $cs_lang['date'] . ': ' . cs_date('unix', $event['events_time'], 1) . "\n";
     $message .= $cs_lang['status'] . ': ' . $cs_lang['status_' . $cs_events['eventguests_status']] . "\n\n";
     $message .= $cs_lang['evg_mail_weblink'] . "\n";
     $message .= $cs_main['php_self']['website'] . cs_url('events', 'view', 'id=' . $event['events_id']);
@@ -44,11 +44,11 @@ if(isset($_GET['cancel']))
   cs_redirect($cs_lang['del_false'], 'events', 'guests', 'id=' . $events_id);
 
 if(!empty($events_form)) {
-  $data['lang']['body'] = sprintf($cs_lang['del_rly'],$eventguests_id);
+  $data['lang']['body'] = sprintf($cs_lang['del_rly'], $eventguests_id);
   
-  $data['lang']['content'] = cs_link($cs_lang['confirm'],'events','guestsdel','id=' . $eventguests_id . '&amp;agree');
+  $data['lang']['content'] = cs_link($cs_lang['confirm'], 'events', 'guestsdel', 'id=' . $eventguests_id . '&amp;agree');
   $data['lang']['content'] .= ' - ';
-  $data['lang']['content'] .= cs_link($cs_lang['cancel'],'events','guestsdel','id=' . $eventguests_id . '&amp;cancel');
+  $data['lang']['content'] .= cs_link($cs_lang['cancel'], 'events', 'guestsdel', 'id=' . $eventguests_id . '&amp;cancel');
   
-  echo cs_subtemplate(__FILE__,$data,'events','remove');
+  echo cs_subtemplate(__FILE__, $data, 'events', 'remove');
 }

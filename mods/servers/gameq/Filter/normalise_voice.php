@@ -38,10 +38,10 @@ class GameQ_Filter_normalise extends GameQ_Filter
     public function __construct()
     { 
 
-        $this->player = array(
-            'name'          => array('client_nickname', 'name'),
-            'channel'       => array('cid')
-        );
+        $this->player = [
+            'name'          => ['client_nickname', 'name'],
+            'channel'       => ['cid'],
+        ];
     }
 
     /**
@@ -53,7 +53,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
      */
     public function filter($original, $server)
     {
-        $result = array();
+        $result = [];
         if (empty($original)) return $result;
 
         // Normalise results
@@ -73,7 +73,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
         }
         else
 		{
-			$result['players'] = array();
+			$result['players'] = [];
 		}
 
         unset($result['gq_players']);
@@ -126,7 +126,7 @@ class GameQ_Filter_normalise extends GameQ_Filter
      */
     private function fill($vars, $val = false)
     {
-        $data = array();
+        $data = [];
 
         foreach ($vars as $target => $source) {
             $data['gq_' . $target] = $val;

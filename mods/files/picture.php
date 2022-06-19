@@ -3,22 +3,22 @@
 // $Id$
 
 $cs_lang = cs_translate('files');
-$cs_option = cs_sql_option(__FILE__,'files');
+$cs_option = cs_sql_option(__FILE__, 'files');
 $cs_files_id = empty($_REQUEST['where']) ? $_GET['id'] : $_REQUEST['where'];
-settype($cs_file_id,'integer');
+settype($cs_file_id, 'integer');
 
 $files_gl = cs_files();
 
-$data = array();
+$data = [];
 
 $img_max['width'] = $cs_option['max_width'];
 $img_max['height'] = $cs_option['max_height'];
 $img_max['size'] = $cs_option['max_size'];
-$img_filetypes = array('gif','jpg','png');
+$img_filetypes = ['gif','jpg','png'];
 
-$file = cs_sql_select(__FILE__,'files','files_previews',"files_id = '" . $cs_files_id . "'");
+$file = cs_sql_select(__FILE__, 'files', 'files_previews', "files_id = '" . $cs_files_id . "'");
 $file_string = $file['files_previews'];
-$file_pics = empty($file_string) ? array() : explode("\n",$file_string);
+$file_pics = empty($file_string) ? [] : explode("\n", $file_string);
 $file_next = count($file_pics) + 1;
 
 $error = 0;
@@ -30,10 +30,10 @@ if(!empty($_GET['delete'])) {
   cs_unlink('files', 'thumb-' . $file_pics[$target]);
   $file_pics[$target] = FALSE;
   $file_pics = array_filter($file_pics);
-  $file_string = implode("\n",$file_pics);
-  $cells = array('files_previews');
-  $content = array($file_string);
-  cs_sql_update(__FILE__,'files',$cells,$content,$cs_files_id);
+  $file_string = implode("\n", $file_pics);
+  $cells = ['files_previews'];
+  $content = [$file_string];
+  cs_sql_update(__FILE__, 'files', $cells, $content, $cs_files_id);
 }
 elseif(!empty($_POST['submit'])) {
   
@@ -75,12 +75,12 @@ elseif(!empty($_POST['submit'])) {
     if(cs_resample($files_gl['picture']['tmp_name'], 'uploads/files/' . $thumb_name, 80, 200) 
     AND cs_upload('files', $picture_name, $files_gl['picture']['tmp_name'])) {
 
-      $cells = array('files_previews');
-      $content = empty($file_string) ? array($target) : array($file_string . "\n" . $target);
-      cs_sql_update(__FILE__,'files',$cells,$content,$cs_files_id);
+      $cells = ['files_previews'];
+      $content = empty($file_string) ? [$target] : [$file_string . "\n" . $target];
+      cs_sql_update(__FILE__, 'files', $cells, $content, $cs_files_id);
 
     
-    cs_redirect($cs_lang['success'],'files','picture','id=' . $cs_files_id);
+    cs_redirect($cs_lang['success'], 'files', 'picture', 'id=' . $cs_files_id);
     }
     else {
         $message .= $cs_lang['up_error'];
@@ -114,7 +114,7 @@ if(!empty($error) OR empty($_POST['submit'])) {
   $matches[2] .= $cs_lang['filetypes'] . $return_types;
   $data['upload']['clip'] = cs_abcode_clip($matches);
   
-  $data['pictures'] = array();
+  $data['pictures'] = [];
   
   if(empty($file_string)) {
     $data['if']['nopics'] = true;
@@ -135,4 +135,4 @@ if(!empty($error) OR empty($_POST['submit'])) {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'files','picture');
+echo cs_subtemplate(__FILE__, $data, 'files', 'picture');

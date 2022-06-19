@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('users');
 $cs_get = cs_get('id');
 
-$data = array();
+$data = [];
 
 $users_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 $nick_temp = cs_sql_select(__FILE__, 'users', 'users_nick', 'users_id = ' . $users_id);
@@ -21,13 +21,13 @@ if(isset($_GET['agree'])) {
 
   while (!empty($given)) {
     for ($i = 0; $i < 40; $i++) {
-      $rand = rand(0,$chars_count);
-      $mail .= $chars{$rand};
+      $rand = rand(0, $chars_count);
+      $mail .= $chars[$rand];
     }
     $given = cs_sql_count(__FILE__, 'users', "users_email = '" . $mail . "'");
   }
 
-  $array_data = array('access_id'=>0,
+  $array_data = ['access_id'=>0,
                       'users_nick'=>$nick,
                       'users_pwd'=>'',
                       'users_name'=>'',
@@ -54,7 +54,7 @@ if(isset($_GET['agree'])) {
                       'users_info'=>'',
                       'users_regkey'=>'',
                       'users_register'=>0,
-                      'users_delete'=>1);
+                      'users_delete'=>1, ];
 
   $array_keys = array_keys($array_data);
   $array_values = array_values($array_data);
@@ -69,9 +69,9 @@ if(isset($_GET['cancel']))
 
 else {
   
-  $data['head']['body'] = sprintf($cs_lang['rly_rmv_user'],$nick_temp['users_nick']);
-  $data['url']['agree'] = cs_url('users','remove','id=' . $users_id . '&amp;agree');
-  $data['url']['cancel'] = cs_url('users','remove','id=' . $users_id . '&amp;cancel');
+  $data['head']['body'] = sprintf($cs_lang['rly_rmv_user'], $nick_temp['users_nick']);
+  $data['url']['agree'] = cs_url('users', 'remove', 'id=' . $users_id . '&amp;agree');
+  $data['url']['cancel'] = cs_url('users', 'remove', 'id=' . $users_id . '&amp;cancel');
 
-  echo cs_subtemplate(__FILE__,$data,'users','remove');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'remove');
 }

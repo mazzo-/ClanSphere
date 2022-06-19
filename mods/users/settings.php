@@ -4,53 +4,53 @@
 
 $cs_lang = cs_translate('users');
 
-$head = array('mod' => $cs_lang['mod_name'], 'action' => $cs_lang['settings'], 'topline' => $cs_lang['settings_info'], 'message' => cs_getmsg());
+$head = ['mod' => $cs_lang['mod_name'], 'action' => $cs_lang['settings'], 'topline' => $cs_lang['settings_info'], 'message' => cs_getmsg()];
 
-$opt_array = array(
-  $cs_lang['profile'] => array(
+$opt_array = [
+  $cs_lang['profile'] => [
     'file' => 'profile',
     'icon' => 'personal',
     'name' => $cs_lang['profile'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['picture'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['picture'] => [
     'file' => 'picture',
     'icon' => 'camera_unmount',
     'name' => $cs_lang['picture'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['password'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['password'] => [
     'file' => 'password',
     'icon' => 'password',
     'name' => $cs_lang['password'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['setup'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['setup'] => [
     'file' => 'setup',
     'icon' => 'looknfeel',
     'name' => $cs_lang['setup'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['close'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['close'] => [
     'file' => 'close',
     'icon' => 'gpg',
     'name' => $cs_lang['close'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['avatar'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['avatar'] => [
     'dir' => 'board',
     'file' => 'avatar',
     'icon' => 'babelfish',
     'name' => $cs_lang['avatar'],
-    'show' => array('users/settings' => 1)
-  ),
-  $cs_lang['signature'] => array(
+    'show' => ['users/settings' => 1],
+  ],
+  $cs_lang['signature'] => [
     'dir' => 'board',
     'file' => 'signature',
     'icon' => 'colors',
     'name' => $cs_lang['signature'],
-    'show' => array('users/settings' => 1)
-  ));
+    'show' => ['users/settings' => 1],
+  ], ];
 
 require_once('mods/clansphere/functions.php');
 echo cs_manage('users', 'settings', 'users', 'center', $opt_array, $head);

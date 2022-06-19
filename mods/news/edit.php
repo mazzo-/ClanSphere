@@ -12,8 +12,8 @@ if (!empty($cs_post['id']))  $news_id = $cs_post['id'];
 require_once('mods/categories/functions.php');
 $news_newtime = 0;
 
-$op_news = cs_sql_option(__FILE__,'news');
-$abcode = explode(",",$op_news['abcode']);
+$op_news = cs_sql_option(__FILE__, 'news');
+$abcode = explode(",", $op_news['abcode']);
 $data['op']['features'] = empty($abcode[0]) ? $cs_lang['no'] : $cs_lang['yes'];
 $data['op']['smileys'] = empty($abcode[1]) ? $cs_lang['no'] : $cs_lang['yes'];
 $data['op']['clip'] = empty($abcode[2]) ? $cs_lang['no'] : $cs_lang['yes'];
@@ -39,7 +39,7 @@ if(isset($_POST['submit']) or isset($_POST['preview'])) {
 
   if(!empty($cs_news['news_publishs_at'])) $cs_news['news_public'] = 0;
 
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+  $run_loop = $_POST['run_loop'] ?? 1;
   $cs_news['news_mirror'] = '';
   $cs_news['news_mirror_name'] = '';
 
@@ -138,7 +138,7 @@ if(isset($_POST['preview']) and empty($error)) {
         $data['prev_mirror'][$prev_run]['dot'] =  ' - ';
       }
 
-      $data['prev_mirror'][$prev_run]['news_mirror'] = cs_html_link($temp_mirror[$run],$temp_mirror_name[$run]);
+      $data['prev_mirror'][$prev_run]['news_mirror'] = cs_html_link($temp_mirror[$run], $temp_mirror_name[$run]);
       $prev_run++;
     }
   }
@@ -163,7 +163,7 @@ if(isset($_POST['mirror'])) {
 }
 
 if(!empty($error) or isset($_POST['preview']) or !isset($_POST['submit'])) {
-  $data['categories']['dropdown'] = cs_categories_dropdown('news',$cs_news['categories_id']);
+  $data['categories']['dropdown'] = cs_categories_dropdown('news', $cs_news['categories_id']);
 
   $data['news']['news_headline'] = cs_secure($cs_news['news_headline']);
   $data['news']['news_readmore'] = cs_secure($cs_news['news_readmore']);
@@ -171,7 +171,7 @@ if(!empty($error) or isset($_POST['preview']) or !isset($_POST['submit'])) {
   $data['news']['users_id'] = (int) $cs_news['users_id'];
 
   if(isset($_POST['mirror'])) {
-    $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+    $run_loop = $_POST['run_loop'] ?? 1;
   }
   else {
     $temp_mirror = explode("\n", $cs_news['news_mirror']);
@@ -198,8 +198,8 @@ if(!empty($error) or isset($_POST['preview']) or !isset($_POST['submit'])) {
     }
 
     if(isset($_POST['mirror'])) {
-      $cs_news["news_mirror_$num"] = isset($_POST["news_mirror_$num"]) ? $_POST["news_mirror_$num"] : '';
-      $cs_news["news_mirror_name_$num"] = isset($_POST["news_mirror_name_$num"]) ? $_POST["news_mirror_name_$num"] : '';
+      $cs_news["news_mirror_$num"] = $_POST["news_mirror_$num"] ?? '';
+      $cs_news["news_mirror_name_$num"] = $_POST["news_mirror_name_$num"] ?? '';
     }
     else {
       $cs_news["news_mirror_$num"] = $temp_mirror[$run];

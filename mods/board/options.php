@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('board');
 
-$cs_board = cs_sql_option(__FILE__,'board');
+$cs_board = cs_sql_option(__FILE__, 'board');
 $board_form = 1;
 
 $data['lang']['getmsg'] = cs_getmsg();
@@ -13,7 +13,7 @@ if(isset($_POST['submit'])) {
   
   $board_form = 0;
   
-  $save = array();
+  $save = [];
   $save['max_text'] = $_POST['max_text'] < 65000 ? (int) $_POST['max_text'] : 65000;
   $save['max_signatur'] = $_POST['max_signatur'];
   $save['avatar_width'] = $_POST['avatar_width'];
@@ -22,7 +22,7 @@ if(isset($_POST['submit'])) {
   $save['file_size'] = $_POST['file_size'] * 1024;
   $save['file_types'] = $_POST['file_types'];
   $save['sort'] = $_POST['sort'];
-  $save['doubleposts'] = empty($_POST['doublep_allowed']) ? -1 : (int) (86400 * str_replace(',','.',$_POST['doubleposts']));
+  $save['doubleposts'] = empty($_POST['doublep_allowed']) ? -1 : (int) (86400 * str_replace(',', '.', $_POST['doubleposts']));
   $save['list_subforums'] = empty($_POST['list_subforums']) ? 0 : 1;
   $save['max_navlist'] = $_POST['max_navlist'];
   $save['max_headline'] = $_POST['max_headline'];
@@ -33,12 +33,12 @@ if(isset($_POST['submit'])) {
   
   cs_optionsave('board', $save);
 
-  cs_redirect($cs_lang['success'], 'options','roots');
+  cs_redirect($cs_lang['success'], 'options', 'roots');
   
 }
 
 if(!empty($board_form)) {  
-  $data['action']['form'] = cs_url('board','options');
+  $data['action']['form'] = cs_url('board', 'options');
   
   $size = $cs_board['avatar_size'] / 1024;
   $size2 = $cs_board['file_size'] / 1024;
@@ -88,4 +88,4 @@ if(!empty($board_form)) {
   $data['options']['list_subforums'] = empty($cs_board['list_subforums']) ? '' : ' checked="checked"';
 }
 
-echo cs_subtemplate(__FILE__,$data,'board','options');
+echo cs_subtemplate(__FILE__, $data, 'board', 'options');

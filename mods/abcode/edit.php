@@ -7,8 +7,8 @@ $cs_get = cs_get('id');
 $cs_post = cs_post('id');
 $files = cs_files();
 
-$op_abcode = cs_sql_option(__FILE__,'abcode');
-$img_filetypes = array(1 => 'gif',2 => 'jpg',3 => 'png');
+$op_abcode = cs_sql_option(__FILE__, 'abcode');
+$img_filetypes = [1 => 'gif',2 => 'jpg',3 => 'png'];
 
 if(isset($cs_post['submit'])) {
   
@@ -30,7 +30,7 @@ if(isset($cs_post['submit'])) {
   if(!empty($files['picture']['tmp_name']))
     $img_size = getimagesize($files['picture']['tmp_name']);
   else
-    $img_size = array(1 => 0, 2 => 0);
+    $img_size = [1 => 0, 2 => 0];
   
   if(!empty($files['picture']['tmp_name']) AND empty($img_size) OR $img_size[2] > 3) {
     $error .= $cs_lang['ext_error'] . cs_html_br(1);
@@ -72,7 +72,7 @@ if(isset($cs_post['submit'])) {
   
   $where = "abcode_pattern = '" . cs_sql_escape($cs_abcode['abcode_pattern']) . "'";
   $where .= " AND abcode_id !='" . $abcode_id . "'";
-  $search = cs_sql_count(__FILE__,'abcode',$where);
+  $search = cs_sql_count(__FILE__, 'abcode', $where);
   
   if(!empty($search)) {
     $error .= $cs_lang['pattern_exists'] . cs_html_br(1);
@@ -82,7 +82,7 @@ else {
   $abcode_id = $cs_get['id'];
   
   $cells = 'abcode_func, abcode_pattern, abcode_result, abcode_file, abcode_order';
-  $cs_abcode = cs_sql_select(__FILE__,'abcode',$cells,'abcode_id = \'' . $abcode_id . '\'');
+  $cs_abcode = cs_sql_select(__FILE__, 'abcode', $cells, 'abcode_id = \'' . $abcode_id . '\'');
 }
 
 if(!isset($cs_post['submit'])) {
@@ -108,7 +108,7 @@ if(!empty($error) OR !isset($cs_post['submit'])) {
   } else {
     $place = 'uploads/abcode/' . $cs_abcode['abcode_file'];
     $size = getimagesize($cs_main['def_path'] . '/' . $place);
-    $data['abcode']['pic'] = cs_html_img($place,$size[1],$size[0]);
+    $data['abcode']['pic'] = cs_html_img($place, $size[1], $size[0]);
   }
 
   $matches[1] = $cs_lang['pic_infos'];
@@ -126,12 +126,12 @@ if(!empty($error) OR !isset($cs_post['submit'])) {
   $data['abcode']['order'] = $cs_abcode['abcode_order'];
   $data['abcode']['id'] = $abcode_id;
 
-  echo cs_subtemplate(__FILE__,$data,'abcode','edit');
+  echo cs_subtemplate(__FILE__, $data, 'abcode', 'edit');
 }
 else {
   $abcode_cells = array_keys($cs_abcode);
   $abcode_save = array_values($cs_abcode);
-  cs_sql_update(__FILE__,'abcode',$abcode_cells,$abcode_save,$abcode_id);
+  cs_sql_update(__FILE__, 'abcode', $abcode_cells, $abcode_save, $abcode_id);
 
   cs_cache_delete('abcode_smileys');
   cs_cache_delete('abcode_content');

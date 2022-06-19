@@ -42,13 +42,13 @@ class GameQ_Protocol_cube extends GameQ_Protocol
         $this->p->skip(2);
 
         // Vars
-        $this->r->add('protocol',       $this->p->readInt8());
-        $this->r->add('mode',           $this->p->readInt8());
-        $this->r->add('num_players',    $this->p->readInt8());
+        $this->r->add('protocol', $this->p->readInt8());
+        $this->r->add('mode', $this->p->readInt8());
+        $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('time_remaining', $this->p->readInt8());
-        $this->r->add('map',            $this->p->readString());
-        $this->r->add('servername',     $this->p->readString());
-        $this->r->add('max_players',    $this->p->readInt8());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('servername', $this->p->readString());
+        $this->r->add('max_players', $this->p->readInt8());
     }
 
 }

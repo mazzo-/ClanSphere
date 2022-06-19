@@ -16,7 +16,7 @@ function cs_set_env($dir) {
   while (false !== ($filename = readdir($dh))) {
     if($filename != '.' AND $filename != '..') {
       $nextcheck = $dir . $filename;
-      @chmod($dir,0777) OR $error++;
+      @chmod($dir, 0777) OR $error++;
     }
   }
   closedir($dh);
@@ -26,7 +26,7 @@ function cs_set_env($dir) {
 
 $set_uploads = cs_set_env('uploads');
 
-$data = array();
+$data = [];
 
 $data['errors']['show'] = '';
 

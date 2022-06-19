@@ -38,23 +38,23 @@ class GameQ_Protocol_ffow extends GameQ_Protocol
         // Header
         $this->p->skip(6);
 
-        $this->r->add('servername',  $this->p->readString());
-        $this->r->add('mapname',     $this->p->readString());
-        $this->r->add('modname',     $this->p->readString());
-        $this->r->add('gamemode',    $this->p->readString());
+        $this->r->add('servername', $this->p->readString());
+        $this->r->add('mapname', $this->p->readString());
+        $this->r->add('modname', $this->p->readString());
+        $this->r->add('gamemode', $this->p->readString());
         $this->r->add('description', $this->p->readString());
-        $this->r->add('version',     $this->p->readString());
-        $this->r->add('port',        $this->p->readInt16());
+        $this->r->add('version', $this->p->readString());
+        $this->r->add('port', $this->p->readInt16());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('dedicated',   $this->p->readInt8());
-        $this->r->add('os',          $this->p->readInt8());
-        $this->r->add('password',    $this->p->readInt8());
-        $this->r->add('anticheat',   $this->p->readInt8());
+        $this->r->add('dedicated', $this->p->readInt8());
+        $this->r->add('os', $this->p->readInt8());
+        $this->r->add('password', $this->p->readInt8());
+        $this->r->add('anticheat', $this->p->readInt8());
         $this->r->add('average_fps', $this->p->readInt8());
-        $this->r->add('round',       $this->p->readInt8());
-        $this->r->add('max_rounds',  $this->p->readInt8());
-        $this->r->add('time_left',   $this->p->readInt16());
+        $this->r->add('round', $this->p->readInt8());
+        $this->r->add('max_rounds', $this->p->readInt8());
+        $this->r->add('time_left', $this->p->readInt16());
     }
 }
 ?>

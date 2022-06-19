@@ -4,15 +4,15 @@
 
 $cs_lang = cs_translate('clans');
 
-$op_clans = cs_sql_option(__FILE__,'clans');
-$op_squads = cs_sql_option(__FILE__,'squads');
-$op_members = cs_sql_option(__FILE__,'members');
+$op_clans = cs_sql_option(__FILE__, 'clans');
+$op_squads = cs_sql_option(__FILE__, 'squads');
+$op_members = cs_sql_option(__FILE__, 'members');
 
 $cs_clans_id = $_GET['id'];
-settype($cs_clans_id,'integer');
+settype($cs_clans_id, 'integer');
 
 $where = "clans_id='" . $cs_clans_id . "'";  
-$cs_clan = cs_sql_select(__FILE__,'clans','*',$where);
+$cs_clan = cs_sql_select(__FILE__, 'clans', '*', $where);
 
 $data['lang']['mod_name'] = $cs_lang[$op_clans['label']];
 $data['clans']['name'] = cs_secure($cs_clan['clans_name']);
@@ -23,27 +23,27 @@ if(empty($cs_clan['clans_picture'])) {
 else {
   $place = 'uploads/clans/' . $cs_clan['clans_picture'];
   $size = getimagesize($cs_main['def_path'] . '/' . $place);
-  $data['clans']['img'] = cs_html_img($place,$size[1],$size[0]);
+  $data['clans']['img'] = cs_html_img($place, $size[1], $size[0]);
 }
 
 $data['clans']['short'] = cs_secure($cs_clan['clans_short']);
 
 if(!empty($cs_clan['clans_country'])) {
   include_once('lang/' . $account['users_lang'] . '/countries.php');
-  $data['clans']['country'] = cs_html_img('symbols/countries/' . $cs_clan['clans_country'] . '.png',11,16) . ' ' . $cs_country[$cs_clan['clans_country']];
+  $data['clans']['country'] = cs_html_img('symbols/countries/' . $cs_clan['clans_country'] . '.png', 11, 16) . ' ' . $cs_country[$cs_clan['clans_country']];
 } else {
   $data['clans']['country'] = '-';
 }
 
 if(!empty($cs_clan['clans_url'])) {
-  $data['clans']['url'] = cs_html_link('http://' . $cs_clan['clans_url'],cs_secure($cs_clan['clans_url']));
+  $data['clans']['url'] = cs_html_link('http://' . $cs_clan['clans_url'], cs_secure($cs_clan['clans_url']));
 }
 else {
   $data['clans']['url'] = '';
 }
 
 if(!empty($cs_clan['clans_since'])) {
-  $content = cs_date('date',$cs_clan['clans_since']);
+  $content = cs_date('date', $cs_clan['clans_since']);
   $birth = explode('-', $cs_clan['clans_since']);
   $age = cs_datereal('Y') - $birth[0];
   if(cs_datereal('m')<=$birth[1]) {
@@ -63,7 +63,7 @@ else {
 
 $select = 'squads_name, games_id, squads_id';
 $where = "clans_id = '" . $cs_clans_id . "'";  
-$cs_squads = cs_sql_select(__FILE__,'squads',$select,$where,'squads_order, squads_name',0,0);
+$cs_squads = cs_sql_select(__FILE__, 'squads', $select, $where, 'squads_order, squads_name', 0, 0);
 $squads_loop = count($cs_squads);
 
 $data['lang']['game'] = $cs_lang['game'];
@@ -82,9 +82,9 @@ for($run=0; $run<$squads_loop; $run++) {
   $data['squads'][$run]['game'] = '';
   }
   
-  $data['squads'][$run]['squads'] = cs_link(cs_secure($cs_squads[$run]['squads_name']),'squads','view','id=' . $cs_squads[$run]['squads_id']);
+  $data['squads'][$run]['squads'] = cs_link(cs_secure($cs_squads[$run]['squads_name']), 'squads', 'view', 'id=' . $cs_squads[$run]['squads_id']);
   $where = "squads_id='" . $cs_squads[$run]['squads_id'] . "'";  
-  $data['squads'][$run]['members'] = cs_sql_count(__FILE__,'members',$where);
+  $data['squads'][$run]['members'] = cs_sql_count(__FILE__, 'members', $where);
 }
 
-echo cs_subtemplate(__FILE__,$data,'clans','view');
+echo cs_subtemplate(__FILE__, $data, 'clans', 'view');

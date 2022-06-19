@@ -8,7 +8,7 @@ $cs_post = cs_post('id');
 $boardmodid = empty($cs_get['id']) ? $cs_post['id'] : $cs_get['id'];
 
 if(isset($cs_post['agree'])) {
-  cs_sql_delete(__FILE__,'boardmods',$boardmodid);
+  cs_sql_delete(__FILE__, 'boardmods', $boardmodid);
   cs_redirect($cs_lang['del_true'], 'boardmods');
 }
 
@@ -18,13 +18,13 @@ if(isset($cs_post['cancel'])) {
 
 $tables = 'boardmods bmo INNER JOIN {pre}_users usr ON usr.users_id = bmo.users_id';
 $where = 'bmo.boardmods_id = ' . $boardmodid;
-$boardmod = cs_sql_select(__FILE__,$tables,'usr.users_nick',$where,0,0,1);
+$boardmod = cs_sql_select(__FILE__, $tables, 'usr.users_nick', $where, 0, 0, 1);
 if(!empty($boardmod)) {
-  $data = array();
-  $data['head']['body'] = sprintf($cs_lang['remove_entry'],$cs_lang['mod_remove'],$boardmod['users_nick']);
+  $data = [];
+  $data['head']['body'] = sprintf($cs_lang['remove_entry'], $cs_lang['mod_remove'], $boardmod['users_nick']);
   $data['boardmod']['id'] = $boardmodid;
-  echo cs_subtemplate(__FILE__,$data,'boardmods','remove');
+  echo cs_subtemplate(__FILE__, $data, 'boardmods', 'remove');
 }
 else {
-  cs_redirect('','boardmods');
+  cs_redirect('', 'boardmods');
 }

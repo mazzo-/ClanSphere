@@ -10,7 +10,7 @@ $check_pw = 1;
 $board_id = empty($_REQUEST['id']) ? '' : $_REQUEST['id'];
 if(!empty($_REQUEST['where']))
   $board_id = $_REQUEST['where'];
-settype($board_id,'integer');
+settype($board_id, 'integer');
 
 include('mods/board/functions.php');
 
@@ -19,14 +19,14 @@ $from = 'board frm INNER JOIN {pre}_categories cat ON frm.categories_id = cat.ca
 $select = 'frm.board_pwd AS board_pwd, frm.board_name AS board_name, cat.categories_name AS categories_name, ';
 $select .= 'frm.board_id AS board_id, cat.categories_id AS categories_id, frm.board_access AS board_access, frm.squads_id AS squads_id';
 $where = "frm.board_id = " . (int)$board_id;
-$cs_thread = cs_sql_select(__FILE__,$from,$select,$where,0,0,1);
+$cs_thread = cs_sql_select(__FILE__, $from, $select, $where, 0, 0, 1);
 if(!empty ($cs_thread['board_pwd'])) {
   $where = "users_id = " . (int)$account['users_id'] . " AND board_id = " . (int)$cs_thread['board_id'];
-  $check_pw = cs_sql_count(__FILE__,'boardpws',$where);
+  $check_pw = cs_sql_count(__FILE__, 'boardpws', $where);
 }
 if(!empty($cs_thread['squads_id'])) {
   $where = "squads_id = " . (int)$cs_thread['squads_id'] . " AND users_id = " . (int)$account['users_id'];
-  $check_sq = cs_sql_count(__FILE__,'members',$where);
+  $check_sq = cs_sql_count(__FILE__, 'members', $where);
 }
 
 //Sicherheitsabfrage Beginn
@@ -43,20 +43,20 @@ if(!empty($errorpage)) {
 
 #check mod
 $acc_mod = 0;
-$check_mod = cs_sql_select(__FILE__,'boardmods','boardmods_modpanel','users_id = ' . (int)$account['users_id'],0,0,1);
+$check_mod = cs_sql_select(__FILE__, 'boardmods', 'boardmods_modpanel', 'users_id = ' . (int)$account['users_id'], 0, 0, 1);
 if(!empty($check['boardmods_modpanel']) OR $account['access_board'] == 5) {
   $acc_mod = 1;
 }
 
-$head  = cs_link($cs_lang['board'],'board','list','normalb') .' -> ';
-$head .= cs_link($cs_thread['categories_name'],'board','list','where=' .$cs_thread['categories_id'],'normalb') .' -> ';
-$head .= cs_link($cs_thread['board_name'],'board','listcat','where=' .$cs_thread['board_id'],'normalb');
+$head  = cs_link($cs_lang['board'], 'board', 'list', 'normalb') .' -> ';
+$head .= cs_link($cs_thread['categories_name'], 'board', 'list', 'where=' .$cs_thread['categories_id'], 'normalb') .' -> ';
+$head .= cs_link($cs_thread['board_name'], 'board', 'listcat', 'where=' .$cs_thread['board_id'], 'normalb');
 $data['head']['boardlinks'] = $head;
 
 $bv['boardvotes_question'] = '';
-$cs_board_opt = cs_sql_option(__FILE__,'board');
+$cs_board_opt = cs_sql_option(__FILE__, 'board');
 $max_size = $cs_board_opt['file_size'];
-$filetypes = explode(',',$cs_board_opt['file_types']);
+$filetypes = explode(',', $cs_board_opt['file_types']);
 
 $board['board_id'] = $board_id;
 $board['users_id'] = $account['users_id'];
@@ -77,20 +77,20 @@ if(isset($_POST['submit']) OR isset($_POST['preview']) OR isset($_POST['new_vote
   $board['threads_text'] = $_POST['threads_text'];
   
   if(!empty($acc_mod)) {
-    $board['threads_important'] = isset($_POST['threads_important']) ? $_POST['threads_important'] : 0;
+    $board['threads_important'] = $_POST['threads_important'] ?? 0;
     $board['threads_close'] = isset($_POST['threads_close']) ? $account['users_id'] : 0;
   }
 
-  $bv['boardvotes_access'] = isset($_POST['votes_access']) ? $_POST['votes_access'] : '0';
-  $bv['boardvotes_question'] = isset($_POST['votes_question']) ? $_POST['votes_question'] : '';
+  $bv['boardvotes_access'] = $_POST['votes_access'] ?? '0';
+  $bv['boardvotes_question'] = $_POST['votes_question'] ?? '';
   $bv['boardvotes_several'] = isset($_POST['votes_several']) ? '1' : '0';
   $cs_vote_tpl['several']['checked'] = empty($votes_several) ? '' : 'checked';
-  if(cs_datepost('votes_end','unix')) {
-    $bv['boardvotes_end'] = cs_datepost('votes_end','unix');
+  if(cs_datepost('votes_end', 'unix')) {
+    $bv['boardvotes_end'] = cs_datepost('votes_end', 'unix');
   }else{
     $bv['boardvotes_end'] = time() + 604800;
   }
-  $votes = isset($_POST['votes']) ? $_POST['votes'] : 0;
+  $votes = $_POST['votes'] ?? 0;
   if(isset($_POST['new_votes'])) {
     $votes = '1';
   }
@@ -104,15 +104,15 @@ if(isset($_POST['submit']) OR isset($_POST['preview']) OR isset($_POST['new_vote
     $count_figures = strlen($board['threads_text']);
     if($count_figures >= $cs_board_opt['max_text']) {
       $diff = $count_figures - $cs_board_opt['max_text'];
-      $error .= sprintf($cs_lang['text_to_long_sprint'],$count_figures,$diff) . cs_html_br(1);
+      $error .= sprintf($cs_lang['text_to_long_sprint'], $count_figures, $diff) . cs_html_br(1);
     }
-    $board['threads_text'] = preg_replace_callback("=\[img\](.*?)\[/img\]=si","cs_abcode_resize",$board['threads_text']);
-    $board['threads_text'] = preg_replace_callback("=\[img width\=(.*?) height\=(.*?)\](.*?)\[/img\]=si","cs_abcode_resize",$board['threads_text']);
+    $board['threads_text'] = preg_replace_callback("=\[img\](.*?)\[/img\]=si", "cs_abcode_resize", $board['threads_text']);
+    $board['threads_text'] = preg_replace_callback("=\[img width\=(.*?) height\=(.*?)\](.*?)\[/img\]=si", "cs_abcode_resize", $board['threads_text']);
   }else{
     $error .= $cs_lang['no_text'] . cs_html_br(1);
   }
 
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 0;
+  $run_loop = $_POST['run_loop'] ?? 0;
   $cs_votes['votes_election'] = '';
   $votes_loop = '';
 
@@ -140,18 +140,18 @@ if(isset($_POST['submit']) OR isset($_POST['preview']) OR isset($_POST['new_vote
   }
 }
 
-$files = isset($_POST['files']) ? $_POST['files'] : 0;
+$files = $_POST['files'] ?? 0;
 if(isset($_POST['new_file'])) {
   $files = '1';
 }
-$run_loop_files = isset($_POST['run_loop_files']) ? $_POST['run_loop_files'] : 0;
+$run_loop_files = $_POST['run_loop_files'] ?? 0;
 $a = '0';
 $b = '1';
 for($run=0; $run < $run_loop_files; $run++) {
   $num = $run+1;
   if(!empty($files_gl["file_$num"]['name'])) {
     $board_files_name = $cs_files[$run]['boardfiles_name'] = $files_gl["file_$num"]['name'];
-    $ext = substr($board_files_name,strlen($board_files_name)+1-strlen(strrchr($board_files_name,'.')));
+    $ext = substr($board_files_name, strlen($board_files_name)+1-strlen(strrchr($board_files_name, '.')));
     if($files_gl["file_$num"]['size'] > $max_size) {
       $error .= $cs_lang['error_filesize'] . cs_html_br(1);
       $file_error[$num] = '1';
@@ -175,7 +175,7 @@ for($run=0; $run < $run_loop_files; $run++) {
     $pattern = "abcdefghijklmnopqrstuvwxyz";
     for($i=0;$i<8;$i++)
     {
-      $hash .= $pattern{rand(0,25)};
+      $hash .= $pattern[rand(0, 25)];
     }
     $file_upload_name[$num] = $hash . '.' . $ext;
     if (cs_upload('board/files', $file_upload_name[$num], $files_gl["file_$num"]['tmp_name'])) {
@@ -221,15 +221,15 @@ if(isset($_POST['preview']) AND empty($error)) {
     $data['if']['pre_votes'] = TRUE;
     $data['preview']['question'] = $bv['boardvotes_question'];
 
-    $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 0;
+    $run_loop = $_POST['run_loop'] ?? 0;
     for($run=0; $run < $run_loop; $run++) {
       $num = $run+1;
-      $cs_files["votes_election_$num"] = isset($_POST["votes_election_$num"]) ? $_POST["votes_election_$num"] : '';
+      $cs_files["votes_election_$num"] = $_POST["votes_election_$num"] ?? '';
       $data['pre_answers'][$run]['run'] = $run;
-      $data['pre_answers'][$run]['answer'] = cs_secure($cs_files["votes_election_$num"],0,1);
+      $data['pre_answers'][$run]['answer'] = cs_secure($cs_files["votes_election_$num"], 0, 1);
     }
   }
-  $data['preview']['text'] = cs_secure($board['threads_text'],1,1);
+  $data['preview']['text'] = cs_secure($board['threads_text'], 1, 1);
 }
 
 if(isset($_POST['election'])) {
@@ -252,24 +252,24 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
     $data['if']['vote'] = TRUE;
     $data['if']['vote_several'] = empty($bv['boardvotes_several']) ? false : true;
 
-    $data['time']['select'] = cs_dateselect('votes_end','unix',$bv['boardvotes_end'],2005);
+    $data['time']['select'] = cs_dateselect('votes_end', 'unix', $bv['boardvotes_end'], 2005);
 
     $data['access']['options'] = '';
     $levels = 0;
     while($levels < 6) {
       $bv['boardvotes_access'] == $levels ? $sel = 1 : $sel = 0;
-      $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+      $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
       $levels++;
     }
 
     $data['data']['votes_question'] = $bv['boardvotes_question'];
     $data['several']['checked'] = empty($bv['boardvotes_several']) ? '' : 'checked="checked"';
 
-    $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+    $run_loop = $_POST['run_loop'] ?? 1;
     for($run=0; $run < $run_loop; $run++)
     {
       $num = $run+1;
-      $cs_files["votes_election_$num"] = isset($_POST["votes_election_$num"]) ? $_POST["votes_election_$num"] : '';
+      $cs_files["votes_election_$num"] = $_POST["votes_election_$num"] ?? '';
 
       $data['answers'][$run]['num'] = $num;
       $data['answers'][$run]['answer'] = $cs_files["votes_election_$num"];
@@ -290,7 +290,7 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
     for($run=0; $run < $run_loop_files; $run++)
     {
       $num = $run + 1;
-      $cs_files["text_$num"] = isset($_POST["text_$num"]) ? $_POST["text_$num"] : '';
+      $cs_files["text_$num"] = $_POST["text_$num"] ?? '';
 
       $data['files'][$run]['num'] = $num;
 
@@ -317,9 +317,9 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
         $data['files'][$run]['up_name'] = $file_upload_name[$num];
 
         $file = $file_name[$num];
-        $extension = strlen(strrchr($file,"."));
+        $extension = strlen(strrchr($file, "."));
         $name = strlen($file);
-        $ext = substr($file,$name - $extension + 1,$name);
+        $ext = substr($file, $name - $extension + 1, $name);
         $ext_lower = strtolower($ext);
 
         $data['files'][$run]['ext'] = cs_filetype($ext_lower);
@@ -328,7 +328,7 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
         $data['files'][$run]['if']['file_is_other'] = FALSE;
 
         #check if file is picture
-        if(strcasecmp($ext,'jpg') == '0' OR strcasecmp($ext,'jpeg') == '0' OR strcasecmp($ext,'gif') == '0' OR strcasecmp($ext,'png') == '0') {
+        if(strcasecmp($ext, 'jpg') == '0' OR strcasecmp($ext, 'jpeg') == '0' OR strcasecmp($ext, 'gif') == '0' OR strcasecmp($ext, 'png') == '0') {
           $data['files'][$run]['if']['file_is_picture'] = TRUE;
         } else {
           $data['files'][$run]['if']['file_is_other'] = TRUE;
@@ -368,16 +368,16 @@ if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
   $data['data']['threads_headline'] = cs_secure($data['data']['threads_headline']);
   $data['data']['threads_text'] = cs_secure($data['data']['threads_text']);
 
- echo cs_subtemplate(__FILE__,$data,'board','thread_add');
+ echo cs_subtemplate(__FILE__, $data, 'board', 'thread_add');
 }
 else {
 
   #save thread
   $thread_cells = array_keys($board);
   $thread_save = array_values($board);
- cs_sql_insert(__FILE__,'threads',$thread_cells,$thread_save);
+ cs_sql_insert(__FILE__, 'threads', $thread_cells, $thread_save);
 
-  $thread_now = cs_sql_select(__FILE__,'threads','threads_id','threads_id = \'' . cs_sql_insertid(__FILE__). '\'');
+  $thread_now = cs_sql_select(__FILE__, 'threads', 'threads_id', 'threads_id = \'' . cs_sql_insertid(__FILE__). '\'');
 
   #if thread voting -> save vote to boardvotes
   if($votes == 1) {
@@ -387,16 +387,16 @@ else {
 
     $bv_cells = array_keys($bv);
     $bv_save = array_values($bv);
-   cs_sql_insert(__FILE__,'boardvotes',$bv_cells,$bv_save);
+   cs_sql_insert(__FILE__, 'boardvotes', $bv_cells, $bv_save);
   }
 
   for($run=0; $run < $run_loop_files; $run++) {
     $num = $run+1;
-    $files_cells = array('users_id','threads_id','boardfiles_time','boardfiles_name');
-    $files_save = array($board['users_id'],$thread_now['threads_id'],$board['threads_time'],$file_name[$num]);
-   cs_sql_insert(__FILE__,'boardfiles',$files_cells,$files_save);
+    $files_cells = ['users_id','threads_id','boardfiles_time','boardfiles_name'];
+    $files_save = [$board['users_id'],$thread_now['threads_id'],$board['threads_time'],$file_name[$num]];
+   cs_sql_insert(__FILE__, 'boardfiles', $files_cells, $files_save);
     $files_select_new_id = cs_sql_insertid(__FILE__);
-    $ext = substr($file_name[$num],strlen($file_name[$num])+1-strlen(strrchr($file_name[$num],'.')));
+    $ext = substr($file_name[$num], strlen($file_name[$num])+1-strlen(strrchr($file_name[$num], '.')));
     $path = $cs_main['def_path'] . '/uploads/board/files/';
     $target = $path . $file_upload_name[$num];
     $target2 = $path . $files_select_new_id . '.' . $ext;
@@ -409,5 +409,5 @@ else {
   include_once('mods/board/repair.php');
   cs_board_threads($board_id);
 
-  cs_redirect($cs_lang['create_done'],'board','thread','where=' .$thread_now['threads_id']);
+  cs_redirect($cs_lang['create_done'], 'board', 'thread', 'where=' .$thread_now['threads_id']);
 }

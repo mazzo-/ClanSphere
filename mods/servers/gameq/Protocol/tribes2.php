@@ -49,15 +49,15 @@ class GameQ_Protocol_tribes2 extends GameQ_Protocol
         $this->p->skip(6);
 
         // Vars
-        $this->r->add('mod',         $this->p->readPascalString());
-        $this->r->add('gametype',    $this->p->readPascalString());
-        $this->r->add('map',         $this->p->readPascalString());
+        $this->r->add('mod', $this->p->readPascalString());
+        $this->r->add('gametype', $this->p->readPascalString());
+        $this->r->add('map', $this->p->readPascalString());
         $this->readBitflag($this->p->read());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('num_bots',    $this->p->readInt8());
-        $this->r->add('cpu',         $this->p->readInt16());
-        $this->r->add('info',        $this->p->readPascalString());
+        $this->r->add('num_bots', $this->p->readInt8());
+        $this->r->add('cpu', $this->p->readInt16());
+        $this->r->add('info', $this->p->readPascalString());
 
         $this->p->skip(2);
 
@@ -72,7 +72,7 @@ class GameQ_Protocol_tribes2 extends GameQ_Protocol
         $this->p->skip();
 
         for ($i = 0; $i < $num_teams; $i++) {
-            $this->r->addTeam('name',  $this->p->readString("\x09"));
+            $this->r->addTeam('name', $this->p->readString("\x09"));
             $this->r->addTeam('score', $this->p->readString("\x0a"));
         }
     }
@@ -85,8 +85,8 @@ class GameQ_Protocol_tribes2 extends GameQ_Protocol
 
     private function readBitflag($flag)
     {
-        $vars = array('dedicated', 'password', 'linux',
-                      'tournament', 'no_alias');
+        $vars = ['dedicated', 'password', 'linux',
+                      'tournament', 'no_alias', ];
         
         $bit = 1;
         foreach ($vars as $var) {

@@ -8,10 +8,10 @@ if($account['access_clansphere'] >= 3 AND $account['access_logs'] >= 3) {
 
   $limit = 5;
   $run = 0;
-  $temp_file = array();
+  $temp_file = [];
   $handle = opendir($cs_logs['dir'] . '/errors');  
   while ($file = readdir ($handle)) {
-    if ($file != "." && $file != ".." && strrchr($file,".") == ".log") {
+    if ($file != "." && $file != ".." && strrchr($file, ".") == ".log") {
       $temp_file[$run] = $file;
       $run++;
     }

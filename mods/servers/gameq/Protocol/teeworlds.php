@@ -37,14 +37,14 @@ class GameQ_Protocol_teeworlds extends GameQ_Protocol
     {
         $this->p->skip(14);
 
-        $this->r->add('version',     $this->p->readString());
-        $this->r->add('hostname',    $this->p->readString());
-        $this->r->add('map',         $this->p->readString());
-        $this->r->add('gametype',    $this->p->readString());
+        $this->r->add('version', $this->p->readString());
+        $this->r->add('hostname', $this->p->readString());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('gametype', $this->p->readString());
 
 
-        $this->r->add('password',    $this->p->readString());
-        $this->r->add('ping',        $this->p->readString());
+        $this->r->add('password', $this->p->readString());
+        $this->r->add('ping', $this->p->readString());
         $this->r->add('num_players', $this->p->readString());
         $this->r->add('max_players', $this->p->readString());
 
@@ -54,7 +54,7 @@ class GameQ_Protocol_teeworlds extends GameQ_Protocol
     private function players()
     {
         while ($name = $this->p->readString()) {
-            $this->r->addPlayer('name',  $name);
+            $this->r->addPlayer('name', $name);
             $this->r->addPlayer('score', $this->p->readString());
         }
     }

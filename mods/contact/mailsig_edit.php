@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('contact');
 
-$data = array();
+$data = [];
 
 $filename = 'uploads/imprint/mailsig.txt';
 $sig_form = 1;
@@ -22,7 +22,7 @@ if(isset($_POST['submit'])) {
     cs_unlink('imprint', 'mailsig.txt');
 
     $fp = fopen ($filename, "w");
-    chmod($filename,0777);
+    chmod($filename, 0777);
     # set stream encoding if possible to avoid converting issues
     if(function_exists('stream_encoding'))
       stream_encoding($fp, $cs_main['charset']);
@@ -32,13 +32,13 @@ if(isset($_POST['submit'])) {
 }
 if(!empty($sig_form)) {
 
-  $data = array();
+  $data = [];
   $data['mailsig']['content'] = $mailsig;
 
   $data['if']['done']     = FALSE;
   $data['if']['form']     = TRUE;
 }
 
-$data['url']['contact_mailsig_edit'] = cs_url('contact','mailsig_edit');
+$data['url']['contact_mailsig_edit'] = cs_url('contact', 'mailsig_edit');
 
-echo cs_subtemplate(__FILE__,$data,'contact','mailsig_edit');
+echo cs_subtemplate(__FILE__, $data, 'contact', 'mailsig_edit');

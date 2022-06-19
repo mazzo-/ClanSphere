@@ -19,8 +19,8 @@ if(!empty($mq_gpc)) {
 $_SERVER['PHP_SELF'] = htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES);
 $cs_main['def_path'] = getcwd();
 $cs_main['php_self'] = pathinfo($_SERVER['SCRIPT_NAME']);
-if($cs_main['php_self']['dirname']{0} == '\\')
-  $cs_main['php_self']['dirname']{0} = '/';
+if($cs_main['php_self']['dirname'][0] == '\\')
+  $cs_main['php_self']['dirname'][0] = '/';
 $cs_main['php_self']['dirname'] = $cs_main['php_self']['dirname'] == '/' ? '/' : $cs_main['php_self']['dirname'] . '/';
   // workaround since filename is available as of php 5.2.0
 if(!isset($cs_main['php_self']['filename']))
@@ -35,7 +35,7 @@ if(empty($_GET['mod']) AND empty($_GET['action'])) {
   else
     $cs_main['php_self']['params'] = $_GET['params'];
 }
-if(!empty($cs_main['php_self']['params']{1})) {
+if(!empty($cs_main['php_self']['params'][1])) {
 
   $params = explode('/', $cs_main['php_self']['params']);
   $_GET['mod'] =  empty($params[1]) ? '' : $params[1];
@@ -57,13 +57,13 @@ $domain = (strpos($domain, '.') !== FALSE) ? $domain : '';
 $port = strpos($domain, ':'); 
 if ($port !== FALSE)
   $domain = substr($domain, 0, $port);
-$cs_main['cookie'] = array('lifetime' => (cs_time() + 2592000), 'path' => $cs_main['php_self']['dirname'], 'domain' => $domain);
+$cs_main['cookie'] = ['lifetime' => (cs_time() + 2592000), 'path' => $cs_main['php_self']['dirname'], 'domain' => $domain];
 
 # set some request and get data to integer for backwards compatibility with old modules
-settype($_GET['id'],'integer');
-settype($_REQUEST['id'],'integer');
-settype($_GET['sort'],'integer');
-settype($_REQUEST['sort'],'integer');
+settype($_GET['id'], 'integer');
+settype($_REQUEST['id'], 'integer');
+settype($_GET['sort'], 'integer');
+settype($_REQUEST['sort'], 'integer');
 # preserved for navlogin functionality
 unset($_GET['style']);
 
@@ -71,15 +71,15 @@ unset($_GET['style']);
 # please try to avoid the usage of these functions
 function cs_servervars($mode, $integers = 0, $unharmed = 0) {
 
-  $return = array();
+  $return = [];
   if (empty($unharmed))
-    $unharmed = array();
+    $unharmed = [];
   $mode = strtolower($mode);
   $vars = $mode == 'post' ? $_POST : $_GET;
   if (is_string($integers))
-    $integers = explode(',',$integers);
+    $integers = explode(',', $integers);
   if (!is_array($integers))
-    $integers = array($integers);
+    $integers = [$integers];
 
   foreach ($vars AS $key => $value) {
     if (in_array($key, $unharmed)) { $return[$key] = $value; continue; }
@@ -92,9 +92,9 @@ function cs_servervars($mode, $integers = 0, $unharmed = 0) {
 
 function cs_get($integers = 0, $unharmed = 0) {
 
-  return cs_servervars('get',$integers,$unharmed);
+  return cs_servervars('get', $integers, $unharmed);
 }
 function cs_post($integers = 0, $unharmed = 0) {
 
-  return cs_servervars('post',$integers,$unharmed);
+  return cs_servervars('post', $integers, $unharmed);
 }

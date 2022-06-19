@@ -3,7 +3,7 @@
 // $Id$
 
 $cs_lang = cs_translate('boardranks');
-$data = array();
+$data = [];
 
 if(isset($_POST['submit'])) {
   
@@ -34,14 +34,14 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['boardranks']['min'] = $boardranks_min;
   $data['boardranks']['name'] = $boardranks_name;
   
-  echo cs_subtemplate(__FILE__,$data,'boardranks','create');
+  echo cs_subtemplate(__FILE__, $data, 'boardranks', 'create');
   
 }
 else {
   
-  $cells = array('boardranks_min','boardranks_name');
-  $content = array($boardranks_min,$boardranks_name);
-  cs_sql_insert(__FILE__,'boardranks',$cells,$content);
+  $cells = ['boardranks_min','boardranks_name'];
+  $content = [$boardranks_min,$boardranks_name];
+  cs_sql_insert(__FILE__, 'boardranks', $cells, $content);
   
-  cs_redirect($cs_lang['create_done'],'boardranks');
+  cs_redirect($cs_lang['create_done'], 'boardranks');
 }

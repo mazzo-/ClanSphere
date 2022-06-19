@@ -6,7 +6,7 @@ $cs_lang = cs_translate('wars');
 
 if(isset($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -18,12 +18,12 @@ if(isset($_POST['submit'])) {
   
   cs_optionsave('wars', $save);
   
-  $lang = cs_substr($account['users_lang'],0,2);
+  $lang = cs_substr($account['users_lang'], 0, 2);
   if (!file_exists('uploads/wars/news_' . $lang . '.txt')) $lang = 'de';
   
   $text = $_POST['news_text'];
   
-  $fp = fopen('uploads/wars/news_' . $lang . '.txt','w');
+  $fp = fopen('uploads/wars/news_' . $lang . '.txt', 'w');
   # set stream encoding if possible to avoid converting issues
   if(function_exists('stream_encoding'))
     stream_encoding($fp, $cs_main['charset']);
@@ -34,12 +34,12 @@ if(isset($_POST['submit'])) {
   
 } else {
   
-  $data = array();
+  $data = [];
   
   $data['head']['message'] = cs_getmsg();
   
-  $data['op'] = cs_sql_option(__FILE__,'wars');
-  $pholders = array();
+  $data['op'] = cs_sql_option(__FILE__, 'wars');
+  $pholders = [];
   $pholders['{SQUADNAME}'] = $cs_lang['op_squadname'];
   $pholders['{SQUADURL}'] = $cs_lang['op_squadurl'];
   $pholders['{OPPONENTNAME}'] = $cs_lang['op_opponentname'];
@@ -49,14 +49,14 @@ if(isset($_POST['submit'])) {
   $pholders['{MATCH_URL}'] = $cs_lang['op_matchurl'];
   $pholders['{CAT_NAME}'] = $cs_lang['op_catname'];
   
-  $lang = cs_substr($account['users_lang'],0,2);
+  $lang = cs_substr($account['users_lang'], 0, 2);
   if (!file_exists('uploads/wars/news_' . $lang . '.txt')) $lang = 'de';
   
   $data['news']['text'] = file_get_contents('uploads/wars/news_' . $lang . '.txt');
   
-  $data['pholders'] = array();
-  foreach ($pholders AS $holder => $meaning) $data['pholders'][] = array('holder' => $holder, 'meaning' => $meaning); 
+  $data['pholders'] = [];
+  foreach ($pholders AS $holder => $meaning) $data['pholders'][] = ['holder' => $holder, 'meaning' => $meaning]; 
   
-  echo cs_subtemplate(__FILE__,$data,'wars','options');
+  echo cs_subtemplate(__FILE__, $data, 'wars', 'options');
   
 }

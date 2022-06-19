@@ -8,7 +8,7 @@ function cs_cache_clear() {
 
   $unicode = extension_loaded('unicode') ? 1 : 0;
   $where = "options_mod = 'clansphere' AND options_name = 'cache_unicode'";
-  cs_sql_update(__FILE__, 'options', array('options_value'), array($unicode), 0, $where); 
+  cs_sql_update(__FILE__, 'options', ['options_value'], [$unicode], 0, $where); 
  }
 
 function cs_cache_delete($name, $ttl = 0) {
@@ -20,12 +20,12 @@ function cs_cache_delete($name, $ttl = 0) {
 
 function cs_cache_info() {
 
-  $form = array();
+  $form = [];
   $info = wincache_ucache_info();
   foreach($info['ucache_entries'] AS $num => $data) {
     $handle = $data['key_name'] . ' (' . $num . ')';
     $age = time() - $data['age_seconds'];
-    $form[$handle] = array('name' => $handle, 'time' => $age, 'size' => $data['value_size']);
+    $form[$handle] = ['name' => $handle, 'time' => $age, 'size' => $data['value_size']];
   }
   ksort($form);
   return array_values($form);

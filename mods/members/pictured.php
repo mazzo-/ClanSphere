@@ -3,17 +3,17 @@
 // $Id$
 
 $cs_lang = cs_translate('members');
-$data = array();
+$data = [];
 
-$op_members = cs_sql_option(__FILE__,'members');
-$op_squads = cs_sql_option(__FILE__,'squads');
+$op_members = cs_sql_option(__FILE__, 'members');
+$op_squads = cs_sql_option(__FILE__, 'squads');
 
 $tables = 'squads sq INNER JOIN {pre}_clans cln ON sq.clans_id = cln.clans_id';
 $cells  = 'sq.squads_id AS squads_id, sq.games_id AS games_id, sq.squads_name AS squads_name, ';
 $cells .= 'sq.clans_id AS clans_id, cln.clans_tagpos AS clans_tagpos, ';
 $cells .= 'cln.clans_tag AS clans_tag';
 $where = 'squads_own = \'1\' AND squads_hidden = 0';
-$data['squads'] = cs_sql_select(__FILE__,$tables,$cells,$where,'squads_order, squads_name',0,0);
+$data['squads'] = cs_sql_select(__FILE__, $tables, $cells, $where, 'squads_order, squads_name', 0, 0);
 $squads_loop = count($data['squads']);
 
 $data['head']['mod'] = $cs_lang[$op_members['label']];
@@ -31,7 +31,7 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   $where = "mem.squads_id = '" . $data['squads'][$sq_run]['squads_id'] . "'";
   $order = 'mem.members_order ASC, usr.users_nick ASC';
 
-  $data['squads'][$sq_run]['members'] = cs_sql_select(__FILE__,$from,$select,$where,$order,0,0);
+  $data['squads'][$sq_run]['members'] = cs_sql_select(__FILE__, $from, $select, $where, $order, 0, 0);
   $members_loop = count($data['squads'][$sq_run]['members']);
 
   $data['squads'][$sq_run]['games_img'] = '';
@@ -42,7 +42,7 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   $data['squads'][$sq_run]['count_members'] = $members_loop;
 
   if(empty($members_loop)) {
-  $data['squads'][$sq_run]['members'] = array();
+  $data['squads'][$sq_run]['members'] = [];
   }
 
   $tr = 0;
@@ -50,7 +50,7 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   
   $members = $data['squads'][$sq_run]['members'];
   
-    $hidden = explode(',',$members[$run]['users_hidden']);
+    $hidden = explode(',', $members[$run]['users_hidden']);
     $allow = $members[$run]['users_id'] == $account['users_id']  OR $account['access_users'] > 4 ? 1 : 0;
     
   if(empty($members[$run]['users_picture'])) {
@@ -58,23 +58,23 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
   } else {
       $place = 'uploads/users/' . $members[$run]['users_picture'];
       $size = getimagesize($cs_main['def_path'] . '/' . $place);
-      $members[$run]['picture'] = cs_html_img($place,$size[1],$size[0]);
+      $members[$run]['picture'] = cs_html_img($place, $size[1], $size[0]);
   }
 
   $url = 'symbols/countries/' . $members[$run]['users_country'] . '.png';
-  $members[$run]['country'] = cs_html_img($url,11,16) . ' ';    
+  $members[$run]['country'] = cs_html_img($url, 11, 16) . ' ';    
   
   $members[$run]['nick']  = $data['squads'][$sq_run]['clans_tagpos'] == 1 ? $data['squads'][$sq_run]['clans_tag'] . ' ' : '';
   $members[$run]['nick'] .=
-    cs_user($members[$run]['users_id'],$members[$run]['users_nick'], $members[$run]['users_active'], $members[$run]['users_delete']);
+    cs_user($members[$run]['users_id'], $members[$run]['users_nick'], $members[$run]['users_active'], $members[$run]['users_delete']);
   $members[$run]['nick'] .= $data['squads'][$sq_run]['clans_tagpos'] == 2 ? ' ' . $data['squads'][$sq_run]['clans_tag'] : '';
 
-  $users_name = !in_array('users_name',$hidden) || !empty($allow) ? $members[$run]['users_name'] : '';
-  $users_surname = !in_array('users_surname',$hidden) || !empty($allow) ? $members[$run]['users_surname'] : '';
+  $users_name = !in_array('users_name', $hidden) || !empty($allow) ? $members[$run]['users_name'] : '';
+  $users_surname = !in_array('users_surname', $hidden) || !empty($allow) ? $members[$run]['users_surname'] : '';
   $members[$run]['surname'] = empty($users_name) && empty($users_surname) ? ' - ' : $users_name . ' ' . $users_surname;
     
   $members[$run]['task'] = cs_secure($members[$run]['members_task']);
-  $since = empty($members[$run]['members_since']) ? '-' : cs_date('date',$members[$run]['members_since']);
+  $since = empty($members[$run]['members_since']) ? '-' : cs_date('date', $members[$run]['members_since']);
   $members[$run]['since'] = $since;
 
   $tr++;
@@ -92,4 +92,4 @@ for($sq_run=0; $sq_run<$squads_loop; $sq_run++) {
 
 }
 
-echo cs_subtemplate(__FILE__,$data,'members','pictured');
+echo cs_subtemplate(__FILE__, $data, 'members', 'pictured');

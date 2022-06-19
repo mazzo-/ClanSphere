@@ -18,24 +18,24 @@ $order = $cs_sort[$sort];
 $where = empty($_GET['where']) ? 0 : $_GET['where'];
 $mof = empty($where) ? '' : " AND users_nick LIKE '" . cs_sql_escape($where) . "%'";
 $condition = 'users_delete = 0 AND users_active = 1' . $mof;
-$users_count = cs_sql_count(__FILE__,'users',$condition);
+$users_count = cs_sql_count(__FILE__, 'users', $condition);
 
 $data['head']['mod'] = $cs_lang['mod_name'];
 $data['head']['action'] = $cs_lang['list'];
 
 $data['head']['total'] = $users_count;
-$data['head']['pages'] = cs_pages('users','list',$users_count,$start,$where,$sort);
+$data['head']['pages'] = cs_pages('users', 'list', $users_count, $start, $where, $sort);
 $sel_female = $where === 'female' ? 'selected' : '';
 $data['head']['sel_female'] = $sel_female;
 $sel_male = $where === 'male' ? 'selected' : '';
 $data['head']['sel_male'] = $sel_male;
 
-$data['sort']['nick'] = cs_sort('users','list',$start,$where,1,$sort);
-$data['sort']['place'] = cs_sort('users','list',$start,$where,3,$sort);
-$data['sort']['laston'] = cs_sort('users','list',$start,$where,5,$sort);
+$data['sort']['nick'] = cs_sort('users', 'list', $start, $where, 1, $sort);
+$data['sort']['place'] = cs_sort('users', 'list', $start, $where, 3, $sort);
+$data['sort']['laston'] = cs_sort('users', 'list', $start, $where, 5, $sort);
 
 $select = 'users_id, users_nick, users_place, users_laston, users_country, users_hidden, users_active, users_invisible';
-$cs_users = cs_sql_select(__FILE__,'users',$select,$condition,$order,$start,$account['users_limit']);
+$cs_users = cs_sql_select(__FILE__, 'users', $select, $condition, $order, $start, $account['users_limit']);
 $users_loop = count($cs_users);
 
 for($run=0; $run<$users_loop; $run++) {
@@ -44,16 +44,16 @@ for($run=0; $run<$users_loop; $run++) {
   $cs_users[$run]['users_id'] = cs_secure($cs_users[$run]['users_id']);
   $cs_users[$run]['nick'] = cs_user($cs_users[$run]['users_id'], $cs_users[$run]['users_nick'], $cs_users[$run]['users_active']);
   $content = cs_secure($cs_users[$run]['users_place']);
-  $hidden = explode(',',$cs_users[$run]['users_hidden']);
-  if(in_array('users_place',$hidden)) {
+  $hidden = explode(',', $cs_users[$run]['users_hidden']);
+  if(in_array('users_place', $hidden)) {
     $content = ($account['access_users'] > 4 OR $cs_users[$run]['users_id'] == $account['users_id']) ?
       cs_html_italic(1) . $content . cs_html_italic(0) : '';
   }
   $cs_users[$run]['place'] = $content;
-  $cs_users[$run]['laston'] = cs_date('unix',$cs_users[$run]['users_laston']);
-  $cs_users[$run]['page'] = cs_userstatus($cs_users[$run]['users_laston'],$cs_users[$run]['users_invisible']);
+  $cs_users[$run]['laston'] = cs_date('unix', $cs_users[$run]['users_laston']);
+  $cs_users[$run]['page'] = cs_userstatus($cs_users[$run]['users_laston'], $cs_users[$run]['users_invisible']);
 
 }
 
 $data['users'] = $cs_users;
-echo cs_subtemplate(__FILE__,$data,'users','list');
+echo cs_subtemplate(__FILE__, $data, 'users', 'list');

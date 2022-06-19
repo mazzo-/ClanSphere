@@ -7,13 +7,13 @@ require_once('mods/categories/functions.php');
 $files = cs_files();
 
 $banners_id = $_REQUEST['id'];
-settype($banners_id,'integer');
+settype($banners_id, 'integer');
 
-$op_banners = cs_sql_option(__FILE__,'banners');
-$img_filetypes = array('gif','jpg','png');
+$op_banners = cs_sql_option(__FILE__, 'banners');
+$img_filetypes = ['gif','jpg','png'];
 
 if(isset($_POST['submit'])) {
-  $cs_banners['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('banners',$_POST['categories_name']);
+  $cs_banners['categories_id'] = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('banners', $_POST['categories_name']);
   $cs_banners['banners_name'] = $_POST['banners_name'];
   $cs_banners['banners_url'] = $_POST['banners_url'];
   $cs_banners['banners_alt'] = $_POST['banners_alt'];
@@ -96,7 +96,7 @@ if(isset($_POST['submit'])) {
   
   $where = "banners_name = '" . cs_sql_escape($cs_banners['banners_name']) . "'";
   $where .= " AND banners_id != '" . $banners_id . "'";
-  $search = cs_sql_count(__FILE__,'banners',$where);
+  $search = cs_sql_count(__FILE__, 'banners', $where);
   
   if(!empty($search)) {
     $error++;
@@ -105,7 +105,7 @@ if(isset($_POST['submit'])) {
 }
 else {
   $cells = 'banners_name, banners_url, banners_alt, banners_order, banners_picture, categories_id';
-  $cs_banners = cs_sql_select(__FILE__,'banners',$cells,"banners_id = '" . $banners_id . "'");
+  $cs_banners = cs_sql_select(__FILE__, 'banners', $cells, "banners_id = '" . $banners_id . "'");
 }
 
 if(!isset($_POST['submit'])) {
@@ -116,9 +116,9 @@ elseif(!empty($error)) {
 }
 
 if(!empty($error) OR !isset($_POST['submit'])) {
-  $data['action']['form'] = cs_url('banners','edit',1);
+  $data['action']['form'] = cs_url('banners', 'edit', 1);
   $data['banners']['name'] = $cs_banners['banners_name'];
-  $data['banners']['category'] = cs_categories_dropdown('banners',$cs_banners['categories_id']); 
+  $data['banners']['category'] = cs_categories_dropdown('banners', $cs_banners['categories_id']); 
   $data['banners']['url'] = $cs_banners['banners_url'];
   $data['banners']['or_img_url'] = $cs_banners['banners_picture'];
   $data['banners']['alt'] = $cs_banners['banners_alt'];
@@ -144,14 +144,14 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   
   $data['data']['id'] = $banners_id;
   
-  echo cs_subtemplate(__FILE__,$data,'banners','edit');
+  echo cs_subtemplate(__FILE__, $data, 'banners', 'edit');
 }
 else {
-  settype($cs_banners['banners_order'],'integer');
+  settype($cs_banners['banners_order'], 'integer');
 
   $banners_cells = array_keys($cs_banners);
   $banners_save = array_values($cs_banners);
-  cs_sql_update(__FILE__,'banners',$banners_cells,$banners_save,$banners_id);
+  cs_sql_update(__FILE__, 'banners', $banners_cells, $banners_save, $banners_id);
   
   cs_redirect($cs_lang['changes_done'], 'banners') ;
 }

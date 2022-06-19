@@ -10,16 +10,16 @@ function cs_cache_dirs($dir, $lang, $return_startup = 0) {
   $content = cs_cache_load($cachename);
 
   if($content === false) {
-    $startup = array();
+    $startup = [];
     $cs_lang_old = $cs_lang;
-    $info = array();
+    $info = [];
     $dirlist = cs_paths($dir);
     unset($dirlist['index.html'], $dirlist['.htaccess'], $dirlist['web.config']);
     $directories = array_keys($dirlist);
     foreach($directories as $target) {
       $this_info = $dir . '/' . $target . '/info.php';
       if(file_exists($this_info)) {
-        $mod_info = array('show' => array());
+        $mod_info = ['show' => []];
         include($this_info);
         $name = empty($mod_info['name']) ? '[' . $target . ']' : $mod_info['name'];
         if(isset($info[$name])) {

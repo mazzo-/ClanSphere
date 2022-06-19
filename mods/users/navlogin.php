@@ -4,10 +4,10 @@
 
 $cs_lang = cs_translate('users');
 
-$data = array();
-$data['options'] = cs_sql_option(__FILE__,'users');
+$data = [];
+$data['options'] = cs_sql_option(__FILE__, 'users');
 
-$styles_array = array('horizontal', 'icons', 'picture');
+$styles_array = ['horizontal', 'icons', 'picture'];
 $style = '';
 if(!empty($_GET['style']))
 if(in_array($_GET['style'], $styles_array)) {
@@ -32,12 +32,12 @@ if(empty($login['mode'])) {
     $login['password'] = 'Pass';
   }
 
-  $data['form']['navlogin'] = cs_url('users','login');
+  $data['form']['navlogin'] = cs_url('users', 'login');
   $data['login']['nick'] = cs_secure($login['nick']);
   $data['login']['password'] = cs_secure($login['password']);
   $data['link']['uri'] = cs_url_self();
 
-  echo cs_subtemplate(__FILE__,$data,'users','navlogin_form' . $style);
+  echo cs_subtemplate(__FILE__, $data, 'users', 'navlogin_form' . $style);
 }
 else {
 
@@ -67,37 +67,37 @@ else {
 
   if($account['access_messages'] >= 2) {
     $where_msg = 'users_id_to = ' . (int) $account['users_id'] . ' AND messages_show_receiver = 1 AND messages_view = 0';
-    $messages_count_new = cs_sql_count(__FILE__,'messages',$where_msg);
+    $messages_count_new = cs_sql_count(__FILE__, 'messages', $where_msg);
     $data['messages']['new'] = $messages_count_new;
   }
 
   if(!$active_panel AND $account['access_contact'] >= 3) {
     $data['contact']['new'] = cs_cache_load('count_mail_unread');
     if($data['contact']['new'] === false)
-      $data['contact']['new'] = cs_cache_save('count_mail_unread', (int) cs_sql_count(__FILE__,'mail','mail_answered = 0'));
+      $data['contact']['new'] = cs_cache_save('count_mail_unread', (int) cs_sql_count(__FILE__, 'mail', 'mail_answered = 0'));
   }
 
   if(!$active_panel AND $account['access_joinus'] >= 3) {
     $data['joinus']['joinus_count'] = cs_cache_load('count_joinus');
     if($data['joinus']['joinus_count'] === false)
-      $data['joinus']['joinus_count'] = cs_cache_save('count_joinus', (int) cs_sql_count(__FILE__,'joinus'));
+      $data['joinus']['joinus_count'] = cs_cache_save('count_joinus', (int) cs_sql_count(__FILE__, 'joinus'));
   }
 
   if(!$active_panel AND $account['access_fightus'] >= 3) {
     $data['fightus']['fightus_count'] = cs_cache_load('count_fightus');
     if($data['fightus']['fightus_count'] === false)
-      $data['fightus']['fightus_count'] = cs_cache_save('count_fightus', (int) cs_sql_count(__FILE__,'fightus'));
+      $data['fightus']['fightus_count'] = cs_cache_save('count_fightus', (int) cs_sql_count(__FILE__, 'fightus'));
   }
 
   if(!$active_panel AND $account['access_board'] >= 4) {
     $data['boardreport']['boardreport_count'] = cs_cache_load('count_boardreport');
     if($data['boardreport']['boardreport_count'] === false)
-      $data['boardreport']['boardreport_count'] = cs_cache_save('count_boardreport', (int) cs_sql_count(__FILE__,'boardreport', 'boardreport_done = 0'));
+      $data['boardreport']['boardreport_count'] = cs_cache_save('count_boardreport', (int) cs_sql_count(__FILE__, 'boardreport', 'boardreport_done = 0'));
   }
 
   if($active_panel AND $account['access_clansphere'] >= 3) {
     $data['link']['panel'] = cs_url('clansphere', 'admin', '', 'admin');
   }
 
-  echo cs_subtemplate(__FILE__,$data,'users','navlogin_view' . $style);
+  echo cs_subtemplate(__FILE__, $data, 'users', 'navlogin_view' . $style);
 }

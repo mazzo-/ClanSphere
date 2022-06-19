@@ -28,7 +28,7 @@ if(empty($_POST['tables'])) {
   $data['if']['form'] = TRUE;
 
   $modules = cs_checkdirs('mods');
-  $static = array();
+  $static = [];
 
   foreach($modules as $mod) {
 
@@ -58,7 +58,7 @@ if(empty($_POST['tables'])) {
   $checked = 'checked="checked"';
   $data['output']['truncate_check'] = empty($truncate) ? '' : $checked;
 
-  $array = $output == 'file' ? array('text' => 0, 'file' => 1) : array('text' => 1, 'file' => 0);
+  $array = $output == 'file' ? ['text' => 0, 'file' => 1] : ['text' => 1, 'file' => 0];
   $data['output']['text_check'] = empty($array['text']) ? '' : $checked;
   $data['output']['file_check'] = empty($array['file']) ? '' : $checked;
 
@@ -67,11 +67,11 @@ else {
 
   $sql_content = '-- ClanSphere ' . $cs_main['version_name'] . ' SQL EXPORT' . "\n";
   $sql_content .= '-- ' . $cs_lang['tables'] . ': ' . count($tables) . "\n";
-  $sql_content .= '-- ' . $cs_lang['date'] . ': ' . cs_date('unix',cs_time(),1) . "\n";
+  $sql_content .= '-- ' . $cs_lang['date'] . ': ' . cs_date('unix', cs_time(), 1) . "\n";
 
   foreach($tables AS $sql_table) {
     $sql_content .= "\n" . '-- --------------------------------------------------';
-    $sql_content .= "\n" . '-- ' . sprintf($cs_lang['sql_data_for'],$sql_table) . "\n\n";
+    $sql_content .= "\n" . '-- ' . sprintf($cs_lang['sql_data_for'], $sql_table) . "\n\n";
     $sql_content .= empty($truncate) ? '' : 'TRUNCATE TABLE ' . $prefix . '_' . $sql_table . ";\n\n";
     $content = cs_sql_select(__FILE__, $sql_table, '*', 0, 0, 0, 0);
     if(!empty($content)) {
@@ -79,13 +79,13 @@ else {
       foreach($content[0] AS $column => $var) {
         $pattern .= $column . ', ';
       }
-      $pattern = substr($pattern,0,-2) . ') VALUES (';
+      $pattern = substr($pattern, 0, -2) . ') VALUES (';
       foreach($content AS $dataset) {
         $values = '';
         foreach($dataset AS $var) {
           $values .= "'" . cs_sql_escape($var) . "', ";
         }
-        $sql_content .= $pattern . substr($values,0,-2) . ");\n";
+        $sql_content .= $pattern . substr($values, 0, -2) . ");\n";
       }
     }
   }
@@ -103,4 +103,4 @@ else {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'database','export');
+echo cs_subtemplate(__FILE__, $data, 'database', 'export');

@@ -6,7 +6,7 @@ $cs_lang = cs_translate('messages');
 
 if (isset($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['del_time'] = (int) $_POST['del_time'];
   $save['max_space'] = (int) $_POST['max_space'];
   
@@ -18,9 +18,9 @@ if (isset($_POST['submit'])) {
 
 } else {
   
-  $data = array();
-  $data['op'] = cs_sql_option(__FILE__,'messages');
+  $data = [];
+  $data['op'] = cs_sql_option(__FILE__, 'messages');
   $data['head']['getmsg'] = cs_getmsg();
 
-  echo cs_subtemplate(__FILE__,$data,'messages','options');
+  echo cs_subtemplate(__FILE__, $data, 'messages', 'options');
 }

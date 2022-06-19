@@ -9,8 +9,8 @@ function cs_remove_dir($path) {
 
   $normal_files = glob($path . '*');
   $hidden_files = glob($path . '\.?*');
-  if(!is_array($normal_files)) $normal_files = array();
-  if(!is_array($hidden_files)) $hidden_files = array();
+  if(!is_array($normal_files)) $normal_files = [];
+  if(!is_array($hidden_files)) $hidden_files = [];
   $all_files = array_merge($normal_files, $hidden_files);
 
   foreach ($all_files as $file) {
@@ -35,7 +35,7 @@ function cs_explorer_path($path, $method, $sub = 0) {
   $slash_esc = '@_@';
 
   if($method == 'raw')
-    $path = str_replace($slash_esc,'/',$path);
+    $path = str_replace($slash_esc, '/', $path);
 
   $path = str_replace('..', '', $path);
   $path = ($path == '/') ? $path : rtrim($path, '/');
@@ -44,7 +44,7 @@ function cs_explorer_path($path, $method, $sub = 0) {
     $path = substr($path, 0, strrpos($path, '/'));
 
   if($method == 'escape')
-    $path = str_replace('/',$slash_esc,$path);
+    $path = str_replace('/', $slash_esc, $path);
 
   return $path;
 }

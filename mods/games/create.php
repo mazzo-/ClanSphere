@@ -9,13 +9,13 @@ require_once 'mods/categories/functions.php';
 $files = cs_files();
 
 $options = cs_sql_option(__FILE__, 'games');
-$img_filetypes = array('image/gif' => 'gif');
+$img_filetypes = ['image/gif' => 'gif'];
 
 $games_error = 0;
 $games_form = 1;
 
 if(empty($_POST['datum_month']) OR empty($_POST['datum_day']) OR empty($_POST['datum_year'])) {
-  $games_release = cs_date('unix',cs_time(),0,1,'Y-m-d');  
+  $games_release = cs_date('unix', cs_time(), 0, 1, 'Y-m-d');  
 }
 else {
   $games_release = $_POST['datum_year'] . '-' . $_POST['datum_month'] . '-' .   $_POST['datum_day'];
@@ -37,7 +37,7 @@ if(!empty($_POST['games_name'])) {
   $games_error++;
 }
 
-$categories_id = empty($_POST['categories_name']) ? $categories_id : cs_categories_create('games',$_POST['categories_name']);
+$categories_id = empty($_POST['categories_name']) ? $categories_id : cs_categories_create('games', $_POST['categories_name']);
 
 if(empty($categories_id)) {
   $errormsg .= $cs_lang['cat_error'] . cs_html_br(1);
@@ -91,30 +91,30 @@ $data['lang']['body'] = !isset($_POST['submit']) ? $cs_lang['body_create'] : $er
 
 if(isset($_POST['submit']) && empty($games_error) && empty($symbol_error)) {
 
-  $games_cells = array('games_name','games_version','games_released','games_creator','categories_id','games_url','games_usk');
-  $games_save = array($games_name,$games_version,$games_release,$games_creator,$categories_id,$games_url,$games_usk);
-  cs_sql_insert(__FILE__,'games',$games_cells,$games_save);
+  $games_cells = ['games_name','games_version','games_released','games_creator','categories_id','games_url','games_usk'];
+  $games_save = [$games_name,$games_version,$games_release,$games_creator,$categories_id,$games_url,$games_usk];
+  cs_sql_insert(__FILE__, 'games', $games_cells, $games_save);
 
   $where = "games_name = '" . cs_sql_escape($games_name) . "'";
-  $getid = cs_sql_select(__FILE__,'games','games_id',$where);
+  $getid = cs_sql_select(__FILE__, 'games', 'games_id', $where);
 
   if(!empty($files['symbol']['tmp_name']) AND $symbol_error == 0) {
     $filename = $getid['games_id'] . '.' . $extension;
-    cs_upload('games',$filename,$files['symbol']['tmp_name']);
+    cs_upload('games', $filename, $files['symbol']['tmp_name']);
   }
   else {
     copy('uploads/games/0.gif', 'uploads/games/' . (int) $getid['games_id'] . '.gif');
   }
 
-  cs_redirect($cs_lang['create_done'],'games');
+  cs_redirect($cs_lang['create_done'], 'games');
 }
 
-$data['url']['form'] = cs_url('games','create');
+$data['url']['form'] = cs_url('games', 'create');
 
 $data['games']['name'] = $games_name;
 $data['games']['version'] = $games_version;
-$data['games']['genre'] = cs_categories_dropdown('games',$categories_id);
-$data['games']['release'] = cs_dateselect('datum','date',$games_release);
+$data['games']['genre'] = cs_categories_dropdown('games', $categories_id);
+$data['games']['release'] = cs_dateselect('datum', 'date', $games_release);
 $data['games']['creator'] = $games_creator;
 $data['games']['homepage'] = $games_url;
 
@@ -128,7 +128,7 @@ $usknum[3]['games_usk'] = '16';
 $usknum[3]['name'] = $cs_lang['usk_16'];
 $usknum[4]['games_usk'] = '18';
 $usknum[4]['name'] = $cs_lang['usk_18'];
-$data['games']['usk'] = cs_dropdown('games_usk','name',$usknum,$games_usk);
+$data['games']['usk'] = cs_dropdown('games_usk', 'name', $usknum, $games_usk);
 
 $matches[1] = $cs_lang['pic_infos'];
 $return_types = '';
@@ -141,4 +141,4 @@ $matches[2] .= $cs_lang['max_size'] . ': ' . cs_filesize($options['max_size']) .
 $matches[2] .= $cs_lang['filetypes'] . $return_types;
 $data['games']['clip'] = cs_abcode_clip($matches);
 
-echo cs_subtemplate(__FILE__,$data,'games','create');
+echo cs_subtemplate(__FILE__, $data, 'games', 'create');

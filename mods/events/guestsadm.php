@@ -6,11 +6,11 @@ $cs_lang = cs_translate('events');
 
 $events_options = cs_sql_option(__FILE__, 'events');
 
-$data = array();
+$data = [];
 $data['head']['info'] = $cs_lang['new_guest_info'];
 
 $eventguests_id = empty($_REQUEST['id']) ? 0 : $_REQUEST['id'];
-settype($eventguests_id,'integer');
+settype($eventguests_id, 'integer');
 $data['eventguests'] = cs_sql_select(__FILE__, 'eventguests', '*', 'eventguests_id = ' . $eventguests_id);
 $cs_user = cs_sql_select(__FILE__, 'users', 'users_nick', 'users_id = ' . $data['eventguests']['users_id']);
 $users_nick = empty($cs_user['users_nick']) ? '' : $cs_user['users_nick'];
@@ -55,7 +55,7 @@ if(isset($_POST['submit'])) {
 
     $where = "events_id = '" . $data['eventguests']['events_id'] . "' AND users_id = '";
     $where .= $data['eventguests']['users_id'] . "' AND eventguests_id != " . $eventguests_id;
-    $search_collision = cs_sql_count(__FILE__,'eventguests',$where);
+    $search_collision = cs_sql_count(__FILE__, 'eventguests', $where);
     
     if(!empty($search_collision))
       $errormsg .= $cs_lang['user_event_exists'] . cs_html_br(1);
@@ -78,38 +78,38 @@ if(!empty($errormsg))
   $data['head']['info'] = $errormsg;
 
 if(!empty($errormsg) OR !isset($_POST['submit'])) {
-  $data['url']['form'] = cs_url('events','guestsadm');
+  $data['url']['form'] = cs_url('events', 'guestsadm');
 
-  $data['events']['time'] = cs_date('unix',$data['events']['events_time'],1);
+  $data['events']['time'] = cs_date('unix', $data['events']['events_time'], 1);
 
   $data['users']['nick'] = cs_secure($users_nick);
 
   if(empty($data['eventguests']['eventguests_phone'])) $data['eventguests']['eventguests_phone'] = '';
   if(empty($data['eventguests']['eventguests_mobile'])) $data['eventguests']['eventguests_mobile'] = '';
 
-  $data['select'] = array(0 => '', 3 => '', 4 => '', 5 => '');
+  $data['select'] = [0 => '', 3 => '', 4 => '', 5 => ''];
   $select = $data['eventguests']['eventguests_status'];
   $data['select'][$select] = ' selected ="selected"';
 
-  echo cs_subtemplate(__FILE__,$data,'events','guestsadm');
+  echo cs_subtemplate(__FILE__, $data, 'events', 'guestsadm');
 }
 else {
   settype($data['eventguests']['eventguests_age'], 'integer');
   $eventguests_cells = array_keys($data['eventguests']);
   $eventguests_save = array_values($data['eventguests']);
-  cs_sql_update(__FILE__,'eventguests',$eventguests_cells,$eventguests_save, $eventguests_id);
+  cs_sql_update(__FILE__, 'eventguests', $eventguests_cells, $eventguests_save, $eventguests_id);
 
   # email notification for eventguest interactions
   if(!empty($data['eventguests']['users_id'])) {
     $subject  = $cs_lang['evg_mail_subject'] . ': ' . $data['events']['events_name'];
     $message  = $cs_lang['evg_mail_reasons'] . $cs_lang['evg_mail_updates'] . "\n\n";
     $message .= $cs_lang['event'] . ': ' . $data['events']['events_name'] . "\n";
-    $message .= $cs_lang['date'] . ': ' . cs_date('unix',$data['events']['events_time'],1) . "\n";
+    $message .= $cs_lang['date'] . ': ' . cs_date('unix', $data['events']['events_time'], 1) . "\n";
     $message .= $cs_lang['status'] . ': ' . $cs_lang['status_' . $data['eventguests']['eventguests_status']] . "\n\n";
     $message .= $cs_lang['evg_mail_weblink'] . "\n";
     $message .= $cs_main['php_self']['website'] . cs_url('events', 'view', 'id=' . $data['events']['events_id']);
     cs_mail($users_data['users_email'], $subject, $message);
   }
 
-  cs_redirect($cs_lang['create_done'],'events','guests','id=' . $data['eventguests']['events_id']);
+  cs_redirect($cs_lang['create_done'], 'events', 'guests', 'id=' . $data['eventguests']['events_id']);
 }

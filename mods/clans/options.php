@@ -6,7 +6,7 @@ $cs_lang = cs_translate('clans');
 
 if(isset($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -15,11 +15,11 @@ if(isset($_POST['submit'])) {
   require_once 'mods/clansphere/func_options.php';
   cs_optionsave('clans', $save);
   
-  cs_redirect($cs_lang['changes_done'],'options','roots');
+  cs_redirect($cs_lang['changes_done'], 'options', 'roots');
   
 } else {
   
-  $op_clans = cs_sql_option(__FILE__,'clans');
+  $op_clans = cs_sql_option(__FILE__, 'clans');
   
   $data['lang']['getmsg'] = cs_getmsg();
   $data['lang']['mod_name'] = $cs_lang[$op_clans['label']];
@@ -35,5 +35,5 @@ if(isset($_POST['submit'])) {
   $data['clans']['max_height'] = $op_clans['max_height'];
   $data['clans']['max_size'] = $op_clans['max_size'];
   
-  echo cs_subtemplate(__FILE__,$data,'clans','options');
+  echo cs_subtemplate(__FILE__, $data, 'clans', 'options');
 }

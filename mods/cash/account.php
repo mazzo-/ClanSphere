@@ -38,7 +38,7 @@ if(isset($_POST['submit'])) {
 
 } else {
 
-  $konto_daten = cs_sql_select(__FILE__,'account','*',0,0,0);
+  $konto_daten = cs_sql_select(__FILE__, 'account', '*', 0, 0, 0);
   $konto_count = count($konto_daten);
   if(!empty($konto_count)) {
     $data['if']['id'] = 1;
@@ -78,15 +78,15 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   if(!empty($data['if']['id'])) {
     $cash_cells = array_keys($data['account']);
     $cash_save = array_values($data['account']);
-    cs_sql_update(__FILE__,'account',$cash_cells,$cash_save,$data['id']['account_id']);
+    cs_sql_update(__FILE__, 'account', $cash_cells, $cash_save, $data['id']['account_id']);
 
-  cs_redirect($cs_lang['changes_done'],'cash','manage');
+  cs_redirect($cs_lang['changes_done'], 'cash', 'manage');
   } else { 
     $cash_cells = array_keys($data['account']);
     $cash_save = array_values($data['account']);
-    cs_sql_insert(__FILE__,'account',$cash_cells,$cash_save);
+    cs_sql_insert(__FILE__, 'account', $cash_cells, $cash_save);
   
-  cs_redirect($cs_lang['create_done'],'cash','manage');
+  cs_redirect($cs_lang['create_done'], 'cash', 'manage');
   }
 }
-echo cs_subtemplate(__FILE__,$data,'cash','account');
+echo cs_subtemplate(__FILE__, $data, 'cash', 'account');

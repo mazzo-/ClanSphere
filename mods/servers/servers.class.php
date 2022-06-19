@@ -2,7 +2,7 @@
 
 class Servers {
 
-  static private $instance = null;
+  private static $instance = null;
   private $_gameQ = null;
   private $_gamesList;
 
@@ -22,7 +22,7 @@ class Servers {
   /**
    *
    */
-  static public function __getInstance() {
+  public static function __getInstance() {
     if(self::$instance == null) {
       self::$instance = new self;
     }
@@ -38,7 +38,7 @@ class Servers {
     if(isset($this->_gamesList[$server['servers_class']]['prot'])) {
       $server['servers_class'] = $this->_gamesList[$server['servers_class']]['prot'];
     }
-    $this->_gameQ->addServer($iId, array($server['servers_class'], $server['servers_ip'], $server['servers_query']));
+    $this->_gameQ->addServer($iId, [$server['servers_class'], $server['servers_ip'], $server['servers_query']]);
   }
 
   /**

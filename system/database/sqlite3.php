@@ -28,7 +28,7 @@ function cs_sql_connect($cs_db, $test = 0) {
   }
 }
 
-function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
+function cs_sql_count($cs_file, $sql_table, $sql_where = 0, $distinct = 0) {
 
   global $cs_db;
 
@@ -37,7 +37,7 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   $sql_query = 'SELECT COUNT(*) FROM ' . $cs_db['prefix'] . '_' . $sql_table;
   $sql_query .= empty($sql_where) ? '' : ' WHERE ' . $sql_where;
 
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if(!$sql_data = $cs_db['con']->query($sql_query)) {
     cs_error_sql($cs_file, 'cs_sql_count', cs_sql_error(0, $sql_query));
     return NULL;
@@ -47,10 +47,10 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   return $sql_result[0];
 }
 
-function cs_sql_delete($cs_file,$sql_table,$sql_id,$sql_field = 0) {
+function cs_sql_delete($cs_file, $sql_table, $sql_id, $sql_field = 0) {
 
   global $cs_db;
-  settype($sql_id,'integer');
+  settype($sql_id, 'integer');
   if(empty($sql_field)) {
     $sql_field = $sql_table . '_id';
   }
@@ -58,7 +58,7 @@ function cs_sql_delete($cs_file,$sql_table,$sql_id,$sql_field = 0) {
   $sql_delete .= ' WHERE ' . $sql_field . ' = ' . $sql_id;
   $cs_db['con']->query($sql_delete) OR
   cs_error_sql($cs_file, 'cs_sql_delete', cs_sql_error(0, $sql_delete));
-  cs_log_sql($cs_file, $sql_delete,1);
+  cs_log_sql($cs_file, $sql_delete, 1);
 }
 
 function cs_sql_escape($string) {
@@ -67,7 +67,7 @@ function cs_sql_escape($string) {
   return $cs_db['con']->escapestring((string) $string);
 }
 
-function cs_sql_insert($cs_file,$sql_table,$sql_cells,$sql_content) {
+function cs_sql_insert($cs_file, $sql_table, $sql_cells, $sql_content) {
 
   global $cs_db;
   $max = count($sql_cells);
@@ -97,10 +97,10 @@ function cs_sql_insertid($cs_file) {
   return $result;
 }
 
-function cs_sql_option($cs_file,$mod) {
+function cs_sql_option($cs_file, $mod) {
 
   global $cs_db, $cs_template;
-  static $options = array();
+  static $options = [];
 
   if (empty($options[$mod])) {
 
@@ -118,11 +118,11 @@ function cs_sql_option($cs_file,$mod) {
       if(count($cs_template)) {
         foreach($cs_template AS $navlist => $value) {
         if($navlist == $mod) {
-          $new_result = array_merge($new_result,$value);
+          $new_result = array_merge($new_result, $value);
         }
         }
       }
-      $options[$mod] = isset($new_result) ? $new_result : 0;
+      $options[$mod] = $new_result ?? 0;
 
       cs_cache_save('op_' . $mod, $options[$mod]);
     }
@@ -131,12 +131,12 @@ function cs_sql_option($cs_file,$mod) {
   return $options[$mod];
 }
 
-function cs_sql_query($cs_file,$sql_query, $more = 0) {
+function cs_sql_query($cs_file, $sql_query, $more = 0) {
 
   global $cs_db;
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if($sql_data = $cs_db['con']->query($sql_query)) {
-    $result = array('affected_rows' => $cs_db['con']->changes());
+    $result = ['affected_rows' => $cs_db['con']->changes()];
     if(!empty($more)) {
       while($sql_result = $sql_data->fetcharray(SQLITE3_ASSOC)) {
         $result['more'][] = $sql_result;
@@ -153,13 +153,13 @@ function cs_sql_query($cs_file,$sql_query, $more = 0) {
 
 function cs_sql_replace($replace) {
 
-  $replace = str_replace('{optimize}','VACUUM',$replace);
-  $replace = str_replace('{serial}','integer',$replace);
-  $replace = str_replace('{engine}','',$replace);
-  return preg_replace("=int\((.*?)\)=si",'integer',$replace);
+  $replace = str_replace('{optimize}', 'VACUUM', $replace);
+  $replace = str_replace('{serial}', 'integer', $replace);
+  $replace = str_replace('{engine}', '', $replace);
+  return preg_replace("=int\((.*?)\)=si", 'integer', $replace);
 }
 
-function cs_sql_select($cs_file,$sql_table,$sql_select,$sql_where = 0,$sql_order = 0,$first = 0,$max = 1, $cache = 0) {
+function cs_sql_select($cs_file, $sql_table, $sql_select, $sql_where = 0, $sql_order = 0, $first = 0, $max = 1, $cache = 0) {
 
   if (!empty($cache) && $return = cs_cache_load($cache)) {
     return $return;
@@ -180,7 +180,7 @@ function cs_sql_select($cs_file,$sql_table,$sql_select,$sql_where = 0,$sql_order
   if(!empty($max)) {
     $sql_query .= ' LIMIT ' . $first . ',' . $max;
   }
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if (!$sql_data = $cs_db['con']->query($sql_query)) {
     cs_error_sql($cs_file, 'cs_sql_select', cs_sql_error(0, $sql_query));
     return NULL;
@@ -205,10 +205,10 @@ function cs_sql_select($cs_file,$sql_table,$sql_select,$sql_where = 0,$sql_order
   return NULL;
 }
 
-function cs_sql_update($cs_file,$sql_table,$sql_cells,$sql_content,$sql_id,$sql_where = 0, $sql_log = 1) {
+function cs_sql_update($cs_file, $sql_table, $sql_cells, $sql_content, $sql_id, $sql_where = 0, $sql_log = 1) {
 
   global $cs_db;
-  settype($sql_id,'integer');
+  settype($sql_id, 'integer');
   $max = count($sql_cells);
   $set = ' SET ';
   for($run=0; $run<$max; $run++) {
@@ -234,7 +234,7 @@ function cs_sql_version($cs_file) {
 
   global $cs_db;
   $version = $cs_db['con']->version();
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $sql_infos['type'] = 'SQLite 3 (sqlite3)';
   $sql_infos['host'] = 'localhost';
   $sql_infos['client'] = $version['versionString'];
@@ -242,7 +242,7 @@ function cs_sql_version($cs_file) {
   $sql_infos['encoding'] = 'default';
 
   $sql_query = 'SELECT COUNT(*) FROM sqlite_master WHERE type = \'table\' AND name LIKE \'' . $cs_db['prefix'] . '_%\'';
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if(!$sql_data = $cs_db['con']->query($sql_query)) {
     cs_error_sql($cs_file, 'cs_sql_count', cs_sql_error(0, $sql_query));
   }
@@ -258,7 +258,7 @@ function cs_sql_version($cs_file) {
 function cs_sql_error($object = 0, $query = 0) {
 
   global $cs_db;
-  $cs_db['con'] = isset($cs_db['con']) ? $cs_db['con'] : $object;
+  $cs_db['con'] ??= $object;
   $error_code = $cs_db['con']->lasterrorcode();
   $error_string = empty($error_code) ? '' : $error_code . ' - ' . $cs_db['con']->lasterrormsg();
   if(!empty($query))

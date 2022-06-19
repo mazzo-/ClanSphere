@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('messages');
 
-$data = array();
+$data = [];
 
 $messages_id = (int) $_GET['id'];
 
@@ -16,7 +16,7 @@ $sender = $data['msg']['users_id_to'] != $account['users_id'] ? 1 : 0;
 
 if (empty($sender)) {
     if (empty($data['msg']['messages_view']))
-        cs_sql_update(__FILE__, 'messages', array('messages_view'), array('1'), $messages_id);
+        cs_sql_update(__FILE__, 'messages', ['messages_view'], ['1'], $messages_id);
     $user_data = cs_sql_select(__FILE__, 'users', 'users_nick, users_active, users_delete', 'users_id = "' . $data['msg']['users_id'] . '"');
     $data['msg']['from'] = cs_user($data['msg']['users_id'], $user_data['users_nick'], $user_data['users_active'], $user_data['users_delete']);
     $data['if']['reply'] = true;
@@ -33,10 +33,10 @@ else {
 }
 
 if(isset($data['msg']['messages_time'])) {
-  $data['msg']['messages_time'] = cs_date('unix', $data['msg']['messages_time'],1);
+  $data['msg']['messages_time'] = cs_date('unix', $data['msg']['messages_time'], 1);
   $data['msg']['messages_id'] = $messages_id;
   $data['msg']['messages_subject'] = cs_secure($data['msg']['messages_subject']);
-  $data['msg']['messages_text'] = cs_secure($data['msg']['messages_text'],1,1);
+  $data['msg']['messages_text'] = cs_secure($data['msg']['messages_text'], 1, 1);
 
   echo cs_subtemplate(__FILE__, $data, 'messages', 'view');
 }

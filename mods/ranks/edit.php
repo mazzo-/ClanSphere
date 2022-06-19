@@ -5,13 +5,13 @@
 $cs_lang = cs_translate('ranks');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 
 $ranks_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $ranks_id = $cs_post['id'];
 
 $cells = 'ranks_name, squads_id, ranks_url, ranks_img, ranks_code';
-$cs_ranks = cs_sql_select(__FILE__,'ranks',$cells,"ranks_id = '" . $ranks_id . "'");
+$cs_ranks = cs_sql_select(__FILE__, 'ranks', $cells, "ranks_id = '" . $ranks_id . "'");
 
 if(isset($_POST['submit'])) {
 
@@ -32,7 +32,7 @@ if(isset($_POST['submit'])) {
   
   $where = "ranks_name = '" . cs_sql_escape($cs_ranks['ranks_name']) . "'";
   $where .= " AND ranks_id != '" . $ranks_id . "'";
-  $search = cs_sql_count(__FILE__,'ranks',$where);
+  $search = cs_sql_count(__FILE__, 'ranks', $where);
   if(!empty($search))
     $error .= $cs_lang['rank_exists'] . cs_html_br(1);
 }
@@ -47,16 +47,16 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['ranks'] = $cs_ranks;
   $data['ranks']['id'] = $ranks_id;
 
-  $data_squads = cs_sql_select(__FILE__,'squads','squads_name,squads_id',0,'squads_name',0,0);
+  $data_squads = cs_sql_select(__FILE__, 'squads', 'squads_name,squads_id', 0, 'squads_name', 0, 0);
   $data['squads'] = cs_dropdownsel($data_squads, $cs_ranks['squads_id'], 'squads_id');
 
- echo cs_subtemplate(__FILE__,$data,'ranks','edit');
+ echo cs_subtemplate(__FILE__, $data, 'ranks', 'edit');
 }
 else {
 
   $ranks_cells = array_keys($cs_ranks);
   $ranks_save = array_values($cs_ranks);
- cs_sql_update(__FILE__,'ranks',$ranks_cells,$ranks_save,$ranks_id);
+ cs_sql_update(__FILE__, 'ranks', $ranks_cells, $ranks_save, $ranks_id);
   
  cs_redirect($cs_lang['changes_done'], 'ranks') ;
 } 

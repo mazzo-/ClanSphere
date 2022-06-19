@@ -7,8 +7,8 @@ $cs_lang = cs_translate('install');
 function cs_phpconfigcheck ($name, $exception = 0) {
 
   $value = strtolower(ini_get($name));
-  $array_false = array('0', 'off', 'false');
-  $array_true = array('1', 'on', 'true');
+  $array_false = ['0', 'off', 'false'];
+  $array_true = ['1', 'on', 'true'];
   if(empty($value) OR in_array($value, $array_false))
     return false;
   elseif(!empty($exception) OR in_array($value, $array_true))
@@ -20,12 +20,12 @@ function cs_phpconfigcheck ($name, $exception = 0) {
 $sql_files = cs_paths('system/database');
 unset($sql_files['pdo.php']);
 
-$data = array();
-$ok = array();
+$data = [];
+$ok = [];
 $ok[0] = cs_html_img('symbols/' . $cs_main['img_path'] . '/16/stop.' . $cs_main['img_ext']);
 $ok[1] = cs_html_img('symbols/' . $cs_main['img_path'] . '/16/submit.' . $cs_main['img_ext']);
 
-$switch = array();
+$switch = [];
 $switch[0] = $cs_lang['off'];
 $switch[1] = $cs_lang['on'];
 
@@ -33,7 +33,7 @@ $check_required = true;
 
 $data['rq']['php'] = '5.0';
 $data['av']['php'] = phpversion();
-$data['ok']['php'] = $ok[version_compare($data['av']['php'],$data['rq']['php'],'>=')];
+$data['ok']['php'] = $ok[version_compare($data['av']['php'], $data['rq']['php'], '>=')];
 if ($data['ok']['php'] != $ok[1]) { $check_required = false; }
 
 $data['rq']['database'] = '';
@@ -45,8 +45,8 @@ foreach($sql_files AS $sql_file => $num) {
     $data['av']['database'] .= $extension . ', ';
   }
 }
-$data['rq']['database'] = substr($data['rq']['database'],0,-2);
-$data['av']['database'] = substr($data['av']['database'],0,-2);
+$data['rq']['database'] = substr($data['rq']['database'], 0, -2);
+$data['av']['database'] = substr($data['av']['database'], 0, -2);
 $data['ok']['database'] = $ok[!empty($data['av']['database'])];
 if ($data['ok']['database'] != $ok[1]) { $check_required = false; }
 
@@ -56,7 +56,7 @@ $check_recommended = true;
 
 $data['rc']['php'] = '5.4.6';
 $data['sv']['php'] = $data['av']['php'];
-$comparison = version_compare($data['av']['php'],$data['rc']['php'],'>=');
+$comparison = version_compare($data['av']['php'], $data['rc']['php'], '>=');
 if (empty($comparison)) { $data['sv']['php'] = '<div style="color:#B91F1D">' . $data['av']['php'] . '</div>'; $check_recommended = 0;}
 
 $data['rc']['short_open_tag'] = $switch[0];
@@ -109,11 +109,11 @@ $data['av']['gd'] = $switch[(int) extension_loaded('gd')];
 if ($data['av']['gd'] != $data['rc']['gd']) { $data['av']['gd'] = '<div style="color:#B91F1D">' . $data['av']['gd'] . '</div>'; $check_recommended = 0; }
 
 if (!empty($check_required) && !empty($check_recommended)) {
-  $data['info']['result'] = $cs_lang['check_perfect'] . cs_html_br(2) . cs_link($cs_lang['continue'],'install','license','lang=' . $account['users_lang']);
+  $data['info']['result'] = $cs_lang['check_perfect'] . cs_html_br(2) . cs_link($cs_lang['continue'], 'install', 'license', 'lang=' . $account['users_lang']);
 } elseif (!empty($check_required)) {
-  $data['info']['result'] = $cs_lang['check_ok'] . cs_html_br(2) . cs_link($cs_lang['continue'],'install','license','lang=' . $account['users_lang']);
+  $data['info']['result'] = $cs_lang['check_ok'] . cs_html_br(2) . cs_link($cs_lang['continue'], 'install', 'license', 'lang=' . $account['users_lang']);
 } else {
   $data['info']['result'] = $cs_lang['check_failed'];
 }
 
-echo cs_subtemplate(__FILE__,$data,'install','compatible');
+echo cs_subtemplate(__FILE__, $data, 'install', 'compatible');

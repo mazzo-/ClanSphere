@@ -11,13 +11,13 @@ $dir = cs_explorer_path($target, 'raw');
 $lsd = cs_explorer_path($dir, 'escape');
 $red_lsd = cs_explorer_path($dir, 'escape', 1);
 
-$data = array();
+$data = [];
 
 if(empty($_POST['submit'])) {
 
   if(empty($dir)) {
 
-    cs_redirect($cs_lang['no_selection'],'explorer','roots','dir=' . $red_lsd);
+    cs_redirect($cs_lang['no_selection'], 'explorer', 'roots', 'dir=' . $red_lsd);
 
   } else {
 
@@ -30,7 +30,7 @@ if(empty($_POST['submit'])) {
     $check = ' checked="checked"';
     $temp = $chmod;
 
-    $rights = array();
+    $rights = [];
     $rights['o_r'] = 400; $rights['o_w'] = 200; $rights['o_e'] = 100;
     $rights['g_r'] =  40; $rights['g_w'] =  20; $rights['g_e'] =  10;
     $rights['p_r'] =   4; $rights['p_w'] =   2; $rights['p_e'] =   1;
@@ -64,5 +64,5 @@ if(empty($_POST['submit'])) {
   $fileperms = octdec(substr(sprintf('%o', fileperms($dir)), -4));
   $message = $new_chmod == $fileperms ? $cs_lang['success'] : $cs_lang['error_chmod'];
 
-  cs_redirect($message, 'explorer','roots','dir=' . $red_lsd);
+  cs_redirect($message, 'explorer', 'roots', 'dir=' . $red_lsd);
 }

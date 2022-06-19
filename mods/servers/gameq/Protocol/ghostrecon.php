@@ -39,9 +39,9 @@ class GameQ_Protocol_ghostrecon extends GameQ_Protocol
         $this->p->skip(25);
 
         $this->r->add('servername', $this->readGhostString());
-        $this->r->add('map',        $this->readGhostString());
-        $this->r->add('mission',    $this->readGhostString());
-        $this->r->add('gametype',   $this->readGhostString());
+        $this->r->add('map', $this->readGhostString());
+        $this->r->add('mission', $this->readGhostString());
+        $this->r->add('gametype', $this->readGhostString());
     }
 
     /**

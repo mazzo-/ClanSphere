@@ -35,7 +35,7 @@ class ReCaptcha
      * Version of this client library.
      * @const string
      */
-    const VERSION = 'php_1.1.2';
+    public const VERSION = 'php_1.1.2';
 
     /**
      * Shared secret for the site.
@@ -86,7 +86,7 @@ class ReCaptcha
     {
         // Discard empty solution submissions
         if (empty($response)) {
-            $recaptchaResponse = new Response(false, array('missing-input-response'));
+            $recaptchaResponse = new Response(false, ['missing-input-response']);
             return $recaptchaResponse;
         }
 

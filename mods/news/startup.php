@@ -26,7 +26,7 @@ if ($cs_main['mod'] == 'news' AND !empty($account['access_news'])) {
     if (!empty($publish)) {
       $count_publish = count($publish);
       for($run = 0; $run < $count_publish; $run++)
-        cs_sql_update(__FILE__, 'news', array('news_public','news_time'), array('1',$publish[$run]['news_publishs_at']), $publish[$run]['news_id']);
+        cs_sql_update(__FILE__, 'news', ['news_public','news_time'], ['1',$publish[$run]['news_publishs_at']], $publish[$run]['news_id']);
     }
 
     cs_cache_delete('news_publish');

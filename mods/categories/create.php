@@ -6,8 +6,8 @@ $cs_lang = cs_translate('categories');
 
 $files_gl = cs_files();
 
-$op_categories = cs_sql_option(__FILE__,'categories');
-$img_filetypes = array('gif','jpg','png');
+$op_categories = cs_sql_option(__FILE__, 'categories');
+$img_filetypes = ['gif','jpg','png'];
 
 include 'mods/categories/functions.php';
 
@@ -58,7 +58,7 @@ if(isset($_POST['submit'])) {
   
   $where = "categories_name = '" . cs_sql_escape($cs_categories['categories_name']) . "'";
   $where .= " AND categories_mod = '" . cs_sql_escape($cs_categories['categories_mod']) . "'";
-  $search = cs_sql_count(__FILE__,'categories',$where);
+  $search = cs_sql_count(__FILE__, 'categories', $where);
   if(!empty($search)) {
     $error .= $cs_lang['cat_exists'] . cs_html_br(1);
   }
@@ -84,7 +84,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   
   $data['cat'] = $cs_categories;
 
-  $data['cat']['subcat_of'] = cs_categories_dropdown2($cs_categories['categories_mod'],$cs_categories['categories_subid'],0);
+  $data['cat']['subcat_of'] = cs_categories_dropdown2($cs_categories['categories_mod'], $cs_categories['categories_subid'], 0);
 
   $run = 0;
   $modules = cs_checkdirs('mods');
@@ -92,7 +92,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     $check_axx = empty($account['access_' . $mods['dir'] . '']) ? 0 : $account['access_' . $mods['dir'] . ''];
     if(!empty($mods['categories']) AND $check_axx > 2) {
         $mods['dir'] == $cs_categories['categories_mod'] ? $sel = 1 : $sel = 0;
-        $data['mod'][$run]['sel'] = cs_html_option($mods['name'],$mods['dir'],$sel);
+        $data['mod'][$run]['sel'] = cs_html_option($mods['name'], $mods['dir'], $sel);
       $run++;
     }
   }
@@ -101,7 +101,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $sel = 0;
   while($levels < 6) {
     $cs_categories['categories_access'] == $levels ? $sel = 1 : $sel = 0;
-    $data['access'][$levels]['sel'] = cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $data['access'][$levels]['sel'] = cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
 
@@ -119,24 +119,24 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $matches[2] .= $cs_lang['filetypes'] . $return_types;
   $data['cat']['picup_clip'] = cs_abcode_clip($matches);
 
-  echo cs_subtemplate(__FILE__,$data,'categories','create');
+  echo cs_subtemplate(__FILE__, $data, 'categories', 'create');
 }
 else {
 
   $categories_cells = array_keys($cs_categories);
   $categories_save = array_values($cs_categories);
-  cs_sql_insert(__FILE__,'categories',$categories_cells,$categories_save);
+  cs_sql_insert(__FILE__, 'categories', $categories_cells, $categories_save);
 
   if(!empty($files_gl['picture']['tmp_name'])) {
     $where = "categories_name = '" . cs_sql_escape($cs_categories['categories_name']) . "'";
-    $getid = cs_sql_select(__FILE__,'categories','categories_id',$where);
+    $getid = cs_sql_select(__FILE__, 'categories', 'categories_id', $where);
     $filename = 'picture-' . $getid['categories_id'] . '.' . $extension;
-    cs_upload('categories',$filename,$files_gl['picture']['tmp_name']);
+    cs_upload('categories', $filename, $files_gl['picture']['tmp_name']);
     
     $cs_categories2['categories_picture'] = $filename;
     $categories2_cells = array_keys($cs_categories2);
     $categories2_save = array_values($cs_categories2);      
-    cs_sql_update(__FILE__,'categories',$categories2_cells,$categories2_save,$getid['categories_id']);
+    cs_sql_update(__FILE__, 'categories', $categories2_cells, $categories2_save, $getid['categories_id']);
   }
-  cs_redirect($cs_lang['create_done'],'categories','manage','where=' . $cs_categories['categories_mod']);
+  cs_redirect($cs_lang['create_done'], 'categories', 'manage', 'where=' . $cs_categories['categories_mod']);
 }

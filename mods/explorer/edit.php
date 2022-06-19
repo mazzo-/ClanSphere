@@ -10,7 +10,7 @@ $dir = cs_explorer_path($_REQUEST['file'], 'raw');
 $lsd = cs_explorer_path($dir, 'escape');
 $red_lsd = cs_explorer_path($dir, 'escape', 1);
 
-$data = array();
+$data = [];
 
 if(empty($_POST['submit'])) {
 
@@ -18,14 +18,14 @@ if(empty($_POST['submit'])) {
     cs_redirect($cs_lang['no_file'], 'explorer', 'roots');
   } elseif(!file_exists($cs_main['def_path'] . '/' . $dir)) {
     cs_redirect($cs_lang['not_found'] . ': ' . $dir, 'explorer', 'roots');
-  } elseif (!$file = fopen($cs_main['def_path'] . '/' . $dir,'r')) {
+  } elseif (!$file = fopen($cs_main['def_path'] . '/' . $dir, 'r')) {
     cs_redirect($cs_lang['file_not_opened'], 'explorer', 'roots');
   } else {
 
-    $content = fread($file,filesize($cs_main['def_path'] . '/' . $dir));
+    $content = fread($file, filesize($cs_main['def_path'] . '/' . $dir));
     fclose($file);
 
-    $ending = strtolower(substr(strrchr($dir,'.'),1));
+    $ending = strtolower(substr(strrchr($dir, '.'), 1));
 
     if ($ending == 'php') {
 
@@ -50,11 +50,11 @@ if(empty($_POST['submit'])) {
 }
 else {
 
-  $data = fopen($cs_main['def_path'] . '/' . $dir,'w');
+  $data = fopen($cs_main['def_path'] . '/' . $dir, 'w');
   # set stream encoding if possible to avoid converting issues
   if(function_exists('stream_encoding'))
     stream_encoding($data, $cs_main['charset']);
-  $message = fwrite($data,$_POST['data_content']) ? $cs_lang['changes_done'] : $cs_lang['error_edit'];
+  $message = fwrite($data, $_POST['data_content']) ? $cs_lang['changes_done'] : $cs_lang['error_edit'];
   fclose($data);
 
   cs_redirect($message, 'explorer', 'roots', 'dir=' . $red_lsd);

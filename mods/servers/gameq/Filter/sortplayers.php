@@ -74,7 +74,7 @@ class GameQ_Filter_sortplayers extends GameQ_Filter
         $dir = ($sort_asc) ? SORT_ASC : SORT_DESC;
 
         // Sort the player array on the given sort_key
-        $sort_column = array();
+        $sort_column = [];
         foreach ($players as $player) {
             $sort_column[] = $player[$sort_key];
         }

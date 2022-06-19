@@ -57,7 +57,7 @@ class GameQ_Protocol_doom3 extends GameQ_Protocol
     {
         while (($id = $this->p->readInt8()) != 32) {
 
-            $this->r->addPlayer('id',   $id);
+            $this->r->addPlayer('id', $id);
             $this->r->addPlayer('ping', $this->p->readInt16());
             $this->r->addPlayer('rate', $this->p->readInt32());
             $this->r->addPlayer('name', $this->p->readString());

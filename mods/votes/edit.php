@@ -4,16 +4,16 @@
 
 $cs_lang = cs_translate('votes');
 
-$cs_vote_tpl = array();
+$cs_vote_tpl = [];
 $cs_vote_tpl['head']['mod']      = $cs_lang['mod_name'];
 $cs_vote_tpl['head']['action']  = $cs_lang['head_edit'];
 $cs_vote_tpl['head']['body']    = $cs_lang['body_edit'];
 
-echo cs_subtemplate(__FILE__,$cs_vote_tpl,'votes','action_head');
+echo cs_subtemplate(__FILE__, $cs_vote_tpl, 'votes', 'action_head');
 
 $vote_id = $_REQUEST['id'];
-settype($vote_id,'integer');
-$vote_edit = cs_sql_select(__FILE__,'votes','*',"votes_id = '" . $vote_id . "'");
+settype($vote_id, 'integer');
+$vote_edit = cs_sql_select(__FILE__, 'votes', '*', "votes_id = '" . $vote_id . "'");
 unset($vote_edit['vote_id']);
 
 $vote_error = 5;
@@ -45,7 +45,7 @@ if(isset($_POST['submit']) OR isset($_POST['preview']))
     $vote_error--;
   }
 
-  $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+  $run_loop = $_POST['run_loop'] ?? 1;
   $cs_files['votes_election'] = '';
   for($run=0; $run < $run_loop; $run++)
   {
@@ -65,15 +65,15 @@ if(isset($_POST['submit']) OR isset($_POST['preview']))
     $errormsg .= $cs_lang['error_election'] . cs_html_br(1);
   }
 
-  if(cs_datepost('votes_start','unix'))
+  if(cs_datepost('votes_start', 'unix'))
   {
-    $votes_start = cs_datepost('votes_start','unix');
+    $votes_start = cs_datepost('votes_start', 'unix');
     $vote_error--;
   }
 
-  if(cs_datepost('votes_end','unix'))
+  if(cs_datepost('votes_end', 'unix'))
   {
-    $votes_end = cs_datepost('votes_end','unix');
+    $votes_end = cs_datepost('votes_end', 'unix');
     $vote_error--;
   }
   else
@@ -85,14 +85,14 @@ if(isset($_POST['submit']))
 {
   if(empty($vote_error))
   {
-    $votes_close = isset($_POST['votes_close']) ? $_POST['votes_close'] : 0;
-    $votes_access = isset($_POST['votes_access']) ? $_POST['votes_access'] : 0;
-    $votes_several = isset($_POST['votes_several']) ? $_POST['votes_several'] : 0;
+    $votes_close = $_POST['votes_close'] ?? 0;
+    $votes_access = $_POST['votes_access'] ?? 0;
+    $votes_several = $_POST['votes_several'] ?? 0;
 
     $vote_form = 0;
-    $vote_cells = array('users_id','votes_access','votes_question','votes_election','votes_start','votes_end','votes_close','votes_several');
-    $vote_save = array($vote_userid,$votes_access,$votes_question,$votes_election,$votes_start,$votes_end,$votes_close,$votes_several);
-    cs_sql_update(__FILE__,'votes',$vote_cells,$vote_save,$vote_id);
+    $vote_cells = ['users_id','votes_access','votes_question','votes_election','votes_start','votes_end','votes_close','votes_several'];
+    $vote_save = [$vote_userid,$votes_access,$votes_question,$votes_election,$votes_start,$votes_end,$votes_close,$votes_several];
+    cs_sql_update(__FILE__, 'votes', $vote_cells, $vote_save, $vote_id);
 
     cs_redirect($cs_lang['changes_done'], 'votes') ;
   }
@@ -101,7 +101,7 @@ if(isset($_POST['submit']))
     $cs_vote_tpl['lang']['error_occurred'] = $cs_lang['error_occurred'];
     $cs_vote_tpl['error']['message'] = $errormsg;
 
-    echo cs_subtemplate(__FILE__,$cs_vote_tpl,'votes','error');
+    echo cs_subtemplate(__FILE__, $cs_vote_tpl, 'votes', 'error');
   }
 }
 
@@ -128,7 +128,7 @@ if(isset($_POST['preview']))
     }
 
     $cs_vote_tpl['votes']['type'] = empty($votes_several) ? 'radio' : 'checkbox';
-    echo cs_subtemplate(__FILE__,$cs_vote_tpl,'votes','action_vote');
+    echo cs_subtemplate(__FILE__, $cs_vote_tpl, 'votes', 'action_vote');
     unset($cs_vote_tpl['answers']);
   }
   else
@@ -136,7 +136,7 @@ if(isset($_POST['preview']))
     $cs_vote_tpl['lang']['error_occurred'] = $cs_lang['error_occurred'];
     $cs_vote_tpl['error']['message'] = $errormsg;
 
-    echo cs_subtemplate(__FILE__,$cs_vote_tpl,'votes','error');
+    echo cs_subtemplate(__FILE__, $cs_vote_tpl, 'votes', 'error');
   }
 }
 if(isset($_POST['election']))
@@ -145,8 +145,8 @@ if(isset($_POST['election']))
   $votes_access = $_POST['votes_access'];
   $levels = $_POST['votes_access'];
   $votes_question = $_POST['votes_question'];
-  $votes_start = cs_datepost('votes_start','unix');
-  $votes_end = cs_datepost('votes_end','unix');
+  $votes_start = cs_datepost('votes_start', 'unix');
+  $votes_end = cs_datepost('votes_end', 'unix');
   $votes_close = empty($_POST['votes_close']) ? 0 : $_POST['votes_close'];
   $votes_several = empty($_POST['votes_several']) ? 0 : $_POST['votes_several'];
   $_POST['run_loop']++;
@@ -166,7 +166,7 @@ if(!empty($vote_form))
 
   if(isset($_POST['election']))
   {
-    $run_loop = isset($_POST['run_loop']) ? $_POST['run_loop'] : 1;
+    $run_loop = $_POST['run_loop'] ?? 1;
   }
   else
   {
@@ -179,7 +179,7 @@ if(!empty($vote_form))
     $num = $run+1;
     if(isset($_POST['election']))
       {
-      $cs_files["votes_election_$num"] = isset($_POST["votes_election_$num"]) ? $_POST["votes_election_$num"] : '';
+      $cs_files["votes_election_$num"] = $_POST["votes_election_$num"] ?? '';
     }
     else
     {
@@ -203,14 +203,14 @@ if(!empty($vote_form))
   $cs_vote_tpl['lang']['reset'] = $cs_lang['reset'];
   $cs_vote_tpl['lang']['add_election'] = $cs_lang['add_election'];
 
-  $cs_vote_tpl['votes']['start_dateselect'] = cs_dateselect('votes_start','unix',$votes_start,2005);
-  $cs_vote_tpl['votes']['end_dateselect'] = cs_dateselect('votes_end','unix',$votes_end,2005);
+  $cs_vote_tpl['votes']['start_dateselect'] = cs_dateselect('votes_start', 'unix', $votes_start, 2005);
+  $cs_vote_tpl['votes']['end_dateselect'] = cs_dateselect('votes_end', 'unix', $votes_end, 2005);
   $cs_vote_tpl['votes']['question'] = $votes_question;
   $cs_vote_tpl['votes']['answers_count'] = $run_loop;
-  $cs_vote_tpl['form']['action'] = cs_url('votes','edit');
+  $cs_vote_tpl['form']['action'] = cs_url('votes', 'edit');
   $cs_vote_tpl['votes']['lang_submit'] = $cs_lang['edit'];
   $cs_vote_tpl['votes']['id'] = $vote_id;
   $cs_vote_tpl['several']['checked'] = empty($votes_several) ? '' : 'checked';
 
-  echo cs_subtemplate(__FILE__,$cs_vote_tpl,'votes','action_form');
+  echo cs_subtemplate(__FILE__, $cs_vote_tpl, 'votes', 'action_form');
 }

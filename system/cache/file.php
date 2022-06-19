@@ -12,7 +12,7 @@ function cs_cache_clear() {
 
   $unicode = extension_loaded('unicode') ? 1 : 0;
   $where = "options_mod = 'clansphere' AND options_name = 'cache_unicode'";
-  cs_sql_update(__FILE__, 'options', array('options_value'), array($unicode), 0, $where); 
+  cs_sql_update(__FILE__, 'options', ['options_value'], [$unicode], 0, $where); 
 }
 
 function cs_cache_delete($name, $ttl = 0) {
@@ -27,9 +27,9 @@ function cs_cache_info() {
   $info = cs_paths('uploads/cache');
   unset($info['index.html'], $info['.htaccess'], $info['web.config']);
 
-  $form = array();
+  $form = [];
   foreach($info AS $filename => $num)
-    $form[$filename] = array('name' => $filename, 'time' => filemtime('uploads/cache/' . $filename), 'size' => filesize('uploads/cache/' . $filename));
+    $form[$filename] = ['name' => $filename, 'time' => filemtime('uploads/cache/' . $filename), 'size' => filesize('uploads/cache/' . $filename)];
 
   $form = array_values($form);
   return $form;

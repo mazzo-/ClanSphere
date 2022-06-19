@@ -6,18 +6,18 @@ $cs_lang = cs_translate('gallery', 1);
 
 $files_gl = cs_files();
 
-$data = array();
+$data = [];
 
-$option = cs_sql_option(__FILE__,'categories');
-$option2 = cs_sql_option(__FILE__,'gallery');
-$img_filetypes = array('gif','jpg','png');
+$option = cs_sql_option(__FILE__, 'categories');
+$option2 = cs_sql_option(__FILE__, 'gallery');
+$img_filetypes = ['gif','jpg','png'];
 require_once('mods/gallery/functions.php');
 
 //check how much folders the user owns. if >= then allowed -> redirect
 $where = 'folders_mod = \'usersgallery\' AND users_id = "'. $account['users_id'] . '"';
-$count = cs_sql_count(__FILE__, 'folders',$where);
+$count = cs_sql_count(__FILE__, 'folders', $where);
 if($count >= $option2['max_folders']) {
-  cs_redirect($cs_lang['max_folders'],'usersgallery','center','page=cat');
+  cs_redirect($cs_lang['max_folders'], 'usersgallery', 'center', 'page=cat');
 }
 
 $folders['sub_id'] = '';
@@ -44,12 +44,12 @@ if(isset($_POST['submit'])) {
   $folders['folders_access'] = $_POST['folders_access'];
   $folders['folders_position'] = $_POST['folders_position'];
   
-    $adv_vote = isset($_POST['adv_vote']) ? $_POST['adv_vote'] : 0;
-    $adv_close = isset($_POST['adv_close']) ? $_POST['adv_close'] : 0;
-    $adv_dl = isset($_POST['adv_download']) ? $_POST['adv_download'] : 0;
-    $adv_dlo = isset($_POST['adv_download_original']) ? $_POST['adv_download_original'] : 0;  
-  $advanced = array($adv_vote,$adv_close,$adv_dl,$adv_dlo);
-  $folders['folders_advanced'] = implode(",",$advanced);
+    $adv_vote = $_POST['adv_vote'] ?? 0;
+    $adv_close = $_POST['adv_close'] ?? 0;
+    $adv_dl = $_POST['adv_download'] ?? 0;
+    $adv_dlo = $_POST['adv_download_original'] ?? 0;  
+  $advanced = [$adv_vote,$adv_close,$adv_dl,$adv_dlo];
+  $folders['folders_advanced'] = implode(",", $advanced);
 
   
   $error = '';
@@ -80,7 +80,7 @@ if(isset($_POST['submit'])) {
 
   $where = "folders_name = '" . cs_sql_escape($folders['folders_name']) . "' AND folders_mod = 'usersgallery'";
   $where .= "AND users_id = '" . $account['users_id'] . "'";
-  $search = cs_sql_count(__FILE__,'folders',$where);
+  $search = cs_sql_count(__FILE__, 'folders', $where);
   if(!empty($search))
     $error .= $cs_lang['cat_exists'] . cs_html_br(1);
 }
@@ -94,13 +94,13 @@ elseif(!empty($error))
 if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['data'] = $folders;
-  $data['data']['folders_select'] = make_folders_select('sub_id',$folders['sub_id'],$account['users_id'],'usersgallery');
+  $data['data']['folders_select'] = make_folders_select('sub_id', $folders['sub_id'], $account['users_id'], 'usersgallery');
 
   $levels = 0;
   $data['data']['folders_access'] = '';
   while($levels < 6) {
     $folders['folders_access'] == $levels ? $sel = 1 : $sel = 0;
-    $data['data']['folders_access'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $data['data']['folders_access'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
    
@@ -125,23 +125,23 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['data']['folders_url'] = cs_secure($data['data']['folders_url']);
   $data['data']['folders_text'] = cs_secure($data['data']['folders_text']);
 
-  echo cs_subtemplate(__FILE__,$data,'usersgallery','folders_create');
+  echo cs_subtemplate(__FILE__, $data, 'usersgallery', 'folders_create');
 }
 else {
 
   $folder_cells = array_keys($folders);
   $folder_save = array_values($folders);
- cs_sql_insert(__FILE__,'folders',$folder_cells,$folder_save);
+ cs_sql_insert(__FILE__, 'folders', $folder_cells, $folder_save);
  
   if(!empty($files_gl['picture']['tmp_name'])) {
     $id = cs_sql_insertid(__FILE__);
     $filename = 'picture-' . $id . '.' . $extension;
-   cs_upload('folders',$filename,$files_gl['picture']['tmp_name']);
+   cs_upload('folders', $filename, $files_gl['picture']['tmp_name']);
 
-    $cells = array('folders_picture');
-    $save = array($filename);
-   cs_sql_update(__FILE__,'folders',$cells,$save,$id);
+    $cells = ['folders_picture'];
+    $save = [$filename];
+   cs_sql_update(__FILE__, 'folders', $cells, $save, $id);
   }
 
- cs_redirect($cs_lang['create_done'],'usersgallery','center','page=cat');
+ cs_redirect($cs_lang['create_done'], 'usersgallery', 'center', 'page=cat');
 }

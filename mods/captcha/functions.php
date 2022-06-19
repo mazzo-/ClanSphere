@@ -3,12 +3,12 @@
 // $Id$
 
 global $available_captchas, $captcha_option;
-$captcha_option['options'] = cs_sql_option(__FILE__,'captcha');
-$available_captchas = array(
+$captcha_option['options'] = cs_sql_option(__FILE__, 'captcha');
+$available_captchas = [
     'standard',
     'recaptcha',
-    'recaptchav2'
-);
+    'recaptchav2',
+];
 
 function cs_captchashow($mini = 0)
 {
@@ -23,7 +23,7 @@ function cs_captchashow($mini = 0)
   elseif(check_captcha_methode() == 'recaptcha')
   {
     require_once('recaptchalib.php');
-    $error = isset($cs_main['captcha_error']) ? $cs_main['captcha_error'] : '';
+    $error = $cs_main['captcha_error'] ?? '';
     return recaptcha_get_html($captcha_option['options']['recaptcha_public_key'], $error);
   }
   else
@@ -31,7 +31,7 @@ function cs_captchashow($mini = 0)
     $mini = $mini != 0 ? '&mini' : '';
     $data['captcha']['img'] = cs_html_img('mods/captcha/generate.php?time=' . cs_time().$mini);
     $data['captcha']['size'] = empty($mini) ? 8 : 3;
-    return cs_subtemplate(__FILE__,$data,'captcha','captcha');
+    return cs_subtemplate(__FILE__, $data, 'captcha', 'captcha');
   }
 }
 
@@ -62,10 +62,12 @@ function cs_captchaverify($mini = 0)
   {
     require_once('recaptchalib.php');
     if (isset($_POST["recaptcha_response_field"])) {
-      $resp = recaptcha_check_answer ($captcha_option['options']['recaptcha_private_key'],
+      $resp = recaptcha_check_answer (
+          $captcha_option['options']['recaptcha_private_key'],
           $_SERVER["REMOTE_ADDR"],
           $_POST["recaptcha_challenge_field"],
-          $_POST["recaptcha_response_field"]);
+          $_POST["recaptcha_response_field"]
+      );
 
       if ($resp->is_valid) {
         return true;

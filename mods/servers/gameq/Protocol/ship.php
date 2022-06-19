@@ -39,23 +39,23 @@ class GameQ_Protocol_ship extends GameQ_Protocol_source
         $this->header('I');
         
         // Rules
-        $result->add('protocol',    $buffer->readInt8());
-        $result->add('hostname',    $buffer->readString());
-        $result->add('map',         $buffer->readString());
-        $result->add('game_dir',    $buffer->readString());
-        $result->add('game_descr',  $buffer->readString());
-        $result->add('steamappid',  $buffer->readInt16());
+        $result->add('protocol', $buffer->readInt8());
+        $result->add('hostname', $buffer->readString());
+        $result->add('map', $buffer->readString());
+        $result->add('game_dir', $buffer->readString());
+        $result->add('game_descr', $buffer->readString());
+        $result->add('steamappid', $buffer->readInt16());
         $result->add('num_players', $buffer->readInt8());
         $result->add('max_players', $buffer->readInt8());
-        $result->add('num_bots',    $buffer->readInt8());
-        $result->add('dedicated',   $buffer->read());
-        $result->add('os',          $buffer->read());
-        $result->add('password',    $buffer->readInt8());
-        $result->add('secure',      $buffer->readInt8());
-        $result->add('game_mode',   $buffer->readInt8());
-        $result->add('witness_count',   $buffer->readInt8());
-        $result->add('witness_time',    $buffer->readInt8());
-        $result->add('version',     $buffer->readInt8());
+        $result->add('num_bots', $buffer->readInt8());
+        $result->add('dedicated', $buffer->read());
+        $result->add('os', $buffer->read());
+        $result->add('password', $buffer->readInt8());
+        $result->add('secure', $buffer->readInt8());
+        $result->add('game_mode', $buffer->readInt8());
+        $result->add('witness_count', $buffer->readInt8());
+        $result->add('witness_time', $buffer->readInt8());
+        $result->add('version', $buffer->readInt8());
     }
 }
 ?>

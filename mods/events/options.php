@@ -6,7 +6,7 @@ $cs_lang = cs_translate('events');
 
 if (isset($_POST['submit'])) {
 
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -26,9 +26,9 @@ if (isset($_POST['submit'])) {
   
 } else {
 
-  $data = array();
+  $data = [];
 
-  $data['op'] = cs_sql_option(__FILE__,'events');
+  $data['op'] = cs_sql_option(__FILE__, 'events');
 
   $data['lang']['getmsg'] = cs_getmsg();
 
@@ -40,5 +40,5 @@ if (isset($_POST['submit'])) {
   $data['checked']['req_mobile'] = !empty($data['op']['req_mobile']) ? $checked : '';
   
   
-  echo cs_subtemplate(__FILE__,$data,'events','options');
+  echo cs_subtemplate(__FILE__, $data, 'events', 'options');
 }

@@ -9,14 +9,14 @@ $select = 'users_id, users_nick, users_country, users_active, users_invisible, u
 $invisible = ($account['access_users'] > 4) ? '' : " AND users_invisible = '0'";
 $upcome = "users_laston > " . $five_min . " AND users_active = '1'" . $invisible;
 $order = 'users_laston DESC';
-$cs_users = cs_sql_select(__FILE__,'users',$select,$upcome,$order,0,8);
-$data = array();
+$cs_users = cs_sql_select(__FILE__, 'users', $select, $upcome, $order, 0, 8);
+$data = [];
 
 if(empty($cs_users)) {
 
   $data['lang']['no_users'] = $cs_lang['no_data'];
   
-  echo cs_subtemplate(__FILE__,$data,'users','no_users');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'no_users');
   
 } else {
   
@@ -34,7 +34,7 @@ if(empty($cs_users)) {
     else
       $data['users'][$run]['nick'] = $cs_users[$run]['users_nick'];
 
-    $data['users'][$run]['url'] = cs_url('users','view','id='.$cs_users[$run]['users_id']);
+    $data['users'][$run]['url'] = cs_url('users', 'view', 'id='.$cs_users[$run]['users_id']);
   }
-  echo cs_subtemplate(__FILE__,$data,'users','navonline_pic');
+  echo cs_subtemplate(__FILE__, $data, 'users', 'navonline_pic');
 }

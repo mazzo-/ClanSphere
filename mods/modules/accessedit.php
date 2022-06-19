@@ -4,18 +4,18 @@
 
 $cs_lang = cs_translate('modules');
 
-$data = array();
+$data = [];
 
 if (empty($_POST['submit'])) {
 
   $dir = $_GET['dir'];
 
-  $data['form']['url'] = cs_url('modules','accessedit');
-  $data['lang']['edit_access'] = sprintf($cs_lang['edit_access'],$dir);
+  $data['form']['url'] = cs_url('modules', 'accessedit');
+  $data['lang']['edit_access'] = sprintf($cs_lang['edit_access'], $dir);
   $data['value']['dir'] = $dir;
 
   $cells = 'access_id, access_name, access_clansphere, access_'.$dir;
-  $data['access'] = cs_sql_select(__FILE__,'access',$cells,0,'access_clansphere ASC',0,0);
+  $data['access'] = cs_sql_select(__FILE__, 'access', $cells, 0, 'access_clansphere ASC', 0, 0);
 
   $sel = 'selected="selected"';
   $count_access = count($data['access']);
@@ -37,24 +37,24 @@ if (empty($_POST['submit'])) {
 
   }
 
-  echo cs_subtemplate(__FILE__,$data,'modules','accessedit_1');
+  echo cs_subtemplate(__FILE__, $data, 'modules', 'accessedit_1');
   
 } else {
 
   $dir = $_POST['dir'];
 
-  $access = cs_sql_select(__FILE__,'access','access_id',0,'access_clansphere ASC',0,0);
+  $access = cs_sql_select(__FILE__, 'access', 'access_id', 0, 'access_clansphere ASC', 0, 0);
 
-  $cells = array('access_'.$dir);
+  $cells = ['access_'.$dir];
 
   foreach ($access as $level) {
-    $values = array($_POST['access_'.$level['access_id']]);
-    cs_sql_update(__FILE__,'access',$cells,$values,$level['access_id']);
+    $values = [$_POST['access_'.$level['access_id']]];
+    cs_sql_update(__FILE__, 'access', $cells, $values, $level['access_id']);
 
     cs_cache_delete('access_' . $level['access_id']);
   }
 
-  $data['url']['continue'] = cs_url('modules','roots');
+  $data['url']['continue'] = cs_url('modules', 'roots');
 
-  echo cs_subtemplate(__FILE__,$data,'modules','accessedit_2');
+  echo cs_subtemplate(__FILE__, $data, 'modules', 'accessedit_2');
 }

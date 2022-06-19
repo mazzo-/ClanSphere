@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('cash');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 $data['op'] = cs_sql_option(__FILE__, 'cash');
 
 $cash_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
@@ -17,7 +17,7 @@ if(isset($_POST['submit'])) {
   $cs_cash['cash_money'] = $_POST['cash_money'];
   $cs_cash['cash_text'] = $_POST['cash_text'];
   $cs_cash['cash_info'] = $_POST['cash_info'];
-  $cs_cash['cash_time'] = cs_datepost('datum','date');
+  $cs_cash['cash_time'] = cs_datepost('datum', 'date');
   $users_nick = empty($_REQUEST['users_nick']) ? '' : $_REQUEST['users_nick'];
 
   $error = '';
@@ -48,7 +48,7 @@ if(isset($_POST['submit'])) {
 else {
 
   $select = 'cash_id, cash_inout, cash_money, cash_time, cash_text, cash_info, users_id';
-  $cs_cash = cs_sql_select(__FILE__,'cash',$select,"cash_id = '" . $cash_id . "'");
+  $cs_cash = cs_sql_select(__FILE__, 'cash', $select, "cash_id = '" . $cash_id . "'");
   
 }
 
@@ -68,27 +68,27 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $inoutlist[0]['name'] = $cs_lang['drop_in'];
   $inoutlist[1]['cash_inout'] = 'out';
   $inoutlist[1]['name'] = $cs_lang['drop_out'];
-  $data['cash']['inout_sel'] = cs_dropdown('cash_inout','name',$inoutlist,$cs_cash['cash_inout']);
+  $data['cash']['inout_sel'] = cs_dropdown('cash_inout', 'name', $inoutlist, $cs_cash['cash_inout']);
 
-  $data['cash']['date_sel'] = cs_dateselect('datum','date',$cs_cash['cash_time'],2000);
+  $data['cash']['date_sel'] = cs_dateselect('datum', 'date', $cs_cash['cash_time'], 2000);
 
    $data['cash']['abcode_smileys'] = cs_abcode_smileys('cash_info');
    $data['cash']['abcode_features'] = cs_abcode_features('cash_info');
 
   $data['cash']['id'] = $cash_id;
 
-  $cs_user = cs_sql_select(__FILE__,'users','users_nick',"users_id = '" . $cs_cash['users_id'] . "'");
+  $cs_user = cs_sql_select(__FILE__, 'users', 'users_nick', "users_id = '" . $cs_cash['users_id'] . "'");
   $data['cash']['users_sel'] = cs_user($cs_cash['users_id'], $cs_user['users_nick']);
   
   $data['users']['nick'] = empty($users_nick) ? $cs_user['users_nick'] : cs_secure($users_nick, 0, 0, 0);
 
-  echo cs_subtemplate(__FILE__,$data,'cash','edit');
+  echo cs_subtemplate(__FILE__, $data, 'cash', 'edit');
 }
 else {
   
   $cash_cells = array_keys($cs_cash);
   $cash_save = array_values($cs_cash);
-  cs_sql_update(__FILE__,'cash',$cash_cells,$cash_save,$cash_id);
+  cs_sql_update(__FILE__, 'cash', $cash_cells, $cash_save, $cash_id);
 
-  cs_redirect($cs_lang['changes_done'],'cash');
+  cs_redirect($cs_lang['changes_done'], 'cash');
 }

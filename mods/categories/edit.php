@@ -7,13 +7,13 @@ $cs_lang = cs_translate('categories');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
 
-$data = array();
+$data = [];
 
 $categories_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $categories_id = $cs_post['id'];
 
-$op_categories = cs_sql_option(__FILE__,'categories');
-$img_filetypes = array('gif','jpg','png');
+$op_categories = cs_sql_option(__FILE__, 'categories');
+$img_filetypes = ['gif','jpg','png'];
 $files = cs_files();
 
 $data['if']['more'] = FALSE;
@@ -84,13 +84,13 @@ if(isset($_POST['submit'])) {
   $where = "categories_name = '" . cs_sql_escape($cs_categories['categories_name']) . "'";
   $where .= " AND categories_mod = '" . cs_sql_escape($_POST['cat_mod']) . "'";
   $where .= " AND categories_id != '" . $categories_id . "'";
-  $search = cs_sql_count(__FILE__,'categories',$where);
+  $search = cs_sql_count(__FILE__, 'categories', $where);
   if(!empty($search)) {
     $error .= $cs_lang['cat_exists'] . cs_html_br(1);
   }
 }
 else {
-  $cs_categories = cs_sql_select(__FILE__,'categories','*',"categories_id = '" . $categories_id . "'");
+  $cs_categories = cs_sql_select(__FILE__, 'categories', '*', "categories_id = '" . $categories_id . "'");
 }
 
 if(!isset($_POST['submit'])) {
@@ -106,7 +106,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
 
   $cat_mod = empty($_POST['cat_mod']) ? $cs_categories['categories_mod'] : $_POST['cat_mod'];
-  $data['cat']['subcat_of'] = cs_categories_dropdown2($cat_mod,$cs_categories['categories_subid'],0);
+  $data['cat']['subcat_of'] = cs_categories_dropdown2($cat_mod, $cs_categories['categories_subid'], 0);
   
   $modules = cs_checkdirs('mods');
   foreach($modules as $mods) {
@@ -121,7 +121,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $sel = 0;
   while($levels < 6) {
     $cs_categories['categories_access'] == $levels ? $sel = 1 : $sel = 0;
-    $data['access'][$levels]['sel'] = cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $data['access'][$levels]['sel'] = cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
   
@@ -133,7 +133,7 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     $data['if']['more'] = TRUE;
     $place = 'uploads/categories/' . $cs_categories['categories_picture'];
     $size = getimagesize($cs_main['def_path'] . '/' . $place);
-    $data['cat']['current_pic'] = cs_html_img($place,$size[1],$size[0]);
+    $data['cat']['current_pic'] = cs_html_img($place, $size[1], $size[0]);
   }
 
   $matches[1] = $cs_lang['pic_infos'];
@@ -149,20 +149,20 @@ if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['cat']['id'] = $categories_id;
 
-  echo cs_subtemplate(__FILE__,$data,'categories','edit');
+  echo cs_subtemplate(__FILE__, $data, 'categories', 'edit');
 }
 else {
 
   $categories_cells = array_keys($cs_categories);
   $categories_save = array_values($cs_categories);
-  cs_sql_update(__FILE__,'categories',$categories_cells,$categories_save,$categories_id);
+  cs_sql_update(__FILE__, 'categories', $categories_cells, $categories_save, $categories_id);
   
   $check = cs_sql_count(__FILE__, 'categories', 'categories_id = ' . (int)$cs_categories['categories_subid'] . ' AND categories_subid = ' . (int)$categories_id);
   
   if (!empty($check))
-    cs_sql_update(__FILE__, 'categories', array('categories_subid'), array(0), $cs_categories['categories_subid']);
+    cs_sql_update(__FILE__, 'categories', ['categories_subid'], [0], $cs_categories['categories_subid']);
   
-  $cs_categories = cs_sql_select(__FILE__,'categories','categories_mod',"categories_id = " . (int)$categories_id,0,0,1);
-  cs_redirect($cs_lang['changes_done'],'categories','manage','where=' . $cs_categories['categories_mod']);
+  $cs_categories = cs_sql_select(__FILE__, 'categories', 'categories_mod', "categories_id = " . (int)$categories_id, 0, 0, 1);
+  cs_redirect($cs_lang['changes_done'], 'categories', 'manage', 'where=' . $cs_categories['categories_mod']);
 } 
   

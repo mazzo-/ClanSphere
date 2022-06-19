@@ -6,7 +6,7 @@ $cs_lang = cs_translate('count');
 
 if(isset($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['width'] = (int) $_POST['width'];
   $save['height'] = (int) $_POST['height'];
   $save['background'] = $_POST['background'];
@@ -27,12 +27,12 @@ if(isset($_POST['submit'])) {
   
 } else {
   
-  $data = array();
+  $data = [];
   
-  $data['count'] = cs_sql_option(__FILE__,'count');
+  $data['count'] = cs_sql_option(__FILE__, 'count');
   
   $data['count']['stats'] = $data['count']['view'] == 'stats' ? 'selected="selected"' : '';
   $data['count']['amstats'] = $data['count']['view'] == 'amstats' ? 'selected="selected"' : '';
 
-  echo cs_subtemplate(__FILE__,$data,'count','options');
+  echo cs_subtemplate(__FILE__, $data, 'count', 'options');
 }

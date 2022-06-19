@@ -37,9 +37,9 @@ class GameQ_Protocol_quakewars extends GameQ_Protocol
         $this->getinfo('infoExResponse');
 
         while (($id = $this->p->readInt8()) != 32) {
-            $this->r->addPlayer('total_xp',     $this->p->readFloat32());
-            $this->r->addPlayer('teamname',     $this->p->readString());
-            $this->r->addPlayer('total_kills',  $this->p->readInt32());
+            $this->r->addPlayer('total_xp', $this->p->readFloat32());
+            $this->r->addPlayer('teamname', $this->p->readString());
+            $this->r->addPlayer('total_kills', $this->p->readInt32());
             $this->r->addPlayer('total_deaths', $this->p->readInt32());
         }
     }
@@ -66,10 +66,10 @@ class GameQ_Protocol_quakewars extends GameQ_Protocol
         // Players
         $this->players();
 
-        $this->r->add('osmask',     $this->p->readInt32());
-        $this->r->add('ranked',     $this->p->readInt8());
-        $this->r->add('timeleft',   $this->p->readInt32());
-        $this->r->add('gamestate',  $this->p->readInt8());
+        $this->r->add('osmask', $this->p->readInt32());
+        $this->r->add('ranked', $this->p->readInt8());
+        $this->r->add('timeleft', $this->p->readInt32());
+        $this->r->add('gamestate', $this->p->readInt8());
         $this->r->add('servertype', $this->p->readInt8());
 
         // 0: regular server
@@ -79,7 +79,7 @@ class GameQ_Protocol_quakewars extends GameQ_Protocol
         // 1: tv server
         else {
             $this->r->add('connected_clients', $this->p->readInt32());
-            $this->r->add('max_clients',       $this->p->readInt32());
+            $this->r->add('max_clients', $this->p->readInt32());
         }
     }
 
@@ -87,12 +87,12 @@ class GameQ_Protocol_quakewars extends GameQ_Protocol
     {
         while (($id = $this->p->readInt8()) != 32) {
 
-            $this->r->addPlayer('id',           $id);
-            $this->r->addPlayer('ping',         $this->p->readInt16());
-            $this->r->addPlayer('name',         $this->p->readString());
-            $this->r->addPlayer('clantag_pos',  $this->p->readInt8());
-            $this->r->addPlayer('clantag',      $this->p->readString());
-            $this->r->addPlayer('bot',          $this->p->readInt8());
+            $this->r->addPlayer('id', $id);
+            $this->r->addPlayer('ping', $this->p->readInt16());
+            $this->r->addPlayer('name', $this->p->readString());
+            $this->r->addPlayer('clantag_pos', $this->p->readInt8());
+            $this->r->addPlayer('clantag', $this->p->readString());
+            $this->r->addPlayer('bot', $this->p->readInt8());
 
         }
     }

@@ -33,14 +33,14 @@ class GameQ_Protocol_cs2d extends GameQ_Protocol
     public function status()
     {
         $this->p->skip(2);
-        $this->r->add('hostname',    $this->readString());
-        $this->r->add('password',    $this->p->readInt8());
-        $this->r->add('mapname',     $this->readString());
+        $this->r->add('hostname', $this->readString());
+        $this->r->add('password', $this->p->readInt8());
+        $this->r->add('mapname', $this->readString());
         $this->r->add('num_players', $this->p->readInt8());
         $this->r->add('max_players', $this->p->readInt8());
-        $this->r->add('fog_of_war',  $this->p->readInt8());
-        $this->r->add('war_mode',    $this->p->readInt8());
-        $this->r->add('version',     $this->readString());
+        $this->r->add('fog_of_war', $this->p->readInt8());
+        $this->r->add('war_mode', $this->p->readInt8());
+        $this->r->add('version', $this->readString());
     }
 
     private function readString()

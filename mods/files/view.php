@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('files');
 
-$data = array();
+$data = [];
 
 require 'mods/files/functions.php';
 
@@ -19,7 +19,7 @@ $select .= ', cat.categories_id AS categories_id, fls.files_count AS files_count
 $select .= ', fls.files_description AS files_description, fls.files_close AS files_close';
 $select .= ', fls.files_vote AS files_vote, fls.files_size AS files_size, fls.files_version AS files_version, fls.files_previews AS files_previews';
 $where = 'cat.categories_access <= ' . (int) $account['access_files'] . ' AND fls.files_id = ' . $file_id;
-$cs_file = cs_sql_select(__FILE__,$from,$select,$where);
+$cs_file = cs_sql_select(__FILE__, $from, $select, $where);
 
 if(!empty($_POST['brokenlink'])) {
   require_once('mods/notifymods/functions.php');
@@ -32,7 +32,7 @@ else
 $from = 'voted';
 $select = 'users_id, voted_answer';
 $where = 'voted_fid = ' . $file_id . ' AND voted_mod = \'files\'';
-$cs_voted = cs_sql_select(__FILE__,$from,$select,$where,0,0,0);
+$cs_voted = cs_sql_select(__FILE__, $from, $select, $where, 0, 0, 0);
 $voted_loop = count($cs_voted);
 
 if(!empty($_POST['voted_answer']))
@@ -51,10 +51,10 @@ for ($run = 0; $run < $voted_loop; $run++) {
 if(empty($check_user_voted) AND isset($_POST['submit']) AND empty($_POST['brokenlink'])) {
   $time = cs_time();
   $voted_ip = cs_getip();
-  $votes_cells = array('voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod');
-  $votes_save = array($file_id,$users_id,$time,$voted_answer,$voted_ip,'files');
-  cs_sql_insert(__FILE__,'voted',$votes_cells,$votes_save);
-  cs_redirect(NULL, 'files', 'view','where=' . $file_id);
+  $votes_cells = ['voted_fid','users_id','voted_time','voted_answer','voted_ip','voted_mod'];
+  $votes_save = [$file_id,$users_id,$time,$voted_answer,$voted_ip,'files'];
+  cs_sql_insert(__FILE__, 'voted', $votes_cells, $votes_save);
+  cs_redirect(NULL, 'files', 'view', 'where=' . $file_id);
 }
 
 
@@ -64,8 +64,8 @@ $data['file']['id'] = $cs_file['files_id'];
 $data['file']['name'] = cs_secure($cs_file['files_name']);
 $data['file']['version'] =  cs_secure($cs_file['files_version']);
 $data['file']['size'] =  cs_filesize($cs_file['files_size']);
-$data['file']['user'] = cs_user($cs_file['users_id'],$cs_file['users_nick'], $cs_file['users_active']);
-$data['file']['date'] = cs_date('unix',$cs_file['files_time'],1);
+$data['file']['user'] = cs_user($cs_file['users_id'], $cs_file['users_nick'], $cs_file['users_active']);
+$data['file']['date'] = cs_date('unix', $cs_file['files_time'], 1);
 $data['file']['count'] = cs_secure($cs_file['files_count']); 
 
 $data['if']['vote'] = false;
@@ -75,7 +75,7 @@ $data['if']['unvoted'] = false;
 if(!empty($cs_file['files_vote'])) {
   $data['if']['vote'] = true;
   if(empty($check_user_voted)) { 
-    $data['votes'] = array();
+    $data['votes'] = [];
     $data['if']['unvoted'] = true;
     for($l = 1;$l < 7;$l++) {
       $data['votes'][$l-1]['name'] = $l . ' - ' . $cs_lang['vote_' . $l];
@@ -89,7 +89,7 @@ if(!empty($cs_file['files_vote'])) {
       $files_votes += $a;
     }
     $files_votes /= $voted_loop;
-    $files_votes = round($files_votes,0);
+    $files_votes = round($files_votes, 0);
     $stars = '';
     for($run=6; $run>$files_votes; $run--)
       $stars .= cs_icon('favorites');
@@ -99,14 +99,14 @@ if(!empty($cs_file['files_vote'])) {
   }
 }
 
-$data['file']['description'] = cs_secure($cs_file['files_description'],1,1);
+$data['file']['description'] = cs_secure($cs_file['files_description'], 1, 1);
 
 $data['if']['preview'] = false;
 if(!empty($cs_file['files_previews'])) {
   $data['if']['preview'] = true;
-  $data['previews'] = array();
+  $data['previews'] = [];
   
-  $files_pics = explode("\n",$cs_file['files_previews']);
+  $files_pics = explode("\n", $cs_file['files_previews']);
   $count = 1;
   foreach($files_pics AS $pic) {
     $data['previews'][$count-1]['image'] = cs_html_img('uploads/files/thumb-' . $pic);
@@ -115,15 +115,15 @@ if(!empty($cs_file['files_previews'])) {
   }
 }
 
-$data['mirrors'] = array();
+$data['mirrors'] = [];
 $files_mirror = $cs_file['files_mirror'];
 $temp = explode("-----", $files_mirror);
 $temp_loop = count($temp);
 
 if(isset($_REQUEST['target']) AND is_array($cs_file)) {
-  $files_cells = array('files_count');
-  $files_save = array(++$cs_file['files_count']);
-  cs_sql_update(__FILE__,'files',$files_cells,$files_save,$file_id,0,0);
+  $files_cells = ['files_count'];
+  $files_save = [++$cs_file['files_count']];
+  cs_sql_update(__FILE__, 'files', $files_cells, $files_save, $file_id, 0, 0);
   $temp_a = explode("\n", $temp[$_REQUEST['target']]);
   $select_mirrow = $temp_a['1'];
   header("Location: ".$select_mirrow."");
@@ -144,15 +144,15 @@ for ($run = 1; $run < $temp_loop; $run++) {
 include_once('mods/comments/functions.php');
 
 $where_com = 'comments_mod = \'files\' AND comments_fid = ' . $file_id;
-$count_com = cs_sql_count(__FILE__,'comments',$where_com);
+$count_com = cs_sql_count(__FILE__, 'comments', $where_com);
 
 if(empty($cs_file))
   require 'mods/errors/404.php';
 else {
-  echo cs_subtemplate(__FILE__,$data,'files','view');
+  echo cs_subtemplate(__FILE__, $data, 'files', 'view');
 
   if(!empty($count_com))
-    echo cs_comments_view($file_id,'files','view',$count_com);
+    echo cs_comments_view($file_id, 'files', 'view', $count_com);
 
-  echo cs_comments_add($file_id,'files',$cs_file['files_close']);
+  echo cs_comments_add($file_id, 'files', $cs_file['files_close']);
 }

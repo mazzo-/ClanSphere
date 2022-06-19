@@ -5,15 +5,15 @@
 require_once 'mods/board/functions.php';
 
 $start = empty($_GET['start']) ? 0 : (int) $_GET['start'];
-$array_result = array();
-$toplist = array();
-$cs_ranks = cs_sql_select(__FILE__,'boardranks','boardranks_min, boardranks_name',0,'boardranks_min ASC',0,0);
+$array_result = [];
+$toplist = [];
+$cs_ranks = cs_sql_select(__FILE__, 'boardranks', 'boardranks_min, boardranks_name', 0, 'boardranks_min ASC', 0, 0);
 
 $toplist = toplist_comments($start, $account['users_limit']);
-$count = cs_sql_count(__FILE__,'comments','comments_mod = \'board\'', 'users_id');
+$count = cs_sql_count(__FILE__, 'comments', 'comments_mod = \'board\'', 'users_id');
 
-$data = array();
-$data['pages']['list'] = cs_pages('board','toplist',$count,$start);
+$data = [];
+$data['pages']['list'] = cs_pages('board', 'toplist', $count, $start);
 $i = 0;
 if(!empty($toplist)) {
   foreach ($toplist AS $users_data) {
@@ -29,7 +29,7 @@ if(!empty($toplist)) {
   }
 }
 else {
-  $data['toplist'] = array();
+  $data['toplist'] = [];
 }
 
-echo cs_subtemplate(__FILE__,$data,'board','toplist');
+echo cs_subtemplate(__FILE__, $data, 'board', 'toplist');

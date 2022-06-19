@@ -4,13 +4,13 @@
 
 $cs_lang = cs_translate('medals');
 
-$data = array();
+$data = [];
 
 $start = empty($_GET['start']) ? 0 : (int) $_GET['start'];
 
 $count_c = cs_sql_count(__FILE__, 'medalsuser', 0, 'users_id');
 
-$data['pages']['list'] = cs_pages('medals','list',$count_c,$start);
+$data['pages']['list'] = cs_pages('medals', 'list', $count_c, $start);
 
 $cells = "u.users_id AS users_id, u.users_nick AS users_nick, COUNT(m.medals_id) AS medals";
 $cells .= ", u.users_active AS users_active, u.users_delete AS users_delete";

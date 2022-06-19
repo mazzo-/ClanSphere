@@ -10,24 +10,24 @@ $dir = cs_explorer_path($_GET['file'], 'raw');
 $lsd = cs_explorer_path($dir, 'escape');
 $red_lsd = cs_explorer_path($dir, 'escape', 1);
 
-$data = array();
+$data = [];
 
 if (empty($dir)) {
   
   echo $cs_lang['no_file'];
-  echo ' ' . cs_link($cs_lang['back'],'explorer','roots');
+  echo ' ' . cs_link($cs_lang['back'], 'explorer', 'roots');
   
 } else {
   
   $dirs = '';
-  $single_dirs = explode('/',$dir);
+  $single_dirs = explode('/', $dir);
   $count_dirs = count($single_dirs) - 1;
   
   for ($x = 0; $x < $count_dirs; $x++) {
     $dirs .= $single_dirs[$x] . '/';
   }
 
-  $ending = strtolower(substr(strrchr($dir,'.'),1));
+  $ending = strtolower(substr(strrchr($dir, '.'), 1));
 
   switch ($ending) {
        
@@ -43,11 +43,11 @@ if (empty($dir)) {
     case 'tpl': case 'htm': case 'html':
       if (empty($_GET['code'])) {
         $content = file_get_contents($dir);
-        $add = cs_link($cs_lang['code'],'explorer','view','code=1&amp;file='.$lsd);
+        $add = cs_link($cs_lang['code'], 'explorer', 'view', 'code=1&amp;file='.$lsd);
         if ($ending == 'tpl') $notable = 1;
       } else {
-        $content = cs_secure(file_get_contents($dir),1,0,0);
-        $add = cs_link($cs_lang['design'],'explorer','view','file='.lsd);
+        $content = cs_secure(file_get_contents($dir), 1, 0, 0);
+        $add = cs_link($cs_lang['design'], 'explorer', 'view', 'file='.lsd);
       }
       break;
     

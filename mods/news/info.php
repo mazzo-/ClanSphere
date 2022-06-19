@@ -12,12 +12,12 @@ $mod_info['team']    = 'ClanSphere';
 $mod_info['url']    = 'www.clansphere.net';
 $mod_info['text']    = $cs_lang['modtext'];
 $mod_info['icon']    = 'knode';
-$mod_info['show']    = array('clansphere/admin' => 3, 'options/roots' => 5);
+$mod_info['show']    = ['clansphere/admin' => 3, 'options/roots' => 5];
 $mod_info['categories']  = TRUE;
 $mod_info['comments']  = TRUE;
 $mod_info['protected']  = FALSE;
-$mod_info['tables']    = array('news');
+$mod_info['tables']    = ['news'];
 $mod_info['startup'] = TRUE;
-$mod_info['navlist'] = array('navlist' => 'max_navlist',
+$mod_info['navlist'] = ['navlist' => 'max_navlist',
                              'navlist_headline' => 'max_headline', 
-               'recent' => 'max_recent',);
+               'recent' => 'max_recent',];

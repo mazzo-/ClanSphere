@@ -28,7 +28,7 @@ if(isset($_POST['submit'])) {
 
   $error = '';
 
-  $search_user = cs_sql_select(__FILE__,'computers','users_id',"computers_id = '" . $computers_id . "'");
+  $search_user = cs_sql_select(__FILE__, 'computers', 'users_id', "computers_id = '" . $computers_id . "'");
   if($search_user['users_id'] != $account['users_id'] AND $account['access_computers'] < 4) {
     $error .= $cs_lang['not_own'] . cs_html_br(1);
   }
@@ -45,7 +45,7 @@ if(isset($_POST['submit'])) {
 else {
 
   $cells = 'computers_name, computers_software, computers_mainboard, computers_memory, computers_processors, computers_graphics, computers_sounds, computers_harddisks, computers_drives, computers_screens, computers_interfaces, computers_networks, computers_more, users_id';
-  $cs_computers = cs_sql_select(__FILE__,'computers',$cells,"computers_id = '" . $computers_id . "'");
+  $cs_computers = cs_sql_select(__FILE__, 'computers', $cells, "computers_id = '" . $computers_id . "'");
 }
 if(!isset($_POST['submit'])) {
   $data['head']['body'] = $cs_lang['body_edit'];
@@ -62,15 +62,15 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['com']['referer'] = empty($_SERVER['HTTP_REFERER']) ? 'center' : $_SERVER['HTTP_REFERER'];
   $data['com']['id'] = $computers_id;
 
-  echo cs_subtemplate(__FILE__,$data,'computers','edit');
+  echo cs_subtemplate(__FILE__, $data, 'computers', 'edit');
 }
 else {
 
   $computers_cells = array_keys($cs_computers);
   $computers_save = array_values($cs_computers);
-  cs_sql_update(__FILE__,'computers',$computers_cells,$computers_save,$_POST['id']);
+  cs_sql_update(__FILE__, 'computers', $computers_cells, $computers_save, $_POST['id']);
   
   #$referrer = strpos($_POST['referer'],'manage') === false ? 'center' : 'manage';
   $referrer = $account['access_computers'] < 3 ? 'center' : 'manage';
-  cs_redirect($cs_lang['changes_done'],'computers',$referrer);
+  cs_redirect($cs_lang['changes_done'], 'computers', $referrer);
 } 

@@ -16,7 +16,7 @@ $cs_gallery['gallery_status'] = '0';
 $watermark_pos = 0;
 $zip_file = '0';
 
-$data = array();
+$data = [];
 $data['if']['start'] = FALSE;
 $data['if']['no_thumb'] = FALSE;
 $data['if']['nopic'] = FALSE;
@@ -26,7 +26,7 @@ $data['if']['pictures_found'] = FALSE;
 $data['if']['pictures_done'] = FALSE;
 $data['if']['thumb'] = FALSE;
 
-$data['manage']['head'] = cs_subtemplate(__FILE__,$data,'gallery','manage_head');
+$data['manage']['head'] = cs_subtemplate(__FILE__, $data, 'gallery', 'manage_head');
 
 if(isset($_POST['submit']))
 {
@@ -53,17 +53,17 @@ if(isset($_POST['submit']))
           $pointer = zip_open($file);
           while ($zipped = zip_read($pointer))
           {
-            if (zip_entry_open($pointer,$zipped,'r'))
+            if (zip_entry_open($pointer, $zipped, 'r'))
             {
               $filename = zip_entry_name($zipped);
               if ($filename == '__MACOSX') continue; //mac os fix
               if(!file_exists('uploads/gallery/pics/' . $filename)) {
-                $file = fopen('uploads/gallery/pics/' . $filename,'w');
-                fwrite($file,zip_entry_read($zipped,zip_entry_filesize($zipped)));
+                $file = fopen('uploads/gallery/pics/' . $filename, 'w');
+                fwrite($file, zip_entry_read($zipped, zip_entry_filesize($zipped)));
                 fclose($file);
                 zip_entry_close($zipped);
               } else {
-                $ext = substr($filename,strlen($filename)+1-strlen(strrchr($filename,'.')));
+                $ext = substr($filename, strlen($filename)+1-strlen(strrchr($filename, '.')));
                 $count = '0';
                 while($count < '1')
                 {
@@ -71,7 +71,7 @@ if(isset($_POST['submit']))
                   $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
                   for($i=0;$i<10;$i++)
                   {
-                    $hash .= $pattern{rand(0,35)};
+                    $hash .= $pattern[rand(0, 35)];
                   }
                   $filename = $hash . '.' . $ext;
                   if(!file_exists($filename))
@@ -79,17 +79,17 @@ if(isset($_POST['submit']))
                     $count++;
                   }
                 }
-                $file = fopen('uploads/gallery/pics/' . $filename,'w');
-                fwrite($file,zip_entry_read($zipped,zip_entry_filesize($zipped)));
+                $file = fopen('uploads/gallery/pics/' . $filename, 'w');
+                fwrite($file, zip_entry_read($zipped, zip_entry_filesize($zipped)));
                 fclose($file);
                 zip_entry_close($zipped);
               }
               $target = $cs_main['def_path'] . '/uploads/gallery/pics/' . $filename;
               $filename = $cs_main['def_path'] . '' . $filename;
-              $aa = strrchr($filename,'.');
+              $aa = strrchr($filename, '.');
               $bb = strlen($filename);
               $ab = strlen($aa);
-              $bb = substr($filename,$bb - $ab + 1);
+              $bb = substr($filename, $bb - $ab + 1);
               if($bb == 'jpg' OR $bb == 'jpeg' OR $bb == 'gif' OR $bb == 'png' OR $bb == 'JPG' OR $bb == 'JPEG' OR $bb == 'GIF' OR $bb == 'PNG')
               {
                 if(getimagesize($target))
@@ -113,8 +113,8 @@ if(isset($_POST['submit']))
       }
     }
 
-    $picnamesArray = array();
-    $thumbnamesArray = array();
+    $picnamesArray = [];
+    $thumbnamesArray = [];
     $dirHandlePics = opendir("uploads/gallery/pics");
     $dirHandleThumbs = opendir("uploads/gallery/thumbs");
     while($filename = readdir($dirHandlePics))
@@ -129,7 +129,7 @@ if(isset($_POST['submit']))
       if ($filename != "." && $filename != ".." && $filename != ".keep" && $filename != ".git" && $filename != "Thumbs.db" && $filename != "index.html")
       {
         $name = strlen($filename);
-        $filename = substr($filename,'6',$name);
+        $filename = substr($filename, '6', $name);
         $thumbnamesArray[] = $filename;
       }
     }
@@ -141,14 +141,14 @@ if(isset($_POST['submit']))
     {
       $data['if']['pictures_found'] = TRUE;
 
-      $data['folders']['select'] = make_folders_select('folders_id','0','0','gallery');
+      $data['folders']['select'] = make_folders_select('folders_id', '0', '0', 'gallery');
 
       $levels = 0;
       $data['access']['options'] = '';
       while($levels < 6)
       {
         $cs_gallery['gallery_access'] == $levels ? $sel = 1 : $sel = 0;
-        $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+        $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
         $levels++;
       }
 
@@ -157,7 +157,7 @@ if(isset($_POST['submit']))
       while($levels < 2)
       {
         $cs_gallery['gallery_status'] == $levels ? $sel = 1 : $sel = 0;
-        $data['show']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['show_' . $levels],$levels,$sel);
+        $data['show']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['show_' . $levels], $levels, $sel);
         $levels++;
       }
 
@@ -166,8 +166,8 @@ if(isset($_POST['submit']))
       if(extension_loaded('gd'))
       {
         $no_watermark = $cs_lang['no_watermark'];
-        $no_cat_data_watermark = array('0' => array('categories_id' => '', 'categories_mod' => 'gallery-watermark', 'categories_name' => $no_watermark, 'categories_picture' => ''));
-        $cat_data_watermark_1 = cs_sql_select(__FILE__,'categories','*',"categories_mod = 'gallery-watermark'",'categories_name',0,0);
+        $no_cat_data_watermark = ['0' => ['categories_id' => '', 'categories_mod' => 'gallery-watermark', 'categories_name' => $no_watermark, 'categories_picture' => '']];
+        $cat_data_watermark_1 = cs_sql_select(__FILE__, 'categories', '*', "categories_mod = 'gallery-watermark'", 'categories_name', 0, 0);
         if(empty($cat_data_watermark_1)) {
           $cat_data_watermark = $no_cat_data_watermark;
         } else {
@@ -196,7 +196,7 @@ if(isset($_POST['submit']))
         foreach ($cat_data_watermark as $data2)
         {
           $data2['categories_picture'] == $cs_gallery['gallery_watermark'] ? $sel = 1 : $sel = 0;
-          $data['watermark']['options'] .= cs_html_option($data2['categories_name'],$data2['categories_picture'],$sel);
+          $data['watermark']['options'] .= cs_html_option($data2['categories_name'], $data2['categories_picture'], $sel);
         }
 
         if(!empty($watermark_id)) {
@@ -204,14 +204,14 @@ if(isset($_POST['submit']))
         } else {
           $url = 'symbols/gallery/nowatermark.png';
         }
-        $data['watermark']['img'] = cs_html_img($url,'','','id="' . $el_id . '"');
+        $data['watermark']['img'] = cs_html_img($url, '', '', 'id="' . $el_id . '"');
 
         $levels = 1;
         $data['watermark']['pos_options'] = '';
         while($levels < 10)
         {
           $watermark_pos == $levels ? $sel = 1 : $sel = 0;
-          $data['watermark']['pos_options'] .= cs_html_option($levels . ' - ' . $cs_lang['watermark_' . $levels],$levels,$sel);
+          $data['watermark']['pos_options'] .= cs_html_option($levels . ' - ' . $cs_lang['watermark_' . $levels], $levels, $sel);
           $levels++;
         }
         $data['watermark']['trans'] = $gallery_watermark_trans;
@@ -254,11 +254,11 @@ if(isset($_POST['submit']))
         if(cs_unlink('gallery', 'Thumb_' . $thumb, 'thumbs') == true)
         {
           $where = "gallery_name = '" . $thumb . "'";
-          $search = cs_sql_count(__FILE__,'gallery',$where);
+          $search = cs_sql_count(__FILE__, 'gallery', $where);
           if(!empty($search))
           {
             $query = "DELETE FROM {pre}_gallery WHERE gallery_name='$thumb'";
-            cs_sql_query(__FILE__,$query);
+            cs_sql_query(__FILE__, $query);
           }
           $msg = $cs_lang['deltrue'];
         }
@@ -282,8 +282,8 @@ if(isset($_POST['submit_1']))
   $post_count = count($_POST);
   $post_count = $post_count - '1';
   $cs_gallery_pic['folders_id'] = empty($_POST['folders_name']) ? $_POST['folders_id'] :
-  make_folders_create('gallery',$_POST['folders_name']);
-  $cs_gallery_option = cs_sql_option(__FILE__,'gallery');
+  make_folders_create('gallery', $_POST['folders_name']);
+  $cs_gallery_option = cs_sql_option(__FILE__, 'gallery');
   $img_max['thumbs'] = $cs_gallery_option['thumbs'];
 
   for($run = 0; $run<$post_count; $run++)
@@ -295,13 +295,13 @@ if(isset($_POST['submit_1']))
       if(cs_resample('uploads/gallery/pics/' . $name, 'uploads/gallery/thumbs/' . 'Thumb_' . $name, $img_max['thumbs'], $img_max['thumbs']))
       {
         $where = "gallery_name = '" . cs_sql_escape($name) . "'";
-        $search = cs_sql_count(__FILE__,'gallery',$where);
+        $search = cs_sql_count(__FILE__, 'gallery', $where);
         if(empty($search))
         {
           $cs_gallery_pic['users_id'] = $account['users_id'];
           $cs_gallery_pic['gallery_name'] = $name;
-          $cs_gallery_pic['gallery_status'] =  isset($_POST['gallery_status']) ? $_POST['gallery_status'] : 0;
-          $cs_gallery_pic['gallery_access'] =  isset($_POST['gallery_access']) ? $_POST['gallery_access'] : 0;
+          $cs_gallery_pic['gallery_status'] =  $_POST['gallery_status'] ?? 0;
+          $cs_gallery_pic['gallery_access'] =  $_POST['gallery_access'] ?? 0;
           $cs_gallery_pic['gallery_watermark'] = $_POST['gallery_watermark'];
           if(!empty($_POST['gallery_watermark']))
           {
@@ -309,21 +309,21 @@ if(isset($_POST['submit_1']))
             $watermark_trans = $_POST['gallery_watermark_trans'];
             $cs_gallery_pic['gallery_watermark_pos'] = $watermark_pos . '|--@--|' . $watermark_trans;
           }
-          $extension = strlen(strrchr($name,"."));
+          $extension = strlen(strrchr($name, "."));
           $file = strlen($name);
-          $filename = substr($name,0,$file-$extension);
+          $filename = substr($name, 0, $file-$extension);
           $cs_gallery_pic['gallery_titel'] = $filename;
           $cs_gallery_pic['gallery_time'] = cs_time();
           $gallery_cells = array_keys($cs_gallery_pic);
           $gallery_save = array_values($cs_gallery_pic);
-          cs_sql_insert(__FILE__,'gallery',$gallery_cells,$gallery_save);
+          cs_sql_insert(__FILE__, 'gallery', $gallery_cells, $gallery_save);
         }
         $data['pics'][$run]['img'] = cs_html_img('mods/gallery/image.php?picname=' . $name);
         $data['pics'][$run]['name'] = $name;
       }
     }
   }
-  cs_redirect($cs_lang['create_done'],'gallery');
+  cs_redirect($cs_lang['create_done'], 'gallery');
 }
 if(!isset($_POST['submit_1'])) {
   if(!isset($_POST['submit']) OR !empty($error)) {
@@ -331,4 +331,4 @@ if(!isset($_POST['submit_1'])) {
   }
 }
 
-echo cs_subtemplate(__FILE__,$data,'gallery','manage_advanced');
+echo cs_subtemplate(__FILE__, $data, 'gallery', 'manage_advanced');

@@ -4,12 +4,12 @@
 
 $cs_lang = cs_translate('captcha');
 
-$data = array();
+$data = [];
 
 require('mods/captcha/functions.php');
 
 
-$sql['options'] = cs_sql_option(__FILE__,'captcha');
+$sql['options'] = cs_sql_option(__FILE__, 'captcha');
 
 
 if(!empty($_POST['submit']))
@@ -26,7 +26,7 @@ if(!empty($_POST['submit']))
 
   cs_optionsave('captcha', $option);
   cs_cache_clear();
-  cs_redirect($cs_lang['changes_done'],'options','roots');
+  cs_redirect($cs_lang['changes_done'], 'options', 'roots');
 }
 else
 {
@@ -46,4 +46,4 @@ foreach($available_captchas AS $captcha)
 }
 
 
-echo cs_subtemplate(__FILE__,$data,'captcha','options');
+echo cs_subtemplate(__FILE__, $data, 'captcha', 'options');

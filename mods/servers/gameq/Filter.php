@@ -27,14 +27,14 @@
  */
 class GameQ_Filter
 {
-    protected $params = array();
+    protected $params = [];
     
     /**
      * Constructor, receives parameters
      *
      * @param    array    $params    Filter parameters
      */
-    function __construct($params)
+    public function __construct($params)
     {
         if (is_array($params)) {
             foreach ($params as $key => $param) {

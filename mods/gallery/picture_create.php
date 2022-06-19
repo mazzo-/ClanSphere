@@ -8,8 +8,8 @@ $files_gl = cs_files();
 
 require_once('mods/gallery/functions.php');
 
-$cs_option = cs_sql_option(__FILE__,'gallery');
-$img_filetypes = array('gif','jpg','png');
+$cs_option = cs_sql_option(__FILE__, 'gallery');
+$img_filetypes = ['gif','jpg','png'];
 
 $data['body']['picture_create'] = '';
 $data['error']['icon'] = '';
@@ -37,16 +37,16 @@ if(isset($_POST['submit'])) {
   }
 
   $cs_gallery['gallery_titel'] = $_POST['gallery_titel'];
-  $cs_gallery['folders_id'] = empty($_POST['folders_name']) ? $_POST['folders_id'] : make_folders_create('gallery',$_POST['folders_name']);
+  $cs_gallery['folders_id'] = empty($_POST['folders_name']) ? $_POST['folders_id'] : make_folders_create('gallery', $_POST['folders_name']);
   $cs_gallery['users_id'] = $account['users_id'];
-  $cs_gallery['gallery_access'] =  isset($_POST['gallery_access']) ? $_POST['gallery_access'] : 0;
-  $cs_gallery['gallery_watermark'] = isset($_POST['gallery_watermark']) ? $_POST['gallery_watermark'] : '';
+  $cs_gallery['gallery_access'] =  $_POST['gallery_access'] ?? 0;
+  $cs_gallery['gallery_watermark'] = $_POST['gallery_watermark'] ?? '';
   $cs_gallery['gallery_description'] = $_POST['gallery_description'];
-  $cs_gallery['gallery_status'] =  isset($_POST['gallery_status']) ? $_POST['gallery_status'] : 1;
+  $cs_gallery['gallery_status'] =  $_POST['gallery_status'] ?? 1;
   $cs_gallery['gallery_time'] = cs_time();
-  $gray = isset($_POST['gray']) ? $_POST['gray'] : 0;
-  $gallery_watermark_trans = isset($_POST['gallery_watermark_trans']) ? $_POST['gallery_watermark_trans'] : '20';
-  $watermark_pos = isset($_POST['watermark_pos']) ? $_POST['watermark_pos'] : '1';
+  $gray = $_POST['gray'] ?? 0;
+  $gallery_watermark_trans = $_POST['gallery_watermark_trans'] ?? '20';
+  $watermark_pos = $_POST['watermark_pos'] ?? '1';
 
   $error = '';
 
@@ -59,7 +59,7 @@ if(isset($_POST['submit'])) {
   if(empty($cs_gallery['folders_id'])) {
     $error .= $cs_lang['no_cat'] . cs_html_br(1);
   }
-  $check_name = cs_sql_count(__FILE__,'gallery',"gallery_name = '" . cs_sql_escape($cs_gallery['gallery_name']) . "'");
+  $check_name = cs_sql_count(__FILE__, 'gallery', "gallery_name = '" . cs_sql_escape($cs_gallery['gallery_name']) . "'");
   if (!empty($check_name)) {
     $error .= $cs_lang['img_is'] . cs_html_br(1);
   }
@@ -132,7 +132,7 @@ elseif(!empty($error)) {
 if(!empty($error) OR !isset($_POST['submit'])) {
 
   $data['data'] = $cs_gallery;
-  $data['data']['folders_select'] = make_folders_select('folders_id',$cs_gallery['folders_id'],'0','gallery');
+  $data['data']['folders_select'] = make_folders_select('folders_id', $cs_gallery['folders_id'], '0', 'gallery');
 
   if(empty($file_up)) {
     $data['if']['file_up'] = FALSE;
@@ -154,29 +154,29 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     $data['show']['picture'] = cs_html_img('mods/gallery/image.php?picname=' . $cs_gallery['gallery_name']);
   }
 
-  $var = cs_html_select(1,'gallery_access');
+  $var = cs_html_select(1, 'gallery_access');
   $levels = 0;
   while($levels < 6) {
     $cs_gallery['gallery_access'] == $levels ? $sel = 1 : $sel = 0;
-    $var .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $var .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
   $var .= cs_html_select(0);
   $data['data']['gallery_access'] = $var;
 
-  $var = cs_html_select(1,'gallery_status');
+  $var = cs_html_select(1, 'gallery_status');
   $levels = 0;
   while($levels < 2) {
     $cs_gallery['gallery_status'] == $levels ? $sel = 1 : $sel = 0;
-    $var .= cs_html_option($cs_lang['show_' . $levels],$levels,$sel);
+    $var .= cs_html_option($cs_lang['show_' . $levels], $levels, $sel);
     $levels++;
   }
   $var .= cs_html_select(0);
   $data['data']['gallery_status'] = $var;
 
   if(extension_loaded('gd')) {
-    $no_cat_data_watermark = array('0' => array('categories_id' => '', 'categories_mod' => 'gallery-watermark', 'categories_name' => $cs_lang['no_watermark'], 'categories_picture' => ''));
-    $cat_data_watermark_1 = cs_sql_select(__FILE__,'categories','*',"categories_mod = 'gallery-watermark'",'categories_name',0,0);
+    $no_cat_data_watermark = ['0' => ['categories_id' => '', 'categories_mod' => 'gallery-watermark', 'categories_name' => $cs_lang['no_watermark'], 'categories_picture' => '']];
+    $cat_data_watermark_1 = cs_sql_select(__FILE__, 'categories', '*', "categories_mod = 'gallery-watermark'", 'categories_name', 0, 0);
     if(empty($cat_data_watermark_1)) {
       $cat_data_watermark = $no_cat_data_watermark;
     } else {
@@ -195,10 +195,10 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     $el_id = 'watermark_1';
     $onc = "document.getElementById('" . $el_id . "').src='" . $cs_main['php_self']['dirname'] . "uploads/categories/' + this.form.";
     $onc .= "gallery_watermark.options[this.form.gallery_watermark.selectedIndex].value";
-    $select1 = cs_html_select(1,'gallery_watermark',"onchange=\"" . $onc . "\"");
+    $select1 = cs_html_select(1, 'gallery_watermark', "onchange=\"" . $onc . "\"");
     foreach ($cat_data_watermark as $datax) {
       $datax['categories_picture'] == $cs_gallery['gallery_watermark'] ? $sel = 1 : $sel = 0;
-      $select1 .= cs_html_option($datax['categories_name'],$datax['categories_picture'],$sel);
+      $select1 .= cs_html_option($datax['categories_name'], $datax['categories_picture'], $sel);
     }
     $select1 .= cs_html_select(0) . ' ';
     $data['data']['w_select'] = $select1;
@@ -207,12 +207,12 @@ if(!empty($error) OR !isset($_POST['submit'])) {
     }  else {
       $url = 'symbols/gallery/nowatermark.png';
     }
-    $data['data']['w_img'] = cs_html_img($url,'','','id="' . $el_id . '"');
-    $data['data']['w_position'] = cs_html_select(1,'watermark_pos');
+    $data['data']['w_img'] = cs_html_img($url, '', '', 'id="' . $el_id . '"');
+    $data['data']['w_position'] = cs_html_select(1, 'watermark_pos');
     $levels = 1;
     while($levels < 10) {
       $watermark_pos == $levels ? $sel = 1 : $sel = 0;
-      $data['data']['w_position'] .= cs_html_option($cs_lang['watermark_' . $levels],$levels,$sel);
+      $data['data']['w_position'] .= cs_html_option($cs_lang['watermark_' . $levels], $levels, $sel);
       $levels++;
     }
     $data['data']['w_position'] .= cs_html_select(0);
@@ -225,14 +225,14 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $checked = 'checked="checked"';
   $data['check']['gray'] = empty($gray) ? '' : $checked;
 
- echo cs_subtemplate(__FILE__,$data,'gallery','picture_create');
+ echo cs_subtemplate(__FILE__, $data, 'gallery', 'picture_create');
 }
 else {
 
   $cs_gallery['gallery_watermark_pos'] = $watermark_pos;
   $cells = array_keys($cs_gallery);
   $save = array_values($cs_gallery);
-  cs_sql_insert(__FILE__,'gallery',$cells,$save);
+  cs_sql_insert(__FILE__, 'gallery', $cells, $save);
 
-  cs_redirect($cs_lang['create_done'],'gallery','manage');
+  cs_redirect($cs_lang['create_done'], 'gallery', 'manage');
 }

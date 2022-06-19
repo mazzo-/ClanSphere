@@ -6,7 +6,7 @@ $cs_lang = cs_translate('squads');
 
 if(isset($_POST['submit'])) {
 
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -17,13 +17,13 @@ if(isset($_POST['submit'])) {
   
   cs_optionsave('squads', $save);
 
-  cs_redirect($cs_lang['success'],'options','roots');
+  cs_redirect($cs_lang['success'], 'options', 'roots');
   
 }
 
-$data = array();
+$data = [];
 
-$data['op'] = cs_sql_option(__FILE__,'squads');
+$data['op'] = cs_sql_option(__FILE__, 'squads');
 
 $data['head']['mod'] = $cs_lang[$data['op']['label'].'s'];
 $data['head']['getmsg'] = cs_getmsg();
@@ -34,4 +34,4 @@ $data['op']['section'] = $data['op']['label'] == 'section' ? 'selected="selected
 $data['op']['team'] = $data['op']['label'] == 'team' ? 'selected="selected"' : '';
 $data['op']['class'] = $data['op']['label'] == 'class' ? 'selected="selected"' : '';
 
-echo cs_subtemplate(__FILE__,$data,'squads','options');
+echo cs_subtemplate(__FILE__, $data, 'squads', 'options');

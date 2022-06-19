@@ -39,16 +39,16 @@ function cs_sql_connect($cs_db, $test = 0) {
 
 function cs_sql_replace($replace) {
 
-  $replace = str_replace('{optimize}','VACUUM',$replace);
-  $replace = str_replace('{serial}','serial NOT NULL',$replace);
-  $replace = str_replace('{engine}','',$replace);
-  return preg_replace("=int\((.*?)\)=si",'integer',$replace);
+  $replace = str_replace('{optimize}', 'VACUUM', $replace);
+  $replace = str_replace('{serial}', 'serial NOT NULL', $replace);
+  $replace = str_replace('{engine}', '', $replace);
+  return preg_replace("=int\((.*?)\)=si", 'integer', $replace);
 }
 
 function cs_sql_version($cs_file) {
 
   global $cs_db;
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $sql_infos['type'] = 'PostgreSQL (pdo_pgsql)';
   $sql_infos['host'] = $cs_db['place'];
   $sql_infos['encoding'] = 'PDO encoding';

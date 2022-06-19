@@ -16,16 +16,16 @@ if(isset($cs_get['cancel'])) {
 }
 
 
-$event = cs_sql_select(__FILE__,'events','events_name','events_id = ' . $cs_get['id'],0,0,1);
+$event = cs_sql_select(__FILE__, 'events', 'events_name', 'events_id = ' . $cs_get['id'], 0, 0, 1);
 if(!empty($event)) {
-  $data = array();
+  $data = [];
   $data['lang']['remove'] = $cs_lang['head_remove'];
-  $data['lang']['body'] = sprintf($cs_lang['remove_entry'],$cs_lang['event'],$event['events_name']);
-  $data['lang']['content'] = cs_link($cs_lang['confirm'],'events','remove','id=' . $cs_get['id'] . '&amp;agree');
+  $data['lang']['body'] = sprintf($cs_lang['remove_entry'], $cs_lang['event'], $event['events_name']);
+  $data['lang']['content'] = cs_link($cs_lang['confirm'], 'events', 'remove', 'id=' . $cs_get['id'] . '&amp;agree');
   $data['lang']['content'] .= ' - ';
-  $data['lang']['content'] .= cs_link($cs_lang['cancel'],'events','remove','id=' . $cs_get['id'] . '&amp;cancel');
-  echo cs_subtemplate(__FILE__,$data,'events','remove');
+  $data['lang']['content'] .= cs_link($cs_lang['cancel'], 'events', 'remove', 'id=' . $cs_get['id'] . '&amp;cancel');
+  echo cs_subtemplate(__FILE__, $data, 'events', 'remove');
 }
 else {
-  cs_redirect('','events');
+  cs_redirect('', 'events');
 }

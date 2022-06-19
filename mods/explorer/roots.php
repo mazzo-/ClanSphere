@@ -6,7 +6,7 @@ $cs_lang = cs_translate('explorer');
 
 include_once('mods/explorer/functions.php');
 
-$data = array();
+$data = [];
 
 $max_data = $account['users_limit'];
 
@@ -18,8 +18,8 @@ $lsd = cs_explorer_path($dir, 'escape');
 
 $count = 0;
 $success = 1;
-$dirs = array();
-$files = array();
+$dirs = [];
+$files = [];
 
 $target = $cs_main['def_path'] . '/' . $dir . '/';
 
@@ -40,7 +40,7 @@ if (is_dir($target) AND chdir($target)) {
   sort($dirs);
   sort($files);
   
-  $datas = array_merge($dirs,$files);
+  $datas = array_merge($dirs, $files);
   $count = count($datas);
   chdir($cs_main['def_path']);
 }
@@ -48,20 +48,20 @@ if (is_dir($target) AND chdir($target)) {
 $more = $lsd == '.' ? '' : 'dir=' . $lsd;
 
 $data['lang']['getmsg'] = cs_getmsg();
-$data['link']['new_file'] = cs_link($cs_lang['new_file'],'explorer','create',$more);
-$data['link']['new_dir'] = cs_link($cs_lang['new_dir'],'explorer','create_dir',$more);
-$data['link']['upload_file'] = cs_link($cs_lang['upload_file'],'explorer','upload',$more);
-$data['pages']['show'] = cs_pages('explorer','roots',$count,$start,$lsd,'',$max_data);
+$data['link']['new_file'] = cs_link($cs_lang['new_file'], 'explorer', 'create', $more);
+$data['link']['new_dir'] = cs_link($cs_lang['new_dir'], 'explorer', 'create_dir', $more);
+$data['link']['upload_file'] = cs_link($cs_lang['upload_file'], 'explorer', 'upload', $more);
+$data['pages']['show'] = cs_pages('explorer', 'roots', $count, $start, $lsd, '', $max_data);
 
-$data['path']['show'] = cs_link($cs_lang['home'],'explorer','roots') . '/';
+$data['path']['show'] = cs_link($cs_lang['home'], 'explorer', 'roots') . '/';
 
 if ($dir != '.') {
   $output_folder = '';
-  $folders = explode('/',$dir);
+  $folders = explode('/', $dir);
 
   foreach ($folders AS $folder) {
     $output_folder .= empty($output_folder) ? $folder : cs_explorer_path('/', 'escape') . $folder;
-    $data['path']['show'] .= cs_link($folder,'explorer','roots','dir='.$output_folder) . '/';
+    $data['path']['show'] .= cs_link($folder, 'explorer', 'roots', 'dir='.$output_folder) . '/';
   }
 }
 
@@ -84,30 +84,30 @@ if(!empty($success)) {
     $file = cs_explorer_path($file_raw, 'escape');
 
     chdir($target);
-    $type = is_dir($datas[$x]) ? 'dir' : strtolower(substr(strrchr($datas[$x],'.'),1));
+    $type = is_dir($datas[$x]) ? 'dir' : strtolower(substr(strrchr($datas[$x], '.'), 1));
     chdir($cs_main['def_path']);
 
     $save[$y]['name'] = $datas[$x];
     $save[$y]['chmod'] = substr(sprintf('%o', fileperms($file_raw)), -4);
-    $save[$y]['access'] = cs_link($img_access,'explorer','chmod','file='.$file);
-    $save[$y]['remove'] = cs_link($img_del,'explorer','remove','file='.$file,0,$cs_lang['remove']);
-    $save[$y]['info'] = cs_link($img_info,'explorer','information','file='.$file);
-    $save[$y]['edit'] = $type != 'dir' ? cs_link($img_edit,'explorer','edit','file='.$file) : '';
+    $save[$y]['access'] = cs_link($img_access, 'explorer', 'chmod', 'file='.$file);
+    $save[$y]['remove'] = cs_link($img_del, 'explorer', 'remove', 'file='.$file, 0, $cs_lang['remove']);
+    $save[$y]['info'] = cs_link($img_info, 'explorer', 'information', 'file='.$file);
+    $save[$y]['edit'] = $type != 'dir' ? cs_link($img_edit, 'explorer', 'edit', 'file='.$file) : '';
 
-    $view = cs_link($datas[$x],'explorer','view','file='.$file);
+    $view = cs_link($datas[$x], 'explorer', 'view', 'file='.$file);
 
     $save[$y]['symbol'] = cs_filetype($type);
     if ($type == 'jpg' || $type == 'jpeg' || $type == 'png' || $type == 'gif' || $type == 'bmp') {
-      $save[$y]['name'] = cs_link($datas[$x],'explorer','view','file='.$file);
+      $save[$y]['name'] = cs_link($datas[$x], 'explorer', 'view', 'file='.$file);
     } elseif ($type == 'dir') {
-      $save[$y]['name'] = cs_link($datas[$x],'explorer','roots','dir='.$file);
+      $save[$y]['name'] = cs_link($datas[$x], 'explorer', 'roots', 'dir='.$file);
     } elseif ($type == 'html' || $type == 'htm' || $type = 'php' || $type == 'txt' || $type == 'sql') {
-      $save[$y]['name'] = cs_link($datas[$x],'explorer','view','file='.$file);
+      $save[$y]['name'] = cs_link($datas[$x], 'explorer', 'view', 'file='.$file);
     }
   }
-  $data['files'] = !empty($save) ? $save : array();
+  $data['files'] = !empty($save) ? $save : [];
 } else {
   $data['files'] = '';
 }
 
-echo cs_subtemplate(__FILE__,$data,'explorer','roots');
+echo cs_subtemplate(__FILE__, $data, 'explorer', 'roots');

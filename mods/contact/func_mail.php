@@ -5,7 +5,7 @@
 function cs_mail_prepare ($email, $title, $message, $from, $type, $options) {
 
   global $cs_main;
-  $mail = array();
+  $mail = [];
 
   # mail content
   $nl = "\n";
@@ -68,7 +68,7 @@ function cs_mail_smtp ($mail, $options) {
     $mail_top =  $mail['headers'] . "To: " . $mail['to'] . $nl . "Subject: " . $mail['subject'];
     $mail_data = $mail_top . $nl . $nl . $mail['message'] . $nl_con . ".";
 
-    $mail_com = array('helo' => 'HELO ' . $host,
+    $mail_com = ['helo' => 'HELO ' . $host,
                       'login' => 'AUTH LOGIN',
                       'user' => base64_encode($options['smtp_user']),
                       'pw' => base64_encode($options['smtp_pw']),
@@ -76,7 +76,7 @@ function cs_mail_smtp ($mail, $options) {
                       'to' => 'RCPT TO:' . $mail['to'],
                       'data' => 'DATA',
                       'response' => $mail_data,
-                      'quit' => 'QUIT');
+                      'quit' => 'QUIT', ];
 
     stream_set_timeout($smtp_con, $timeout);
 

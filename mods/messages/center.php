@@ -3,16 +3,16 @@
 // $Id$
 
 $cs_lang = cs_translate('messages');
-$data = array();
+$data = [];
 
-$data['option'] = cs_sql_option(__FILE__,'messages');
+$data['option'] = cs_sql_option(__FILE__, 'messages');
 
 $time = cs_time();
 $del_time_new = 60 * 60 * 24 * $data['option']['del_time'];
 $del_time_new = $time - $del_time_new;
 
 $query = "DELETE FROM {pre}_messages WHERE messages_time <= '$del_time_new' AND (messages_archiv_sender = '0' AND messages_archiv_receiver = '0')";
-cs_sql_query(__FILE__,$query);
+cs_sql_query(__FILE__, $query);
 
 $users_id = $account['users_id'];
 
@@ -45,14 +45,14 @@ $data['head']['message'] = cs_getmsg();
 
 if ($data['count']['new_messages'] == 1) $data['lang']['new_messages'] = $cs_lang['new_message'];
 
-$cs_messages_options = cs_sql_select(__FILE__,'autoresponder','autoresponder_close,autoresponder_mail','users_id = "' . $users_id . '"');
+$cs_messages_options = cs_sql_select(__FILE__, 'autoresponder', 'autoresponder_close,autoresponder_mail', 'users_id = "' . $users_id . '"');
 
 $data['var']['autoresponder'] = empty($cs_messages_options['autoresponder_close']) ? $cs_lang['autore_false'] : $cs_lang['autore_true'];
 $data['var']['mailmessage'] = empty($cs_messages_options['autoresponder_mail']) ? $cs_lang['autore_false'] : $cs_lang['autore_true'];
 
 $data['if']['buddies'] = empty($account['access_buddys']) ? 0 : 1;
 if(!empty($account['access_buddys']))
-  $data['count']['buddys'] = cs_sql_count(__FILE__,'buddys','users_id = "' . $users_id . '"');
+  $data['count']['buddys'] = cs_sql_count(__FILE__, 'buddys', 'users_id = "' . $users_id . '"');
 
 $data['var']['space_used'] = !empty($data['count']['archivbox']) ? round($data['count']['archivbox'] / $data['option']['max_space'] * 100) : 0;
 

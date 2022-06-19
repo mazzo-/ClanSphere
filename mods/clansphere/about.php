@@ -8,6 +8,6 @@
 
 $cs_lang = cs_translate('clansphere');
 
-$data = array();
+$data = [];
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','about');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'about');

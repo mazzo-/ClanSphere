@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('board');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
-$data = array();
+$data = [];
 
 $files_gl = cs_files();
 
@@ -17,12 +17,12 @@ $check_sq = 0;
 include('mods/board/functions.php');
 
 $cells = 'users_id, comments_text, comments_time, comments_fid';
-$cs_comments = cs_sql_select(__FILE__,'comments',$cells,"comments_id = '" . $comments_id . "'");
+$cs_comments = cs_sql_select(__FILE__, 'comments', $cells, "comments_id = '" . $comments_id . "'");
 $fid = $cs_comments['comments_fid'];
 
-$options = cs_sql_option(__FILE__,'board');
+$options = cs_sql_option(__FILE__, 'board');
 $max_text = $options['max_text'];
-$filetypes = explode(',',$options['file_types']);
+$filetypes = explode(',', $options['file_types']);
 $error = '';
 $ori_text = $cs_comments['comments_text'];
 
@@ -30,19 +30,19 @@ $ori_text = $cs_comments['comments_text'];
 $from = 'comments com INNER JOIN {pre}_threads thr ON com.comments_fid = thr.threads_id INNER JOIN {pre}_board frm ON thr.board_id = frm.board_id INNER JOIN {pre}_categories cat ON frm.categories_id = cat.categories_id';
 $select = 'thr.threads_headline AS threads_headline, frm.board_name AS board_name, cat.categories_name AS categories_name, thr.threads_id AS threads_id, frm.board_id AS board_id, cat.categories_id AS categories_id, com.comments_edit AS comments_edit, com.users_id AS users_id, frm.board_pwd AS board_pwd, frm.board_access AS board_access, frm.squads_id AS squads_id';
 $where = "com.comments_id = '" . $comments_id . "'";
-$cs_thread = cs_sql_select(__FILE__,$from,$select,$where,0,0,1);
+$cs_thread = cs_sql_select(__FILE__, $from, $select, $where, 0, 0, 1);
 
-$thread_mods = cs_sql_select(__FILE__,'boardmods','boardmods_edit',"users_id = '" . $account['users_id'] . "'",0,0,1);
+$thread_mods = cs_sql_select(__FILE__, 'boardmods', 'boardmods_edit', "users_id = '" . $account['users_id'] . "'", 0, 0, 1);
 
 //Sicherheitsabfrage Beginn
 if(!empty($cs_thread['board_pwd'])) {
   $where = 'users_id = ' . (int)$account['users_id'] . ' AND board_id = ' . (int)$cs_thread['board_id'];
-  $check_pw = cs_sql_count(__FILE__,'boardpws',$where);
+  $check_pw = cs_sql_count(__FILE__, 'boardpws', $where);
 }
 
 if(!empty($cs_thread['squads_id']) AND $account['access_board'] < $cs_thread['board_access']) {
   $sq_where = "users_id = " . (int)$account['users_id'] . " AND squads_id = " . (int)$cs_thread['squads_id'];
-  $check_sq = cs_sql_count(__FILE__,'members',$sq_where);
+  $check_sq = cs_sql_count(__FILE__, 'members', $sq_where);
 }
 
 if(empty($fid) || (count($cs_thread) == 0))
@@ -62,16 +62,16 @@ else if(empty($allowed))
 
 // Boardfiles Berechnung Start
 $run_loop_files = '0';
-$check = cs_sql_count(__FILE__,'boardfiles','threads_id =' . $cs_thread['threads_id'] . ' AND comments_id=' .  $comments_id);
+$check = cs_sql_count(__FILE__, 'boardfiles', 'threads_id =' . $cs_thread['threads_id'] . ' AND comments_id=' .  $comments_id);
 if(!empty($check) AND empty($_POST)) {
   $from = 'boardfiles';
   $select = 'boardfiles_id, threads_id, users_id, boardfiles_name';
   $where = 'threads_id=' . $cs_thread['threads_id'] . ' AND comments_id=' . $comments_id;
-  $cs_boardfiles = cs_sql_select(__FILE__,$from,$select,$where,'','','');
+  $cs_boardfiles = cs_sql_select(__FILE__, $from, $select, $where, '', '', '');
   $run_loop_files = count($cs_boardfiles);
   $files = '1';
 } else {
-  $files = isset($_POST['files']) ? $_POST['files'] : 0;
+  $files = $_POST['files'] ?? 0;
 }
 
 if(isset($_POST['new_file'])) {
@@ -79,7 +79,7 @@ if(isset($_POST['new_file'])) {
 }
 
 $thread_error = 0;
-$file_error = array();
+$file_error = [];
 
 $run_loop_files = isset($_POST['run_loop_files']) ? $_POST['run_loop_files'] + $run_loop_files : 0 + $run_loop_files;
 $a = '0';
@@ -89,7 +89,7 @@ for($run=0; $run < $run_loop_files; $run++) {
   if(!empty($files_gl['file_'.$num]['name'])) {
     $board_files_name = $cs_boardfiles[$run]['boardfiles_name'] = $files_gl['file_'.$num]['name'];
 
-    $ext = strtolower(substr(strrchr($board_files_name,'.'),1));
+    $ext = strtolower(substr(strrchr($board_files_name, '.'), 1));
 
     if($files_gl['file_'.$num]['size'] > $options['file_size']) {
       $error .= $cs_lang['error_filesize'] . cs_html_br(1);
@@ -118,7 +118,7 @@ for($run=0; $run < $run_loop_files; $run++) {
     $pattern = "abcdefghijklmnopqrstuvwxyz";
     for($i=0;$i<8;$i++)
     {
-      $hash .= $pattern{rand(0,25)};
+      $hash .= $pattern[rand(0, 25)];
     }
     $file_upload_name[$run] = $hash . '.' . $ext;
 
@@ -143,7 +143,7 @@ for($run=0; $run < $run_loop_files; $run++) {
         $b++;
         $check = '1';
       } else {
-        $ext = substr($cs_boardfiles[$run]['boardfiles_name'],strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'],'.')));
+        $ext = substr($cs_boardfiles[$run]['boardfiles_name'], strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'], '.')));
         $del_file_x = $cs_boardfiles[$run]['boardfiles_id'] . '.' . $ext;
         cs_unlink('board', $del_file_x, 'files');
         $cs_boardfiles[$run]['boardfiles_name'] = '';
@@ -177,10 +177,10 @@ if(isset($_POST['files+'])) {
 // Boardfiles Berechnung Ende
 
 
-$head  = cs_link($cs_lang['board'],'board','list','normalb') .' -> ';
-$head .= cs_link($cs_thread['categories_name'],'board','list','where=' .$cs_thread['categories_id'],'normalb') .' -> ';
-$head .= cs_link($cs_thread['board_name'],'board','listcat','where=' .$cs_thread['board_id'],'normalb') .' -> ';
-$head .= cs_link($cs_thread['threads_headline'],'board','thread','where=' .$cs_thread['threads_id'],'normalb');
+$head  = cs_link($cs_lang['board'], 'board', 'list', 'normalb') .' -> ';
+$head .= cs_link($cs_thread['categories_name'], 'board', 'list', 'where=' .$cs_thread['categories_id'], 'normalb') .' -> ';
+$head .= cs_link($cs_thread['board_name'], 'board', 'listcat', 'where=' .$cs_thread['board_id'], 'normalb') .' -> ';
+$head .= cs_link($cs_thread['threads_headline'], 'board', 'thread', 'where=' .$cs_thread['threads_id'], 'normalb');
 $data['head']['links'] = $head;
 
 
@@ -196,10 +196,10 @@ if(isset($_POST['submit']) OR isset($_POST['preview']) OR isset($_POST['files+']
     $ori_text = $cs_comments['comments_text'];
     if($text_count >= $max_text) {
       $diff = $text_count - $max_text;
-      $error .= sprintf($cs_lang['text_to_long_sprint'],$text_count,$diff) . cs_html_br(1);
+      $error .= sprintf($cs_lang['text_to_long_sprint'], $text_count, $diff) . cs_html_br(1);
     }
-    $cs_comments['comments_text'] = preg_replace_callback("=\[img\](.*?)\[/img\]=si","cs_abcode_resize",$cs_comments['comments_text']);
-    $cs_comments['comments_text'] = preg_replace_callback("=\[img width\=(.*?) height\=(.*?)\](.*?)\[/img\]=si","cs_abcode_resize",$cs_comments['comments_text']);  
+    $cs_comments['comments_text'] = preg_replace_callback("=\[img\](.*?)\[/img\]=si", "cs_abcode_resize", $cs_comments['comments_text']);
+    $cs_comments['comments_text'] = preg_replace_callback("=\[img width\=(.*?) height\=(.*?)\](.*?)\[/img\]=si", "cs_abcode_resize", $cs_comments['comments_text']);  
   }
   else{
     $error .= $cs_lang['no_text'] . cs_html_br(1);
@@ -213,7 +213,7 @@ $data['show']['error'] = $error;
 $data['if']['preview'] = FALSE;
 if(isset($_POST['preview']) AND empty($error)) {
   $data['if']['preview'] = true;
-  $data['prev']['text'] = cs_secure($cs_comments['comments_text'],1,1);
+  $data['prev']['text'] = cs_secure($cs_comments['comments_text'], 1, 1);
 }
 
 
@@ -222,7 +222,7 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
   $data['thread']['text_size'] = $max_text;
   $data['abcode']['smileys'] = cs_abcode_smileys('comments_text');
   $data['abcode']['features'] = cs_abcode_features('comments_text');
-  $data['data']['comments_text'] = cs_secure($ori_text,0,0,0,0,0);
+  $data['data']['comments_text'] = cs_secure($ori_text, 0, 0, 0, 0, 0);
   
   
   //files
@@ -238,7 +238,7 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
     for($run=0; $run < $run_loop_files; $run++)
     {
       $num = $run + 1;
-      $cs_files["text_$num"] = isset($_POST["text_$num"]) ? $_POST["text_$num"] : '';
+      $cs_files["text_$num"] = $_POST["text_$num"] ?? '';
 
       $data['files'][$run]['num'] = $num;
       
@@ -261,7 +261,7 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
       else {
         if(empty($_POST)) {
           $file_x = $cs_boardfiles[$run]['boardfiles_name'];
-          $ext = substr($file_x,strlen($file_x)+1-strlen(strrchr($file_x,'.')));
+          $ext = substr($file_x, strlen($file_x)+1-strlen(strrchr($file_x, '.')));
           $file_upload_name[$run] = $cs_boardfiles[$run]['boardfiles_id'] . '.' . $ext;
         }
         $data['files'][$run]['if']['file_exists'] = TRUE;
@@ -273,9 +273,9 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
         $data['files'][$run]['del'] = $cs_boardfiles[$run]['boardfiles_del'];
         
         $file = $cs_boardfiles[$run]['boardfiles_name'];
-        $extension = strlen(strrchr($file,"."));
+        $extension = strlen(strrchr($file, "."));
         $name = strlen($file);
-        $ext = substr($file,$name - $extension + 1,$name);
+        $ext = substr($file, $name - $extension + 1, $name);
         $ext_lower = strtolower($ext);
                 
         $data['files'][$run]['ext'] = cs_filetype($ext_lower);
@@ -292,7 +292,7 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
         $data['files'][$run]['if']['file_is_other'] = FALSE;
         
         #check if file is picture
-        if(strcasecmp($ext,'jpg') == '0' OR strcasecmp($ext,'jpeg') == '0' OR strcasecmp($ext,'gif') == '0' OR strcasecmp($ext,'png') == '0') {
+        if(strcasecmp($ext, 'jpg') == '0' OR strcasecmp($ext, 'jpeg') == '0' OR strcasecmp($ext, 'gif') == '0' OR strcasecmp($ext, 'png') == '0') {
           $data['files'][$run]['if']['file_is_picture'] = TRUE;
         } else {
           $data['files'][$run]['if']['file_is_other'] = TRUE;
@@ -315,47 +315,47 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
   $data['comments']['id'] = $comments_id;
 
 
- echo cs_subtemplate(__FILE__,$data,'board','com_edit');
+ echo cs_subtemplate(__FILE__, $data, 'board', 'com_edit');
 }
 else {
   $opt = "comments_mod = 'board' AND comments_fid = \"" . $fid . "\"";
   $opt .= " AND comments_id <= \"" . $comments_id . "\"";
-  $count_com = cs_sql_count(__FILE__,'comments',$opt);
+  $count_com = cs_sql_count(__FILE__, 'comments', $opt);
   
   if ($options['sort'] == 'ASC') {
     $remainder = $count_com % $account['users_limit'];
     $start = $count_com % $account['users_limit'] == 0 ? $count_com - $remainder - $account['users_limit'] : $count_com - $remainder;
   } else {
     $where = "comments_fid = " . (int)$fid . " AND comments_mod = 'board' AND comments_id > " . (int)$comments_id;
-    $after = cs_sql_count(__FILE__,'comments',$where);
+    $after = cs_sql_count(__FILE__, 'comments', $where);
     $start = $after - $after % $account['users_limit'];
   }
 
   if(!empty($cs_thread['comments_edit']))
-    $comments_edits_now = explode('/',$cs_thread['comments_edit']);
+    $comments_edits_now = explode('/', $cs_thread['comments_edit']);
   else
     $comments_edits_now[3] = 0;
     $new_count = 1 + $comments_edits_now[3];
     $comments_edit = $account['users_id'].'/'.$account['users_nick'].'/'.cs_time().'/'.$new_count;
 
-  $com_cells = array('comments_text','comments_edit');
-  $com_save = array($cs_comments['comments_text'],$comments_edit);
-  cs_sql_update(__FILE__,'comments',$com_cells,$com_save,$comments_id);
+  $com_cells = ['comments_text','comments_edit'];
+  $com_save = [$cs_comments['comments_text'],$comments_edit];
+  cs_sql_update(__FILE__, 'comments', $com_cells, $com_save, $comments_id);
 
   for($run=0; $run < $run_loop_files; $run++) {
     if($cs_boardfiles[$run]['boardfiles_del'] == 1) {
-        $ext = substr($cs_boardfiles[$run]['boardfiles_name'],strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'],'.')));
+        $ext = substr($cs_boardfiles[$run]['boardfiles_name'], strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'], '.')));
         $del_file_x = $cs_boardfiles[$run]['boardfiles_id'] . '.' . $ext;
       cs_unlink('board', $del_file_x, 'files');
       $sql_id = $cs_boardfiles[$run]['boardfiles_id'];
-      cs_sql_delete(__FILE__,'boardfiles',$sql_id);
+      cs_sql_delete(__FILE__, 'boardfiles', $sql_id);
     }
     if($cs_boardfiles[$run]['boardfiles_id'] == '') {
-      $files_cells = array('users_id','threads_id','comments_id','boardfiles_time','boardfiles_name');
-      $files_save = array($cs_boardfiles[$run]['users_id'],$cs_thread['threads_id'],$comments_id,cs_time(),$cs_boardfiles[$run]['boardfiles_name']);
-      cs_sql_insert(__FILE__,'boardfiles',$files_cells,$files_save);
+      $files_cells = ['users_id','threads_id','comments_id','boardfiles_time','boardfiles_name'];
+      $files_save = [$cs_boardfiles[$run]['users_id'],$cs_thread['threads_id'],$comments_id,cs_time(),$cs_boardfiles[$run]['boardfiles_name']];
+      cs_sql_insert(__FILE__, 'boardfiles', $files_cells, $files_save);
       $files_select_new_id = cs_sql_insertid(__FILE__);
-      $ext = substr($cs_boardfiles[$run]['boardfiles_name'],strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'],'.')));
+      $ext = substr($cs_boardfiles[$run]['boardfiles_name'], strlen($cs_boardfiles[$run]['boardfiles_name'])+1-strlen(strrchr($cs_boardfiles[$run]['boardfiles_name'], '.')));
       $path = $cs_main['def_path'] . '/uploads/board/files/';
       $target = $path . $file_upload_name[$run];
       $target2 = $path . $files_select_new_id . '.' . $ext;
@@ -368,5 +368,5 @@ else {
   $add_start = empty($start) ? '' : '&start=' . $start;
   $more = 'where=' . $fid . $add_start . '#com' . $count_com;
   
-  cs_redirect($cs_lang['changes_done'],'board','thread',$more);
+  cs_redirect($cs_lang['changes_done'], 'board', 'thread', $more);
 }

@@ -6,7 +6,7 @@ $cs_lang = cs_translate('categories');
 $cs_get = cs_get('id');
 
 $categories_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
-$cs_categories = cs_sql_select(__FILE__,'categories','*',"categories_id = '" . $categories_id . "'");
+$cs_categories = cs_sql_select(__FILE__, 'categories', '*', "categories_id = '" . $categories_id . "'");
 
 $data['cat']['name'] = cs_secure($cs_categories['categories_name']);
 
@@ -22,17 +22,17 @@ foreach($modules as $mods) {
 $data['cat']['url'] = '';
 if(!empty($cs_categories['categories_url'])) {
   $cs_cat_url = cs_secure($cs_categories['categories_url']);
-  $data['cat']['url'] = cs_html_link('http://' . $cs_cat_url,$cs_cat_url);
+  $data['cat']['url'] = cs_html_link('http://' . $cs_cat_url, $cs_cat_url);
 }
 
 
-$data['cat']['text'] = cs_secure($cs_categories['categories_text'],1,1);
+$data['cat']['text'] = cs_secure($cs_categories['categories_text'], 1, 1);
 
 $data['cat']['pic'] = '';
 if(!empty($cs_categories['categories_picture'])) {
   $place = 'uploads/categories/' . $cs_categories['categories_picture'];
   $size = getimagesize($cs_main['def_path'] . '/' . $place);
-  $data['cat']['pic'] = cs_html_img($place,$size[1],$size[0]);
+  $data['cat']['pic'] = cs_html_img($place, $size[1], $size[0]);
 }
 
-echo cs_subtemplate(__FILE__,$data,'categories','view');
+echo cs_subtemplate(__FILE__, $data, 'categories', 'view');

@@ -40,7 +40,7 @@ class GameQ_Protocol_warsow extends GameQ_Protocol_quake3
         while ($this->p->getLength() and $this->p->lookAhead(11) != '\\challenge\\') {
 
             $this->r->addPlayer('frags', $this->p->readString("\x20"));
-            $this->r->addPlayer('ping',  $this->p->readString("\x20"));
+            $this->r->addPlayer('ping', $this->p->readString("\x20"));
             
             // Player name
             if ($this->p->read() !== '"') { 

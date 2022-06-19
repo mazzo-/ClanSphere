@@ -35,10 +35,10 @@ require_once GAMEQ_BASE . 'Result.php';
  */
 class GameQ
 {
-    private $prot    = array();     // Cached protocol objects
-    private $servers = array();     // Server data
-    private $filters = array();     // Filter objects
-    private $options = array();     // Options:
+    private $prot    = [];     // Cached protocol objects
+    private $servers = [];     // Server data
+    private $filters = [];     // Filter objects
+    private $options = [];     // Options:
                                     // - (bool) debug
                                     // - (bool) raw
                                     // - (int)  timeout
@@ -56,9 +56,9 @@ class GameQ
     public function __construct()
     {
         // Default options
-        $this->setOption('timeout',    200);
-        $this->setOption('raw',        false);
-        $this->setOption('debug',      false);
+        $this->setOption('timeout', 200);
+        $this->setOption('raw', false);
+        $this->setOption('debug', false);
         $this->setOption('sock_count', 64);
         $this->setOption('sock_start', 0);
 
@@ -132,7 +132,7 @@ class GameQ
      */
     public function getOption($var)
     {
-        return isset($this->options[$var]) ? $this->options[$var] : null;
+        return $this->options[$var] ?? null;
     }
 
     /**
@@ -153,7 +153,7 @@ class GameQ
      * @param    array     $params    Assiociative array containing parameters
      * @return   boolean   True on success, false on failure
      */
-    public function setFilter($name, $params = array())
+    public function setFilter($name, $params = [])
     {
         // Load it
         $file  = GAMEQ_BASE . 'Filter/' . $name . '.php';
@@ -161,16 +161,20 @@ class GameQ
 
         // Initialize the protocol object
         if (!is_readable($file)) {
-            trigger_error('GameQ::setFilter: unable to read file [' . $file . '].',
-                    E_USER_NOTICE);
+            trigger_error(
+                'GameQ::setFilter: unable to read file [' . $file . '].',
+                E_USER_NOTICE
+            );
             return false;
         }
         include_once($file);
 
         // Check if the class can be loaded
         if (!class_exists($class)) {
-            trigger_error('GameQ::setFilter: unable to load filter [' . $name . '].',
-                    E_USER_NOTICE);
+            trigger_error(
+                'GameQ::setFilter: unable to load filter [' . $name . '].',
+                E_USER_NOTICE
+            );
             return false;
         }
 
@@ -203,7 +207,7 @@ class GameQ
         $sock_start = $this->getOption('sock_start');
         $sock_count = $this->getOption('sock_count');
 
-        $data = array();
+        $data = [];
 
         // Get a list of packets
         $packs = $this->getPackets($this->servers);
@@ -248,7 +252,7 @@ class GameQ
      */
     public function clearServers()
     {
-        $this->servers = array();
+        $this->servers = [];
     }
 
     /**
@@ -301,15 +305,19 @@ class GameQ
 
         // Initialize the protocol object
         if (!is_readable($file)) {
-            trigger_error('GameQ::getProtocol: unable to read file [' . $file . '].',
-                    E_USER_ERROR);
+            trigger_error(
+                'GameQ::getProtocol: unable to read file [' . $file . '].',
+                E_USER_ERROR
+            );
         }
         include_once($file);
 
         // Check if the class can be loaded
         if (!class_exists($class)) {
-            trigger_error('GameQ::setFilter: unable to load protocol [' . $name . '].',
-                    E_USER_ERROR);
+            trigger_error(
+                'GameQ::setFilter: unable to load protocol [' . $name . '].',
+                E_USER_ERROR
+            );
         }
 
         $this->prot[$name] = new $class;
@@ -326,7 +334,7 @@ class GameQ
      */
     private function getPackets($servers)
     {
-        $result = array();
+        $result = [];
 
         // Get packets for each server 
         foreach ($servers as $id => $server) {
@@ -343,7 +351,7 @@ class GameQ
             // Create an entry for each packet
             foreach ($packets as $packetname => $packet) {
 
-                $p = array();
+                $p = [];
                 $p['sid']  = $id;
                 $p['name'] = $packetname;
                 $p['data'] = $packet;
@@ -479,16 +487,16 @@ class GameQ
         $debug = $this->getOption('debug');
         
         // Nothing to process
-        if (!isset($data) or count($data) === 0) return array();
+        if (!isset($data) or count($data) === 0) return [];
 
         // Load the protocol
         $prot = $this->getProtocol($protname);
-        $call = array($prot, $packetname);
+        $call = [$prot, $packetname];
 
         // Preprocess the packet data
         try {
             $data = $prot->preprocess($data);
-            if ($data == false) return array();
+            if ($data == false) return [];
         }
         catch (GameQ_ParsingException $e) {
             if ($debug) print $e;
@@ -496,8 +504,10 @@ class GameQ
 
         // Check if the parsing method actually exists
         if (!is_callable($call)) {
-            trigger_error('GameQ::processResponse: unable to call ' . $protname . '::' . $packetname . '.',
-                    E_USER_ERROR);
+            trigger_error(
+                'GameQ::processResponse: unable to call ' . $protname . '::' . $packetname . '.',
+                E_USER_ERROR
+            );
         }
         
         // Parse the packet
@@ -523,9 +533,9 @@ class GameQ
     private function processRaw($packets, $servers)
     {
         // Create an empty result list
-        $results = array();
+        $results = [];
         foreach ($servers as $sid => $server) {
-            $results[$sid] = array();
+            $results[$sid] = [];
         }
 
         // Add packets to server
@@ -547,9 +557,9 @@ class GameQ
     private function processResponses($packets, $servers)
     {
         // Create an empty result list
-        $results = array();
+        $results = [];
         foreach ($servers as $sid => $server) {
-            $results[$sid] = array();
+            $results[$sid] = [];
         }
 
         // Process each packet and add it to the proper server

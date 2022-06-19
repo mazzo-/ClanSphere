@@ -5,10 +5,10 @@
 $cs_lang = cs_translate('squads');
 $cs_post = cs_post('start,sort');
 $cs_get = cs_get('start,sort');
-$data = array();
+$data = [];
 
-$op_squads = cs_sql_option(__FILE__,'squads');
-$op_clans = cs_sql_option(__FILE__,'clans');
+$op_squads = cs_sql_option(__FILE__, 'squads');
+$op_clans = cs_sql_option(__FILE__, 'clans');
 
 $start = empty($cs_get['start']) ? 0 : $cs_get['start'];
 if (!empty($cs_post['start']))  $start = $cs_post['start'];
@@ -21,22 +21,22 @@ $cs_sort[3] = 'cln.clans_name DESC';
 $cs_sort[4] = 'cln.clans_name ASC';
 $order = $cs_sort[$sort];
 $where = 'squads_hidden = 0';
-$squads_count = cs_sql_count(__FILE__,'squads', $where);
+$squads_count = cs_sql_count(__FILE__, 'squads', $where);
 
 
 $data['head']['mod'] = $cs_lang[$op_squads['label'].'s'];
 $data['head']['count'] = $squads_count;
-$data['head']['pages'] = cs_pages('squads','list',$squads_count,$start,0,$sort);
+$data['head']['pages'] = cs_pages('squads', 'list', $squads_count, $start, 0, $sort);
 
-$data['sort']['squads_name'] = cs_sort('squads','list',$start,0,1,$sort);
+$data['sort']['squads_name'] = cs_sort('squads', 'list', $start, 0, 1, $sort);
 $data['lang']['squads_label'] = $cs_lang[$op_squads['label']];
-$data['sort']['clans_name'] = cs_sort('squads','list',$start,0,3,$sort);
+$data['sort']['clans_name'] = cs_sort('squads', 'list', $start, 0, 3, $sort);
 $data['lang']['clans_label'] = $cs_lang[$op_clans['label']];
 
 $select = 'sqd.squads_name AS squads_name, sqd.clans_id AS clans_id, cln.clans_name AS ';
 $select .= 'clans_name, sqd.squads_id AS squads_id, sqd.games_id AS games_id';
 $from = 'squads sqd INNER JOIN {pre}_clans cln ON sqd.clans_id = cln.clans_id';
-$data['squads'] = cs_sql_select(__FILE__,$from,$select,$where,$order,$start,$account['users_limit']);
+$data['squads'] = cs_sql_select(__FILE__, $from, $select, $where, $order, $start, $account['users_limit']);
 $squads_loop = count($data['squads']);
 
 
@@ -50,4 +50,4 @@ for($run=0; $run<$squads_loop; $run++) {
   $data['squads'][$run]['clans_name'] = cs_secure($data['squads'][$run]['clans_name']);
   $data['squads'][$run]['id'] = $data['squads'][$run]['squads_id'];
 }
-echo cs_subtemplate(__FILE__,$data,'squads','list');
+echo cs_subtemplate(__FILE__, $data, 'squads', 'list');

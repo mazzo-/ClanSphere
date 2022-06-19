@@ -30,8 +30,8 @@ require_once GAMEQ_BASE . 'Protocol.php';
 class GameQ_Protocol_ts2 extends GameQ_Protocol
 {
 
-    private $clients = array();
-    private $channels = array();
+    private $clients = [];
+    private $channels = [];
     
     
     public function details()
@@ -40,7 +40,7 @@ class GameQ_Protocol_ts2 extends GameQ_Protocol
         while ($this->p->getLength()) {
             $details = trim ($this->p->readString ("\n"));
             if ($details == "OK") break;
-            list ($key, $value) = explode ('=', $details, 2); // -> Serverdetails
+             [$key, $value] = explode ('=', $details, 2); // -> Serverdetails
             $this->r->add($key, $value);
             switch ($key) {
                 case "server_name": $this->r->add('hostname', $value);
@@ -54,7 +54,7 @@ class GameQ_Protocol_ts2 extends GameQ_Protocol
 
     public function channels()
     {
-        $this->channels = array();
+        $this->channels = [];
 
         $this->header();
 
@@ -70,10 +70,10 @@ class GameQ_Protocol_ts2 extends GameQ_Protocol
         }
 
         foreach ($this->channels as $channel) {
-            $this->r->addTeam('id',     $channel['id']);
+            $this->r->addTeam('id', $channel['id']);
             $this->r->addTeam('parent', $channel['parent']);
-            $this->r->addTeam('name',   $channel['name']);
-            $this->r->addTeam('topic',  $channel['topic']);
+            $this->r->addTeam('name', $channel['name']);
+            $this->r->addTeam('topic', $channel['topic']);
         }
 
     }
@@ -81,7 +81,7 @@ class GameQ_Protocol_ts2 extends GameQ_Protocol
 
     public function players()
     {
-        $this->clients = array();
+        $this->clients = [];
 
         $this->header();
 
@@ -97,7 +97,7 @@ class GameQ_Protocol_ts2 extends GameQ_Protocol
         }
         
         foreach ($this->clients as $client) {
-            $this->r->addPlayer('id',   $client['p_id']);
+            $this->r->addPlayer('id', $client['p_id']);
             $this->r->addPlayer('team', $client['c_id']);
             $this->r->addPlayer('ping', $client['ping']);
             $this->r->addPlayer('name', $client['nick']);

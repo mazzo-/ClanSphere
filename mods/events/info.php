@@ -12,10 +12,10 @@ $mod_info['team']    = 'ClanSphere';
 $mod_info['url']    = 'www.clansphere.net';
 $mod_info['text']    = $cs_lang['mod_text'];
 $mod_info['icon']    = 'cal';
-$mod_info['show']    = array('users/settings' => 2, 'clansphere/admin' => 3, 'options/roots' => 5);
+$mod_info['show']    = ['users/settings' => 2, 'clansphere/admin' => 3, 'options/roots' => 5];
 $mod_info['categories']  = TRUE;
 $mod_info['comments']  = TRUE;
 $mod_info['protected']  = FALSE;
-$mod_info['tables']    = array('events', 'eventguests');
-$mod_info['navlist']  = array('navbirthday' => 'max_navbirthday',
-                'navnext' => 'max_navnext');
+$mod_info['tables']    = ['events', 'eventguests'];
+$mod_info['navlist']  = ['navbirthday' => 'max_navbirthday',
+                'navnext' => 'max_navnext', ];

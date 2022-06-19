@@ -5,11 +5,11 @@
 $cs_lang = cs_translate('games');
 
 $cs_games_id = $_GET['id'];
-settype($cs_games_id,'integer');
-$cs_games = cs_sql_select(__FILE__,'games','*',"games_id = '" . $cs_games_id . "'");
-$games_genre = cs_sql_select(__FILE__,'categories','*',"categories_id = '" . $cs_games['categories_id'] . "'");
+settype($cs_games_id, 'integer');
+$cs_games = cs_sql_select(__FILE__, 'games', '*', "games_id = '" . $cs_games_id . "'");
+$games_genre = cs_sql_select(__FILE__, 'categories', '*', "categories_id = '" . $cs_games['categories_id'] . "'");
 
-empty($cs_games['games_released']) ? $since2 = '-' : $since2 = cs_date('date',$cs_games['games_released']);
+empty($cs_games['games_released']) ? $since2 = '-' : $since2 = cs_date('date', $cs_games['games_released']);
 $data['games']['release'] = $since2;
 $data['games']['name'] = cs_secure($cs_games['games_name']);
 $data['games']['version'] = cs_secure($cs_games['games_version']);
@@ -37,10 +37,10 @@ else {
 }
 
 if(!empty($cs_games['games_url'])) {
-  $data['games']['homepage'] = cs_html_link('http://' . $cs_games['games_url'],$cs_games['games_url']);
+  $data['games']['homepage'] = cs_html_link('http://' . $cs_games['games_url'], $cs_games['games_url']);
 }
 else {
   $data['games']['homepage'] = '-';
 }
 
-echo cs_subtemplate(__FILE__,$data,'games','view');
+echo cs_subtemplate(__FILE__, $data, 'games', 'view');

@@ -73,7 +73,7 @@ class GameQ_Protocol_gamespy2 extends GameQ_Protocol
         }
 
         // Variable names
-        $varnames = array();
+        $varnames = [];
         while ($this->p->getLength()) {
             $varnames[] = str_replace('_', '', $this->p->readString());
             if ($this->p->lookAhead() === "\x00") {

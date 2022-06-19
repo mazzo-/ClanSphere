@@ -4,7 +4,7 @@
 
 $cs_lang = cs_translate('install');
 
-$data = array();
+$data = [];
 
 $data['if']['sql_select'] = $cs_main['action'] == 'sql_select' ? 1 : 0;
 
@@ -30,4 +30,4 @@ $data['arr']['sql'] = $cs_main['action'] == 'sql' ? $arrow : '';
 $data['arr']['admin'] = $cs_main['action'] == 'admin' ? $arrow : '';
 $data['arr']['check'] = $cs_main['action'] == 'complete' ? $arrow : '';
 
-echo cs_subtemplate(__FILE__,$data,'install','navi');
+echo cs_subtemplate(__FILE__, $data, 'install', 'navi');

@@ -4,15 +4,15 @@
 
 $cs_lang = cs_translate('squads');
 
-$op_squads = cs_sql_option(__FILE__,'squads');
-$op_clans = cs_sql_option(__FILE__,'clans');
+$op_squads = cs_sql_option(__FILE__, 'squads');
+$op_clans = cs_sql_option(__FILE__, 'clans');
 $files = cs_files();
 
-$data = array();
+$data = [];
 
 $data['if']['gamesmod'] = empty($account['access_games']) ? FALSE : TRUE;
 
-$img_filetypes = array('gif','jpg','png');
+$img_filetypes = ['gif','jpg','png'];
 
 if(isset($_POST['submit'])) {
 
@@ -61,7 +61,7 @@ if(isset($_POST['submit'])) {
   }
   
   $where = "squads_name = '" . cs_sql_escape($cs_squads['squads_name']) . "'";
-  $search = cs_sql_count(__FILE__,'squads',$where);
+  $search = cs_sql_count(__FILE__, 'squads', $where);
   if(!empty($search)) {
     $error .= $cs_lang['squad_exists'] . cs_html_br(1);
   }
@@ -105,20 +105,20 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['squads']['squads_check'] = empty($cs_squads['squads_hidden']) ? '' : $checked;
    
   $data['lang']['clan_label'] = $cs_lang[$op_clans['label']];
-  $cs_clans = cs_sql_select(__FILE__,'clans','clans_name,clans_id',0,'clans_name',0,0);
-  $data['squads']['clan_sel'] = cs_dropdown('clans_id','clans_name',$cs_clans,$cs_squads['clans_id']);
+  $cs_clans = cs_sql_select(__FILE__, 'clans', 'clans_name,clans_id', 0, 'clans_name', 0, 0);
+  $data['squads']['clan_sel'] = cs_dropdown('clans_id', 'clans_name', $cs_clans, $cs_squads['clans_id']);
 
   if($data['if']['gamesmod'] == TRUE) {
-    $data['games'] = array();
+    $data['games'] = [];
     $el_id = 'game_1';
-    $cs_games = cs_sql_select(__FILE__,'games','games_name,games_id',0,'games_name',0,0);
+    $cs_games = cs_sql_select(__FILE__, 'games', 'games_name,games_id', 0, 'games_name', 0, 0);
     $games_count = count($cs_games);
     for($run = 0; $run < $games_count; $run++) {
       $sel = $cs_games[$run]['games_id'] == $cs_squads['games_id'] ? 1 : 0;
-      $data['games'][$run]['sel'] = cs_html_option($cs_games[$run]['games_name'],$cs_games[$run]['games_id'],$sel);
+      $data['games'][$run]['sel'] = cs_html_option($cs_games[$run]['games_name'], $cs_games[$run]['games_id'], $sel);
     }
     $url = 'uploads/games/' . $cs_squads['games_id'] . '.gif';
-    $data['squads']['games_img'] = cs_html_img($url,0,0,'id="' . $el_id . '"');
+    $data['squads']['games_img'] = cs_html_img($url, 0, 0, 'id="' . $el_id . '"');
   }
 
   $matches[1] = $cs_lang['secure_stages'];
@@ -140,24 +140,24 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['squads']['picup_clip'] = cs_abcode_clip($matches);
 
 
-  echo cs_subtemplate(__FILE__,$data,'squads','create');
+  echo cs_subtemplate(__FILE__, $data, 'squads', 'create');
 }
 else {
 
   $squads_cells = array_keys($cs_squads);
   $squads_save = array_values($cs_squads);
-  cs_sql_insert(__FILE__,'squads',$squads_cells,$squads_save);
+  cs_sql_insert(__FILE__, 'squads', $squads_cells, $squads_save);
 
   if(!empty($files['picture']['tmp_name'])) {
       $where = "squads_name = '" . cs_sql_escape($cs_squads['squads_name']) . "'";
-      $getid = cs_sql_select(__FILE__,'squads','squads_id',$where);
+      $getid = cs_sql_select(__FILE__, 'squads', 'squads_id', $where);
     $filename = 'picture-' . $getid['squads_id'] . '.' . $extension;
-      cs_upload('squads',$filename,$files['picture']['tmp_name']);
+      cs_upload('squads', $filename, $files['picture']['tmp_name']);
     
     $cs_squads2['squads_picture'] = $filename;
     $squads2_cells = array_keys($cs_squads2);
     $squads2_save = array_values($cs_squads2);      
-    cs_sql_update(__FILE__,'squads',$squads2_cells,$squads2_save,$getid['squads_id']);
+    cs_sql_update(__FILE__, 'squads', $squads2_cells, $squads2_save, $getid['squads_id']);
   }
-  cs_redirect($cs_lang['create_done'],'squads');
+  cs_redirect($cs_lang['create_done'], 'squads');
 }

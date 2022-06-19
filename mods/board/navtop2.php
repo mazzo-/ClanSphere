@@ -4,8 +4,8 @@
 
 require_once 'mods/board/functions.php';
 
-$cs_option = cs_sql_option(__FILE__,'board');
-$data = array();
+$cs_option = cs_sql_option(__FILE__, 'board');
+$data = [];
 
 $toplist = toplist_threads(0, $cs_option['max_navtop2']);
 
@@ -19,4 +19,4 @@ if(!empty($toplist)) {
   }
 }
   
-echo cs_subtemplate(__FILE__,$data, 'board', 'navtop2');
+echo cs_subtemplate(__FILE__, $data, 'board', 'navtop2');

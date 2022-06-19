@@ -12,7 +12,7 @@ $cache_time = 60;
 // Test if fsockopen active
 if (empty($data) AND fsockopen("udp://127.0.0.1", 1)) {
 
-  $data = array('servers' => array());
+  $data = ['servers' => []];
   $data['if']['live'] = false;
 
   include_once 'mods/servers/servers.class.php';
@@ -20,13 +20,13 @@ if (empty($data) AND fsockopen("udp://127.0.0.1", 1)) {
   /* Get Server SQL-Data */
   $select = 'servers_name, servers_ip, servers_port, servers_info, servers_query, servers_class, servers_stats, servers_order, servers_id';
   $order = '{random}';
-  $cs_servers = cs_sql_select(__FILE__,'servers',$select,0,$order,0,1);
+  $cs_servers = cs_sql_select(__FILE__, 'servers', $select, 0, $order, 0, 1);
 
   /* Settings */
   $objServers = Servers::__getInstance();
 
   $data['servers']['hostname'] = $cs_servers['servers_name'];
-  $server_query_ex = explode(";",$cs_servers['servers_class']);
+  $server_query_ex = explode(";", $cs_servers['servers_class']);
   $cs_servers['servers_class'] = $server_query_ex[0];
   $cs_servers['servers_game'] = empty($server_query_ex[1]) ? '' : $server_query_ex[1];
   if(!empty($cs_servers['servers_stats'])) {
@@ -40,9 +40,9 @@ if (empty($data) AND fsockopen("udp://127.0.0.1", 1)) {
       $data['servers']['map'] = '';
       $data['servers']['mappic'] = 'uploads/servers/no_response.jpg';
       $data['servers']['mapname'] = '';
-      $data['servers']['max_players'] = isset($server['max_players']) ? $server['max_players'] : 0;
-      $data['servers']['num_players'] = isset($server['num_players']) ? $server['num_players'] : 0;
-      $data['servers']['game_descr'] = isset($server['game_descr']) ? $server['game_descr'] : '';
+      $data['servers']['max_players'] = $server['max_players'] ?? 0;
+      $data['servers']['num_players'] = $server['num_players'] ?? 0;
+      $data['servers']['game_descr'] = $server['game_descr'] ?? '';
 
       if(!empty($cs_servers['servers_stats'])) {
         $data['servers']['servers_ip'] = $cs_servers['servers_ip'];
@@ -72,7 +72,7 @@ if (empty($data) AND fsockopen("udp://127.0.0.1", 1)) {
 
         $select = 'maps_name, maps_picture, server_name';
         $where = 'server_name = \'' . $data['servers']['map'] . '\'';
-        $sqlmap = cs_sql_select(__FILE__,'maps',$select,$where,0,0,1);
+        $sqlmap = cs_sql_select(__FILE__, 'maps', $select, $where, 0, 0, 1);
         if(!empty($sqlmap)) {
           $data['servers']['map'] = $sqlmap['maps_name'];
           if(file_exists('uploads/maps/' . $sqlmap['maps_picture'])) {
@@ -105,4 +105,4 @@ if (empty($data) AND fsockopen("udp://127.0.0.1", 1)) {
 if(empty($data))
   echo 'fsockopen error';
 else
-  echo cs_subtemplate(__FILE__,$data,'servers','navrandom');
+  echo cs_subtemplate(__FILE__, $data, 'servers', 'navrandom');

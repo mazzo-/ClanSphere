@@ -28,7 +28,7 @@ class GameQ_ParsingException extends Exception
     private $packet;
     protected $format = 'Could not parse packet for server "%s"';
 
-    function __construct($packet = null)
+    public function __construct($packet = null)
     {
         $this->packet = $packet;
         parent::__construct('');

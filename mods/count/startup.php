@@ -11,14 +11,14 @@ if(!empty($account['access_count']))
 
   if(!isset($_SESSION['count_id']) OR !isset($_SESSION['count_last']))
   {
-    $fetch_me = cs_sql_select(__FILE__,'count','count_id, count_time',"count_ip = '" . cs_sql_escape($ip) . "'",'count_id DESC');
+    $fetch_me = cs_sql_select(__FILE__, 'count', 'count_id, count_time', "count_ip = '" . cs_sql_escape($ip) . "'", 'count_id DESC');
     $_SESSION['count_id'] = $fetch_me['count_id'];
     $_SESSION['count_time'] = $fetch_me['count_time'];
     $_SESSION['count_last'] = $fetch_me['count_time'];
   }
   else
   {
-    $fetch_me = array();
+    $fetch_me = [];
     $fetch_me['count_id'] = $_SESSION['count_id'];
     $fetch_me['count_time'] = $_SESSION['count_time'];
   }
@@ -31,22 +31,22 @@ if(!empty($account['access_count']))
   {
     if($time < $time_lock)
     {
-      $counter_cells = array('count_time','count_location');
-      $counter_content = array($time,$cs_main['mod'] . '/' . $cs_main['action']);
-      cs_sql_update(__FILE__,'count',$counter_cells,$counter_content,$fetch_me['count_id'], 0, 0);
+      $counter_cells = ['count_time','count_location'];
+      $counter_content = [$time,$cs_main['mod'] . '/' . $cs_main['action']];
+      cs_sql_update(__FILE__, 'count', $counter_cells, $counter_content, $fetch_me['count_id'], 0, 0);
     }
     else 
     {
-      $counter_cells = array('count_ip','count_time','count_location');
-      $counter_save = array($ip,$time,$cs_main['mod'] . '/' . $cs_main['action']);
-      cs_sql_insert(__FILE__,'count',$counter_cells,$counter_save);
+      $counter_cells = ['count_ip','count_time','count_location'];
+      $counter_save = [$ip,$time,$cs_main['mod'] . '/' . $cs_main['action']];
+      cs_sql_insert(__FILE__, 'count', $counter_cells, $counter_save);
       $_SESSION['count_id'] = cs_sql_insertid(__FILE__);
     }
     $_SESSION['count_last'] = $time;
   }
 
   //Backup the files in counter
-  $op_counter = cs_sql_option(__FILE__,'counter');
+  $op_counter = cs_sql_option(__FILE__, 'counter');
   $month = cs_datereal('n');
   $yesterday = cs_datereal('d') - 1;
 
@@ -63,8 +63,8 @@ if(!empty($account['access_count']))
       $count_day = cs_sql_count(__FILE__, 'count', $cond);
 
       if (!empty($count_day)) {
-        $cells = array('count_month', 'count_num', 'count_mode');
-        $values = array($day . '-' . $month . '-' . $year, $count_day, 1);
+        $cells = ['count_month', 'count_num', 'count_mode'];
+        $values = [$day . '-' . $month . '-' . $year, $count_day, 1];
         cs_sql_insert(__FILE__, 'count_archiv', $cells, $values);
       }
       $timer = $timer2;
@@ -72,7 +72,7 @@ if(!empty($account['access_count']))
 
     cs_sql_query(__FILE__, "DELETE FROM {pre}_count WHERE count_time < '" . $timer . "'");
 
-    $save = array('last_archiv_day' => $yesterday);
+    $save = ['last_archiv_day' => $yesterday];
 
     require_once 'mods/clansphere/func_options.php';
 
@@ -85,8 +85,8 @@ if(!empty($account['access_count']))
     $timer = mktime(0, 0, 0, $month, 1, $year);
     $timer2 = $timer - 86400;
     $cond = "count_time < '" .$timer . "'";
-    $last_day = cs_sql_count(__FILE__,'count',$cond . " AND count_time > '" . $timer2 . "'");
-    $count_month = cs_sql_count(__FILE__,'count',$cond);
+    $last_day = cs_sql_count(__FILE__, 'count', $cond . " AND count_time > '" . $timer2 . "'");
+    $count_month = cs_sql_count(__FILE__, 'count', $cond);
 
     $month_archieve = cs_sql_select(__FILE__, 'count_archiv', 'SUM(count_num) AS count', 'count_mode = 1', 0, 0, 0);
     $count_month += $month_archieve[0]['count'];
@@ -105,14 +105,14 @@ if(!empty($account['access_count']))
         $old_month = $month - 1;
       }
 
-      $counter_cells1 = array('count_month','count_num');
-      $counter_content1 = array($old_month . '-' . $old_year, $count_month);   
+      $counter_cells1 = ['count_month','count_num'];
+      $counter_content1 = [$old_month . '-' . $old_year, $count_month];   
 
-      cs_sql_insert(__FILE__, 'count_archiv', $counter_cells1 ,$counter_content1);
+      cs_sql_insert(__FILE__, 'count_archiv', $counter_cells1, $counter_content1);
     }
 
     //Save the newest month
-    $save = array('last_archiv' => $month, 'last_archiv_day' => 1, 'count_lastday' => $last_day);
+    $save = ['last_archiv' => $month, 'last_archiv_day' => 1, 'count_lastday' => $last_day];
 
     require_once 'mods/clansphere/func_options.php';
 

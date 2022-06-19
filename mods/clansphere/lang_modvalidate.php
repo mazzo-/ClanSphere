@@ -3,7 +3,7 @@
 // $Id$
 
 # Overwrite global settings by using the following array
-$cs_main = array('init_sql' => true, 'init_tpl' => false, 'init_mod' => true);
+$cs_main = ['init_sql' => true, 'init_tpl' => false, 'init_mod' => true];
 
 chdir('../../');
 
@@ -32,14 +32,14 @@ if($account['access_clansphere'] < 5) {
   return;
 }
 
-$cs_lang = array();
+$cs_lang = [];
 include 'lang/' . $language . '/system/main.php';
 $cs_lang_global = $cs_lang;
 $errors_count = 0;
 $count_line = 0;
-$data = array();
+$data = [];
 $cs_lang2 = cs_translate('clansphere');
-$cs_lang = array();
+$cs_lang = [];
 $file_new = '';
 
 function cs_validate ($matches) {
@@ -47,11 +47,11 @@ function cs_validate ($matches) {
   
   $result = '';
   
-  if(array_key_exists($matches[1],$cs_lang)) {
+  if(array_key_exists($matches[1], $cs_lang)) {
     $result = 'same';
     if($cs_lang[$matches[1]] != $matches[3])
       $result .= $cs_lang[$matches[1]];
-  } elseif (array_key_exists($matches[1],$cs_lang_global)) {
+  } elseif (array_key_exists($matches[1], $cs_lang_global)) {
     $result = 'main';
     if($cs_lang_global[$matches[1]] != $matches[3])
       $result .= $cs_lang_global[$matches[1]];
@@ -64,12 +64,12 @@ $fp = file($file);
 foreach ($fp AS $line) {
   $count_line++;
   
-  if(substr($line,0,9) != '$cs_lang[' || strpos($line,'.=') !== false || substr($line,-3,1) != ';' || strpos($line,'"') !== false) {
+  if(substr($line, 0, 9) != '$cs_lang[' || strpos($line, '.=') !== false || substr($line, -3, 1) != ';' || strpos($line, '"') !== false) {
     $file_new .= $line;
     continue;
   }
   
-  $result = preg_replace_callback('=\$cs_lang\[\'(.*?)\'\](.*?)\'(.*?)\';=si',"cs_validate",$line);
+  $result = preg_replace_callback('=\$cs_lang\[\'(.*?)\'\](.*?)\'(.*?)\';=si', "cs_validate", $line);
   $result = trim($result);
   
   if(empty($result)) {
@@ -81,14 +81,14 @@ foreach ($fp AS $line) {
     highlight_string('<?php ' . $line . ' ?>');
     $string = ob_get_contents();
     ob_end_clean();
-    $search = array('&lt;?php&nbsp;',
+    $search = ['&lt;?php&nbsp;',
                 '<br />&nbsp;</span><span style="color: #0000BB">?&gt;</span>',
-                '<br />&nbsp;</font><font color="#0000BB">?&gt;</font>');
-    $string = str_replace($search,array('','</span>','</font>'),$string);
+                '<br />&nbsp;</font><font color="#0000BB">?&gt;</font>', ];
+    $string = str_replace($search, ['','</span>','</font>'], $string);
     $data['errors'][$errors_count]['line'] = $count_line;
-    $data['errors'][$errors_count]['file'] = substr($result,0,4);
+    $data['errors'][$errors_count]['file'] = substr($result, 0, 4);
     $data['errors'][$errors_count]['text'] = $string;
-    $data['errors'][$errors_count]['old_value'] = substr($result,4);
+    $data['errors'][$errors_count]['old_value'] = substr($result, 4);
     $data['errors'][$errors_count]['type'] = empty($data['errors'][$errors_count]['old_value']) ? $cs_lang2['repetition'] : $cs_lang2['overwrite'];
     
     $file_new .= empty($data['errors'][$errors_count]['old_value']) ? '' : $line;
@@ -98,21 +98,21 @@ foreach ($fp AS $line) {
 }
 
 if(!empty($fix)) {
-  $fp2 = fopen($file,'w');
+  $fp2 = fopen($file, 'w');
   # set stream encoding if possible to avoid converting issues
   if(function_exists('stream_encoding'))
     stream_encoding($fp2, $cs_main['charset']);
-  fwrite($fp2,$file_new);
+  fwrite($fp2, $file_new);
   fclose($fp2);
   
-  $cs_lang = array();
+  $cs_lang = [];
   include 'lang/' . $language . '/system/main.php';
   $cs_lang_global = $cs_lang;
   $errors_count = 0;
   $count_line = 0;
-  $data = array();
+  $data = [];
   $cs_lang2 = cs_translate('clansphere');
-  $cs_lang = array();
+  $cs_lang = [];
   $file_new = '';
   $fp = file($file);
 
@@ -120,12 +120,12 @@ if(!empty($fix)) {
   
     $count_line++;
     
-    if(substr($line,0,9) != '$cs_lang[' || strpos($line,'.=') !== false || substr($line,-3,1) != ';' || strpos($line,'"') !== false) {
+    if(substr($line, 0, 9) != '$cs_lang[' || strpos($line, '.=') !== false || substr($line, -3, 1) != ';' || strpos($line, '"') !== false) {
       $file_new .= $line;
       continue;
     }
     
-    $result = preg_replace_callback('=\$cs_lang\[\'(.*?)\'\](.*?)\'(.*?)\';=si',"cs_validate",$line);
+    $result = preg_replace_callback('=\$cs_lang\[\'(.*?)\'\](.*?)\'(.*?)\';=si', "cs_validate", $line);
     $result = trim($result);
     
     if(empty($result)) {
@@ -137,14 +137,14 @@ if(!empty($fix)) {
       highlight_string('<?php ' . $line . ' ?>');
       $string = ob_get_contents();
       ob_end_clean();
-      $search = array('&lt;?php&nbsp;',
+      $search = ['&lt;?php&nbsp;',
                   '<br />&nbsp;</span><span style="color: #0000BB">?&gt;</span>',
-                  '<br />&nbsp;</font><font color="#0000BB">?&gt;</font>');
-      $string = str_replace($search,array('','</span>','</font>'),$string);
+                  '<br />&nbsp;</font><font color="#0000BB">?&gt;</font>', ];
+      $string = str_replace($search, ['','</span>','</font>'], $string);
       $data['errors'][$errors_count]['line'] = $count_line;
-      $data['errors'][$errors_count]['file'] = substr($result,0,4);
+      $data['errors'][$errors_count]['file'] = substr($result, 0, 4);
       $data['errors'][$errors_count]['text'] = $string;
-      $data['errors'][$errors_count]['old_value'] = substr($result,4);
+      $data['errors'][$errors_count]['old_value'] = substr($result, 4);
       $data['errors'][$errors_count]['type'] = empty($data['errors'][$errors_count]['old_value']) ? $cs_lang2['repetition'] : $cs_lang2['overwrite'];
       
       $file_new .= empty($data['errors'][$errors_count]['old_value']) ? '' : $line;
@@ -169,6 +169,6 @@ highlight_string($file_new);
 $data['file']['fixed'] = ob_get_contents();
 ob_end_clean();
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','lang_modvalidate');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'lang_modvalidate');
 
 chdir('mods/clansphere/');

@@ -5,7 +5,7 @@
 $cs_lang = cs_translate('rules');
 require_once('mods/categories/functions.php');
   
-$data = array();
+$data = [];
 $data['if']['preview'] = false;
 
 $data['ru']['rules_order'] = '';
@@ -14,7 +14,7 @@ $data['ru']['rules_rule'] = '';
 
 if(isset($_POST['submit']) OR isset($_POST['preview'])) {
 
-  $data['ru']['categories_id'] = empty($_POST['categories_id']) ? cs_categories_create('rules',$_POST['categories_name']) 
+  $data['ru']['categories_id'] = empty($_POST['categories_id']) ? cs_categories_create('rules', $_POST['categories_name']) 
   : (int) $_POST['categories_id'];
 
   $data['ru']['rules_order'] = $_POST['rules_order'];
@@ -45,22 +45,22 @@ elseif(isset($_POST['preview']) AND empty($error)) {
   $data['if']['preview'] = true;
   $data['ru']['order'] = cs_secure($data['ru']['rules_order']);
   $data['ru']['title'] = cs_secure($data['ru']['rules_title']);
-  $data['ru']['rule'] = cs_secure($data['ru']['rules_rule'],1);
+  $data['ru']['rule'] = cs_secure($data['ru']['rules_rule'], 1);
 }
 
 if(!empty($error) OR !isset($_POST['submit']) OR isset($_POST['preview'])) {
 
   $categories_id = empty($_POST['categories_id']) ? 0 : $_POST['categories_id'];
-  $data['categories']['dropdown'] = cs_categories_dropdown('rules',$categories_id);
+  $data['categories']['dropdown'] = cs_categories_dropdown('rules', $categories_id);
   $data['abcode']['features'] = cs_abcode_features('rules_rule');
   
- echo cs_subtemplate(__FILE__,$data,'rules','create');
+ echo cs_subtemplate(__FILE__, $data, 'rules', 'create');
 
 } else {
   
   $rules_cells = array_keys($data['ru']);
   $rules_save = array_values($data['ru']);
- cs_sql_insert(__FILE__,'rules',$rules_cells,$rules_save);
+ cs_sql_insert(__FILE__, 'rules', $rules_cells, $rules_save);
   
- cs_redirect($cs_lang['create_done'],'rules');
+ cs_redirect($cs_lang['create_done'], 'rules');
 } 

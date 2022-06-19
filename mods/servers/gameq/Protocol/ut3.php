@@ -33,8 +33,8 @@ require_once GAMEQ_BASE . 'Protocol/gamespy3.php';
  */
 class GameQ_Protocol_ut3 extends GameQ_Protocol_gamespy3
 {
-    private $old = array();
-    private $res = array();
+    private $old = [];
+    private $res = [];
 
     public function status()
     {
@@ -50,23 +50,23 @@ class GameQ_Protocol_ut3 extends GameQ_Protocol_gamespy3
         $this->mv('p1073741826', 'gametype');
         $this->mv('p1073741827', 'servername');
         $this->mv('p1073741828', 'custom_mutators');
-        $this->mv('gamemode',    'open');
-        $this->mv('s32779',      'gamemode');
-        $this->mv('s0',          'bot_skill');
-        $this->mv('s6',          'pure_server');
-        $this->mv('s7',          'password');
-        $this->mv('s8',          'vs_bots');
-        $this->mv('s10',         'force_respawn');
-        $this->mv('p268435704',  'frag_limit');
-        $this->mv('p268435705',  'time_limit');
-        $this->mv('p268435703',  'numbots');
-        $this->mv('p268435717',  'stock_mutators');
+        $this->mv('gamemode', 'open');
+        $this->mv('s32779', 'gamemode');
+        $this->mv('s0', 'bot_skill');
+        $this->mv('s6', 'pure_server');
+        $this->mv('s7', 'password');
+        $this->mv('s8', 'vs_bots');
+        $this->mv('s10', 'force_respawn');
+        $this->mv('p268435704', 'frag_limit');
+        $this->mv('p268435705', 'time_limit');
+        $this->mv('p268435703', 'numbots');
+        $this->mv('p268435717', 'stock_mutators');
 
         // Put custom mutators into an array
         $this->res['custom_mutators'] = explode("\x1c", $this->res['custom_mutators']);
 
         // Delete some unknown stuff
-        $this->del(array('s1','s9','s11','s12','s13','s14'));
+        $this->del(['s1','s9','s11','s12','s13','s14']);
     }
 
     private function del($array)

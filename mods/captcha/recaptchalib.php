@@ -50,7 +50,7 @@ function _recaptcha_qsencode ($data) {
                 $req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
 
         // Cut the last '&'
-        $req=substr($req,0,strlen($req)-1);
+        $req=substr($req, 0, strlen($req)-1);
         return $req;
 }
 
@@ -135,8 +135,8 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
  * A ReCaptchaResponse is returned from recaptcha_check_answer()
  */
 class ReCaptchaResponse {
-        var $is_valid;
-        var $error;
+        public $is_valid;
+        public $error;
 }
 
 
@@ -149,7 +149,7 @@ class ReCaptchaResponse {
   * @param array $extra_params an array of extra variables to post to the server
   * @return ReCaptchaResponse
   */
-function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array())
+function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = [])
 {
 	if ($privkey == null || $privkey == '') {
 		die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
@@ -169,14 +169,16 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
                 return $recaptcha_response;
         }
 
-        $response = _recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify",
-                                          array (
+        $response = _recaptcha_http_post (
+            RECAPTCHA_VERIFY_SERVER,
+            "/recaptcha/api/verify",
+             [
                                                  'privatekey' => $privkey,
                                                  'remoteip' => $remoteip,
                                                  'challenge' => $challenge,
-                                                 'response' => $response
-                                                 ) + $extra_params
-                                          );
+                                                 'response' => $response,
+                                                 ] + $extra_params
+        );
 
         $answers = explode ("\n", $response [1]);
         $recaptcha_response = new ReCaptchaResponse();
@@ -200,7 +202,7 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
  * @param string $appname The name of your application
  */
 function recaptcha_get_signup_url ($domain = null, $appname = null) {
-	return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode (array ('domains' => $domain, 'app' => $appname));
+	return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode ( ['domains' => $domain, 'app' => $appname]);
 }
 
 function _recaptcha_aes_pad($val) {
@@ -211,7 +213,7 @@ function _recaptcha_aes_pad($val) {
 
 /* Mailhide related code */
 
-function _recaptcha_aes_encrypt($val,$ky) {
+function _recaptcha_aes_encrypt($val, $ky) {
 	if (! function_exists ("mcrypt_encrypt")) {
 		die ("To use reCAPTCHA Mailhide, you need to have the mcrypt php module installed.");
 	}

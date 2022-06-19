@@ -17,7 +17,7 @@ $comments_id = empty($_POST['submit']) ? (int) $_GET['id'] : (int) $_POST['comme
 if (!empty($_POST['submit']) && empty($error)) {
 
   $cells = 'users_id, comments_time, comments_fid, comments_edit';
-  $comment = cs_sql_select(__FILE__,'comments',$cells,'comments_id = ' . (int)$comments_id);
+  $comment = cs_sql_select(__FILE__, 'comments', $cells, 'comments_id = ' . (int)$comments_id);
 
   // Get last comment
   $lastid = !empty($_POST['comments']) ? (int) end($_POST['comments']) : 0;
@@ -25,14 +25,14 @@ if (!empty($_POST['submit']) && empty($error)) {
   $old_threads_id = (int) $_POST['old_threads_id'];
 
   if (!empty($lastid)) {
-    $last = cs_sql_select(__FILE__,'comments','comments_time, users_id','comments_id = ' . (int)$lastid);
+    $last = cs_sql_select(__FILE__, 'comments', 'comments_time, users_id', 'comments_id = ' . (int)$lastid);
   } else {
-    $last = array();
+    $last = [];
     $last['comments_time'] = $comment['comments_time'];
     $last['users_id'] = $comment['users_id'];
   }
 
-  $save = array();
+  $save = [];
   $save['users_id'] = (int) $comment['users_id'];
   $save['threads_time'] = $comment['comments_time'];
   $save['threads_text'] = $_POST['threads_text'];
@@ -46,50 +46,50 @@ if (!empty($_POST['submit']) && empty($error)) {
   $cells = array_keys($save);
   $values = array_values($save);
 
-  cs_sql_insert(__FILE__,'threads',$cells, $values);
+  cs_sql_insert(__FILE__, 'threads', $cells, $values);
 
   $threads_id = cs_sql_insertid(__FILE__);
 
   if (empty($threads_id)) {
-    cs_redirect($cs_lang['error'] . '.','board','thread','where=' . $comment['comments_fid']);
+    cs_redirect($cs_lang['error'] . '.', 'board', 'thread', 'where=' . $comment['comments_fid']);
   }
-  cs_sql_delete(__FILE__,'comments',$comments_id);
+  cs_sql_delete(__FILE__, 'comments', $comments_id);
 
   // Move selected comments
   if (!empty($_POST['comments'])) {
-    $cells = array('comments_fid');
-    $content = array($threads_id);
+    $cells = ['comments_fid'];
+    $content = [$threads_id];
     $cond_files = '';
 
     foreach ($_POST['comments'] as $comment_id) {
       settype($comment_id, 'integer');
-      cs_sql_update(__FILE__,'comments',$cells,$content, $comment_id);
+      cs_sql_update(__FILE__, 'comments', $cells, $content, $comment_id);
       $cond_files .= ' OR comments_id = ' . (int)$comment_id;
     }
 
     // Move attachments of the comments
-    $cells = array('threads_id');
+    $cells = ['threads_id'];
     $cond_files = substr($cond_files, 4);
     cs_sql_update(__FILE__, 'boardfiles', $cells, $content, 0, $cond_files);
     
   }
   // Move attachments of the thread
-  $cells = array('threads_id', 'comments_id');
-  $content = array($threads_id, 0);
+  $cells = ['threads_id', 'comments_id'];
+  $content = [$threads_id, 0];
   cs_sql_update(__FILE__, 'boardfiles', $cells, $content, 0, 'comments_id = ' . (int)$comments_id);
 
   // Update old threads information
   $cond = "comments_fid = " . (int)$old_threads_id . " AND comments_mod = 'board'";
-  $comments_old = cs_sql_count(__FILE__,'comments',$cond);
-  $last = cs_sql_select(__FILE__,'comments','users_id, comments_time', $cond, 'comments_time ASC');
+  $comments_old = cs_sql_count(__FILE__, 'comments', $cond);
+  $last = cs_sql_select(__FILE__, 'comments', 'users_id, comments_time', $cond, 'comments_time ASC');
 
   if (empty($last)) {
-    $last = cs_sql_select(__FILE__,'threads','users_id, threads_time', "threads_id = " . (int)$old_threads_id);
+    $last = cs_sql_select(__FILE__, 'threads', 'users_id, threads_time', "threads_id = " . (int)$old_threads_id);
     $last_time = $last['threads_time'];
   } else
     $last_time = $last['comments_time'];
 
-  $save = array();
+  $save = [];
   $save['threads_last_user'] = $last['users_id'];
   $save['threads_last_time'] = $last_time;
   $save['threads_comments'] = $comments_old;
@@ -97,7 +97,7 @@ if (!empty($_POST['submit']) && empty($error)) {
   $cells = array_keys($save);
   $values = array_values($save);
 
-  cs_sql_update(__FILE__,'threads',$cells,$values,$old_threads_id);
+  cs_sql_update(__FILE__, 'threads', $cells, $values, $old_threads_id);
 
   // Update board information
 
@@ -120,27 +120,27 @@ if (!empty($_POST['submit']) && empty($error)) {
     cs_board_threads($board_id);
   }  
 
-  cs_redirect($cs_lang['success'] . ' ' . cs_link($cs_lang['to_old_thread'],'board','thread','where=' . $comment['comments_fid']),'board','thread','where=' . $threads_id);
+  cs_redirect($cs_lang['success'] . ' ' . cs_link($cs_lang['to_old_thread'], 'board', 'thread', 'where=' . $comment['comments_fid']), 'board', 'thread', 'where=' . $threads_id);
 }
 else {
 
-  $data = array();
+  $data = [];
 
-  $data['url']['board_thread_cut'] = cs_url('board','thread_cut');
+  $data['url']['board_thread_cut'] = cs_url('board', 'thread_cut');
 
   if (empty($error)) {
     $tables = 'comments cms INNER JOIN {pre}_users usr ON cms.users_id = usr.users_id';
     $cells  = 'cms.comments_text AS comments_text, cms.comments_fid AS comments_fid, ';
     $cells .= 'usr.users_id AS users_id, usr.users_nick AS users_nick, ';
     $cells .= 'usr.users_active AS users_active, usr.users_country AS users_country';
-    $data['comment'] = cs_sql_select(__FILE__,$tables,$cells,'comments_id = ' . (int)$comments_id);
+    $data['comment'] = cs_sql_select(__FILE__, $tables, $cells, 'comments_id = ' . (int)$comments_id);
     $data['comment']['comments_id'] = $comments_id;
   } else {
     $tables = 'comments cms INNER JOIN {pre}_users usr ON cms.users_id = usr.users_id';
     $cells  = 'cms.comments_fid AS comments_fid, ';
     $cells .= 'usr.users_id AS users_id, usr.users_nick AS users_nick, ';
     $cells .= 'usr.users_active AS users_active, usr.users_country AS users_country';
-    $data['comment'] = cs_sql_select(__FILE__,$tables,$cells,'comments_id = ' . (int)$comments_id);
+    $data['comment'] = cs_sql_select(__FILE__, $tables, $cells, 'comments_id = ' . (int)$comments_id);
     $data['comment']['comments_text'] = $_POST['threads_text'];
     $data['lang']['errors_here'] = $cs_lang['error_occured'] . $error;
   }
@@ -148,7 +148,7 @@ else {
 
   $tables = 'categories cat INNER JOIN {pre}_board b ON cat.categories_id = b.categories_id';
   $cells = 'cat.categories_name AS categories_name, b.board_name AS board_name, b.board_id AS board_id';
-  $boards = cs_sql_select(__FILE__,$tables,$cells,0,0,0,0);
+  $boards = cs_sql_select(__FILE__, $tables, $cells, 0, 0, 0, 0);
 
   $data['board']['select'] = cs_html_select(1, 'board_id');
   $data['board']['select'] .= cs_html_option('----', 0);
@@ -157,21 +157,21 @@ else {
   }
   $data['board']['select'] .= cs_html_select(0);
 
-  $data['comment']['text'] = cs_secure($data['comment']['comments_text'],1,1);
+  $data['comment']['text'] = cs_secure($data['comment']['comments_text'], 1, 1);
   $data['comment']['user'] = cs_user($data['comment']['users_id'], $data['comment']['users_nick'], $data['comment']['users_active']);
 
   $tables = 'comments cms INNER JOIN {pre}_users usr ON cms.users_id = usr.users_id';
   $cells  = 'usr.users_nick AS users_nick, usr.users_id AS users_id, cms.comments_text AS comments_text, ';
   $cells .= 'usr.users_active AS users_active, usr.users_country AS users_country, cms.comments_id AS comments_id';
   $cond = "cms.comments_fid = " . (int)$data['comment']['comments_fid'] . " AND comments_mod = 'board' AND cms.comments_id > " . (int)$comments_id;
-  $data['comments'] = cs_sql_select(__FILE__,$tables,$cells,$cond,'comments_time',0,0);
+  $data['comments'] = cs_sql_select(__FILE__, $tables, $cells, $cond, 'comments_time', 0, 0);
   $comments_count = count($data['comments']);
 
   for ($run = 0; $run < $comments_count; $run++) {
     $data['comments'][$run]['user'] = cs_user($data['comments'][$run]['users_id'], $data['comments'][$run]['users_nick'], $data['comments'][$run]['users_active']);
-    $data['comments'][$run]['comments_text'] = cs_secure($data['comments'][$run]['comments_text'],1,1);
-    $data['comments'][$run]['checked'] = !empty($_POST) && in_array($data['comments'][$run]['comments_id'],$_POST['comments']) ? ' checked="checked"' : '';
+    $data['comments'][$run]['comments_text'] = cs_secure($data['comments'][$run]['comments_text'], 1, 1);
+    $data['comments'][$run]['checked'] = !empty($_POST) && in_array($data['comments'][$run]['comments_id'], $_POST['comments']) ? ' checked="checked"' : '';
   }
 
-  echo cs_subtemplate(__FILE__,$data,'board','thread_cut');
+  echo cs_subtemplate(__FILE__, $data, 'board', 'thread_cut');
 }

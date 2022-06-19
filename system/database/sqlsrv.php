@@ -9,7 +9,7 @@ function cs_sql_connect($cs_db, $test = 0) {
     $error = 'PHP extension sqlsrv must be activated!';
   }
   else {
-    $cn_info = array('UID' => $cs_db['user'], 'PWD' => $cs_db['pwd'], 'Database' => $cs_db['name']);
+    $cn_info = ['UID' => $cs_db['user'], 'PWD' => $cs_db['pwd'], 'Database' => $cs_db['name']];
     $connect = sqlsrv_connect($cs_db['place'], $cn_info) OR $error = cs_sql_error();
   }
 
@@ -24,7 +24,7 @@ function cs_sql_connect($cs_db, $test = 0) {
   }
 }
 
-function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
+function cs_sql_count($cs_file, $sql_table, $sql_where = 0, $distinct = 0) {
 
   global $cs_db;
   $row = empty($distinct) ? '*' : 'DISTINCT ' . $distinct;
@@ -32,7 +32,7 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   $sql_query = 'SELECT COUNT(' . $row . ') FROM ' . $cs_db['prefix'] . '_' . $sql_table;
   $sql_query .= empty($sql_where) ? '' : ' WHERE ' . $sql_where;
 
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if (!$sql_data = sqlsrv_query($cs_db['con'], $sql_query)) {
     cs_error_sql($cs_file, 'cs_sql_count', cs_sql_error(0, $sql_query));
     return NULL;
@@ -44,22 +44,22 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   return $sql_result;
 }
 
-function cs_sql_delete($cs_file,$sql_table,$sql_id,$sql_field = 0) {
+function cs_sql_delete($cs_file, $sql_table, $sql_id, $sql_field = 0) {
 
   global $cs_db;
-  settype($sql_id,'integer');
+  settype($sql_id, 'integer');
   if (empty($sql_field)) {
     $sql_field = $sql_table . '_id';
   }
   $sql_delete = 'DELETE FROM ' . $cs_db['prefix'] . '_' . $sql_table;
   $sql_delete .= ' WHERE ' . $sql_field . ' = ' . $sql_id;
   sqlsrv_query($cs_db['con'], $sql_delete) or cs_error_sql($cs_file, 'cs_sql_delete', cs_sql_error(0, $sql_delete));
-  cs_log_sql($cs_file, $sql_delete,1);
+  cs_log_sql($cs_file, $sql_delete, 1);
 }
 
 function cs_sql_escape($string) {
 
-  return str_replace("'","''",(string) $string);
+  return str_replace("'", "''", (string) $string);
 }
 
 function cs_sql_insert($cs_file, $sql_table, $sql_cells, $sql_content) {
@@ -75,7 +75,7 @@ function cs_sql_insert($cs_file, $sql_table, $sql_cells, $sql_content) {
   }
   $set .= ") VALUES ('";
   for ($run = 0; $run < $max; $run++) {
-    $set .= str_replace("'","''",(string) $sql_content[$run]);
+    $set .= str_replace("'", "''", (string) $sql_content[$run]);
     if ($run != $max - 1) {
       $set .= "','";
     }
@@ -90,14 +90,14 @@ function cs_sql_insert($cs_file, $sql_table, $sql_cells, $sql_content) {
 function cs_sql_insertid($cs_file) {
 
   $found = cs_sql_query($cs_file, 'SELECT @@IDENTITY AS lastval', 1);
-  $lastval = isset($found['more'][0]['lastval']) ? $found['more'][0]['lastval'] : NULL;
+  $lastval = $found['more'][0]['lastval'] ?? NULL;
   return $lastval;
 }
 
 function cs_sql_option($cs_file, $mod) {
 
   global $cs_db, $cs_template;
-  static $options = array();
+  static $options = [];
 
   if (empty($options[$mod])) {
 
@@ -116,11 +116,11 @@ function cs_sql_option($cs_file, $mod) {
       if(count($cs_template)) {
         foreach($cs_template AS $navlist => $value) {
         if($navlist == $mod) {
-          $new_result = array_merge($new_result,$value);
+          $new_result = array_merge($new_result, $value);
         }
         }
       }
-      $options[$mod] = isset($new_result) ? $new_result : 0;
+      $options[$mod] = $new_result ?? 0;
 
       cs_cache_save('op_' . $mod, $options[$mod]);
     }
@@ -134,7 +134,7 @@ function cs_sql_query($cs_file, $sql_query, $more = 0) {
   global $cs_db;
   $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if ($sql_data = sqlsrv_query($cs_db['con'], $sql_query)) {
-    $result = array('affected_rows' => sqlsrv_rows_affected($sql_data));
+    $result = ['affected_rows' => sqlsrv_rows_affected($sql_data)];
     if(!empty($more)) {
       while ($sql_result = sqlsrv_fetch_array($sql_data, SQLSRV_FETCH_ASSOC)) {
         $result['more'][] = $sql_result;
@@ -152,10 +152,10 @@ function cs_sql_query($cs_file, $sql_query, $more = 0) {
 
 function cs_sql_replace($replace) {
 
-  $replace = preg_replace("={optimize}(.*?[;])=si",'',$replace);
-  $replace = str_replace('{serial}','int IDENTITY(1,1)',$replace);
-  $replace = str_replace('{engine}','',$replace);
-  return preg_replace("=int\((.*?)\)=si",'int',$replace);
+  $replace = preg_replace("={optimize}(.*?[;])=si", '', $replace);
+  $replace = str_replace('{serial}', 'int IDENTITY(1,1)', $replace);
+  $replace = str_replace('{engine}', '', $replace);
+  return preg_replace("=int\((.*?)\)=si", 'int', $replace);
 }
 
 function cs_sql_select($cs_file, $sql_table, $sql_select, $sql_where = 0, $sql_order = 0, $first = 0, $max = 1, $cache = 0) {
@@ -172,7 +172,7 @@ function cs_sql_select($cs_file, $sql_table, $sql_select, $sql_where = 0, $sql_o
   if(!empty($max) OR $sql_order === '{random}') {
     $sql_select = ' TOP ' . $max . ' ' . $sql_select;
     if(!empty($first)) {
-      $cell = explode(' ',$sql_table);
+      $cell = explode(' ', $sql_table);
       $same_qry = ' ' . $cell[0] . '_id FROM ' . $cs_db['prefix'] . '_' . $sql_table;
       $same_qry .= empty($sql_where) ? '' : ' WHERE ' . $sql_where;
       $same_qry .= empty($sql_order) ? '' : ' ORDER BY ' . $sql_order;
@@ -222,7 +222,7 @@ function cs_sql_update($cs_file, $sql_table, $sql_cells, $sql_content, $sql_id, 
   $max = count($sql_cells);
   $set = ' SET ';
   for ($run = 0; $run < $max; $run++) {
-    $set .= $sql_cells[$run] . "='" . str_replace("'","''",(string) $sql_content[$run]);
+    $set .= $sql_cells[$run] . "='" . str_replace("'", "''", (string) $sql_content[$run]);
     if ($run != $max - 1) {
       $set .= "', ";
     }
@@ -244,7 +244,7 @@ function cs_sql_update($cs_file, $sql_table, $sql_cells, $sql_content, $sql_id, 
 function cs_sql_version($cs_file) {
 
   global $cs_db;
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $client = sqlsrv_client_info($cs_db['con']);
   $server = sqlsrv_server_info($cs_db['con']);
 
@@ -260,8 +260,8 @@ function cs_sql_error($object = 0, $query = 0) {
 
   global $cs_db;
   $errors_array = sqlsrv_errors();
-  $code = isset($errors_array[0]['code']) ? $errors_array[0]['code'] : 0;
-  $error_string = isset($errors_array[0]['message']) ? $errors_array[0]['message'] : '';
+  $code = $errors_array[0]['code'] ?? 0;
+  $error_string = $errors_array[0]['message'] ?? '';
   if(!empty($code))
     $error_string = $code . ' - ' . $error_string;
   if(!empty($query))

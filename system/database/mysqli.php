@@ -29,7 +29,7 @@ function cs_sql_connect($cs_db, $test = 0) {
   return $error;
 }
 
-function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
+function cs_sql_count($cs_file, $sql_table, $sql_where = 0, $distinct = 0) {
 
   global $cs_db;
   $row = empty($distinct) ? '*' : 'DISTINCT ' . $distinct;
@@ -37,7 +37,7 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   $sql_query = 'SELECT COUNT(' . $row . ') FROM ' . $cs_db['prefix'] . '_' . $sql_table;
   $sql_query .= empty($sql_where) ? '' : ' WHERE ' . $sql_where;
 
-  $sql_query = str_replace('{pre}',$cs_db['prefix'],$sql_query);
+  $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if (!$sql_data = mysqli_query($cs_db['con'], $sql_query)) {
     cs_error_sql($cs_file, 'cs_sql_count', cs_sql_error(0, $sql_query));
     return NULL;
@@ -48,17 +48,17 @@ function cs_sql_count($cs_file,$sql_table,$sql_where = 0, $distinct = 0) {
   return $sql_result[0];
 }
 
-function cs_sql_delete($cs_file,$sql_table,$sql_id,$sql_field = 0) {
+function cs_sql_delete($cs_file, $sql_table, $sql_id, $sql_field = 0) {
 
   global $cs_db;
-  settype($sql_id,'integer');
+  settype($sql_id, 'integer');
   if (empty($sql_field)) {
     $sql_field = $sql_table . '_id';
   }
   $sql_delete = 'DELETE FROM ' . $cs_db['prefix'] . '_' . $sql_table;
   $sql_delete .= ' WHERE ' . $sql_field . ' = ' . $sql_id;
   mysqli_query($cs_db['con'], $sql_delete) or cs_error_sql($cs_file, 'cs_sql_delete', cs_sql_error(0, $sql_delete));
-  cs_log_sql($cs_file, $sql_delete,1);
+  cs_log_sql($cs_file, $sql_delete, 1);
 }
 
 function cs_sql_escape($string) {
@@ -102,7 +102,7 @@ function cs_sql_insertid($cs_file) {
 function cs_sql_option($cs_file, $mod) {
 
   global $cs_db, $cs_template;
-  static $options = array();
+  static $options = [];
 
   if (empty($options[$mod])) {
 
@@ -121,11 +121,11 @@ function cs_sql_option($cs_file, $mod) {
       if(count($cs_template)) {
         foreach($cs_template AS $navlist => $value) {
         if($navlist == $mod) {
-          $new_result = array_merge($new_result,$value);
+          $new_result = array_merge($new_result, $value);
         }
         }
       }
-      $options[$mod] = isset($new_result) ? $new_result : 0;
+      $options[$mod] = $new_result ?? 0;
 
       cs_cache_save('op_' . $mod, $options[$mod]);
     }
@@ -139,7 +139,7 @@ function cs_sql_query($cs_file, $sql_query, $more = 0) {
   global $cs_db;
   $sql_query = str_replace('{pre}', $cs_db['prefix'], $sql_query);
   if ($sql_data = mysqli_query($cs_db['con'], $sql_query)) {
-    $result = array('affected_rows' => mysqli_affected_rows($cs_db['con']));
+    $result = ['affected_rows' => mysqli_affected_rows($cs_db['con'])];
     if(!empty($more)) {
       while ($sql_result = mysqli_fetch_assoc($sql_data)) {
         $result['more'][] = $sql_result;
@@ -167,10 +167,10 @@ function cs_sql_replace($replace) {
   else
   $engine = ' TYPE=' . $subtype . ' CHARACTER SET utf8';
 
-  $replace = str_replace('{optimize}','OPTIMIZE TABLE',$replace);
-  $replace = str_replace('{serial}','int(8) unsigned NOT NULL auto_increment',$replace);
-  $replace = str_replace('{engine}',$engine,$replace);
-  return preg_replace("=create index (\S+) on (\S+) (\S+)=si",'ALTER TABLE $2 ADD KEY $1 $3',$replace);
+  $replace = str_replace('{optimize}', 'OPTIMIZE TABLE', $replace);
+  $replace = str_replace('{serial}', 'int(8) unsigned NOT NULL auto_increment', $replace);
+  $replace = str_replace('{engine}', $engine, $replace);
+  return preg_replace("=create index (\S+) on (\S+) (\S+)=si", 'ALTER TABLE $2 ADD KEY $1 $3', $replace);
 }
 
 function cs_sql_select($cs_file, $sql_table, $sql_select, $sql_where = 0, $sql_order = 0, $first = 0, $max = 1, $cache = 0) {
@@ -250,7 +250,7 @@ function cs_sql_version($cs_file) {
 
   global $cs_db;
   $subtype = empty($cs_db['subtype']) ? 'myisam' : strtolower($cs_db['subtype']);
-  $sql_infos = array('data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => array());
+  $sql_infos = ['data_free' => 0, 'data_size' => 0, 'index_size' => 0, 'tables' => 0, 'names' => []];
   $sql_query = "SHOW TABLE STATUS LIKE '" . cs_sql_escape($cs_db['prefix'] . '_') . "%'";
   $sql_data = mysqli_query($cs_db['con'], $sql_query) or cs_error_sql($cs_file, 'cs_sql_version', cs_sql_error(0, $sql_query));
   while($row = mysqli_fetch_assoc($sql_data)) {

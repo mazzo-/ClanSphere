@@ -81,7 +81,7 @@ class GameQ_Protocol_gamespy extends GameQ_Protocol
         if (count($packets) == 1) return $packets[0];
 
         // Order packets by queryid
-        $newpackets = array();
+        $newpackets = [];
         foreach ($packets as $packet) {
 
             preg_match("#^(.*)\\\\queryid\\\\([^\\\\]+)(\\\\|$)#", $packet, $matches);

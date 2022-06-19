@@ -3,7 +3,7 @@
 // $Id$
 
 $cs_lang = cs_translate('news');
-$data = array();
+$data = [];
 $cs_post = cs_post('where');
 $cs_get = cs_get('where');
 
@@ -18,7 +18,7 @@ $abcode = explode(",", $cs_option['abcode']);
 $where = "nws.news_public = 1 AND cat.categories_access <= " . $account['access_news'];
 if(!empty($cat_id)) {
   $cat_where = 'categories_subid = ' . $cat_id;
-  $categories = cs_sql_select(__FILE__,'categories','categories_id',$cat_where,0,0,0);
+  $categories = cs_sql_select(__FILE__, 'categories', 'categories_id', $cat_where, 0, 0, 0);
   if(!empty($categories)) {
     $where .= " AND (cat.categories_id = '" . $cat_id . "'";
     for($a=0; $a<count($categories); $a++) {
@@ -33,7 +33,7 @@ if(!empty($cat_id)) {
 }
 $start = empty($_REQUEST['start']) ? 0 : (int)$_REQUEST['start'];
 
-$data['cats']['dropdown'] = cs_categories_dropdown2('news', $cat_id,0,'where');
+$data['cats']['dropdown'] = cs_categories_dropdown2('news', $cat_id, 0, 'where');
 
 $join = 'news nws INNER JOIN {pre}_categories cat ON nws.categories_id = cat.categories_id';
 $news_count = cs_sql_count(__FILE__, $join, $where, 'news_id');
@@ -48,8 +48,8 @@ $order = 'news_attached DESC, news_time DESC';
 $cs_news = cs_sql_select(__FILE__, $from, $select, $where, $order, $start, $cs_option['max_recent']);
 
 if($cs_option['max_recent'] == '1') {
-  $anews = array();
-  array_push($anews,$cs_news);
+  $anews = [];
+  array_push($anews, $cs_news);
   unset($cs_news);
   $cs_news = $anews;
   $news_loop = 1;
@@ -60,8 +60,8 @@ else {
 
 // Get number of comments per post
 // $comment_counts maps news_id to comment count
-$comment_counts = array();
-$news_ids = array();
+$comment_counts = [];
+$news_ids = [];
 if(is_array($cs_news)) {
   foreach($cs_news as $item){
     $news_ids[] = $item['news_id'];
@@ -77,7 +77,7 @@ if(is_array($cs_news)) {
   }
 }
 else
-  $comment_count_res = array();
+  $comment_count_res = [];
 
 for($run = 0; $run < $news_loop; $run++) {
   $cs_news[$run]['news_headline'] = cs_secure($cs_news[$run]['news_headline']);
@@ -95,7 +95,7 @@ for($run = 0; $run < $news_loop; $run++) {
   }
 
   $cs_user = cs_secure($cs_news[$run]['users_nick']);
-  $cs_news[$run]['users_link'] = cs_user($cs_news[$run]['users_id'],$cs_news[$run]['users_nick'], $cs_news[$run]['users_active'], $cs_news[$run]['users_delete']);
+  $cs_news[$run]['users_link'] = cs_user($cs_news[$run]['users_id'], $cs_news[$run]['users_nick'], $cs_news[$run]['users_active'], $cs_news[$run]['users_delete']);
   $cs_news[$run]['comments_count'] = $comment_counts[$cs_news[$run]['news_id']];
   $start = floor($cs_news[$run]['comments_count'] / ($account['users_limit'] + 1)) * $account['users_limit'];
   $cs_news_com_count = $cs_news[$run]['comments_count'] - $start;
@@ -137,8 +137,8 @@ for($run = 0; $run < $news_loop; $run++) {
     else {
       $cs_news[$run]['mirror'][$tpl_run]['dot'] =  ' - ';
     }
-    $url = strpos($temp_mirror[$run_mirror],'://') === false ? 'http://' . $temp_mirror[$run_mirror] : $temp_mirror[$run_mirror];
-    $cs_news[$run]['mirror'][$tpl_run]['news_mirror'] = cs_html_link($url,$temp_mirror_name[$run_mirror]);
+    $url = strpos($temp_mirror[$run_mirror], '://') === false ? 'http://' . $temp_mirror[$run_mirror] : $temp_mirror[$run_mirror];
+    $cs_news[$run]['mirror'][$tpl_run]['news_mirror'] = cs_html_link($url, $temp_mirror_name[$run_mirror]);
     $tpl_run++;
   }
   }

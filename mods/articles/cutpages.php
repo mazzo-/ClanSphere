@@ -16,13 +16,13 @@ function cs_abcode_pb_url($matches) {
     $matches[2] = $matches[1];
   }
   
-  return cs_link($matches[2],'articles','view','id=' .$matches[3]. '&page=' .$matches[1]);
+  return cs_link($matches[2], 'articles', 'view', 'id=' .$matches[3]. '&page=' .$matches[1]);
   
 }
 
-function articles_secure($replace,$abcode = 0) {
+function articles_secure($replace, $abcode = 0) {
 
-    $replace = preg_replace_callback("=\[pb_url\=(.*?)\](.*?)\[/pb_url\]=si","cs_abcode_pb_url",$replace);
+    $replace = preg_replace_callback("=\[pb_url\=(.*?)\](.*?)\[/pb_url\]=si", "cs_abcode_pb_url", $replace);
   
      return $replace;
 }

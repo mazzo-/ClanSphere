@@ -33,7 +33,7 @@ class GameQ_Result
      *
      * @var        array
      */
-    private $result = array();
+    private $result = [];
 
     /**
      * Adds variable to results
@@ -80,7 +80,7 @@ class GameQ_Result
     {
         // Nothing of this type yet, set an empty array
         if (!isset($this->result[$sub]) or !is_array($this->result[$sub])) {
-            $this->result[$sub] = array();
+            $this->result[$sub] = [];
         }
         
         // Find the first entry that doesn't have this variable
@@ -117,7 +117,7 @@ class GameQ_Result
      */
     public function get($var)
     {
-        return isset($this->result[$var]) ? $this->result[$var] : null;
+        return $this->result[$var] ?? null;
     }
 }
 ?>

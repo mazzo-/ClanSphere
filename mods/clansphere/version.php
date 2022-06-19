@@ -6,9 +6,9 @@ $cs_lang = cs_translate('clansphere');
 
 $error = '';
 
-$local = array('version' => $cs_main['version_name'], 'published' => $cs_main['version_date'], 'id' => $cs_main['version_id']);
+$local = ['version' => $cs_main['version_name'], 'published' => $cs_main['version_date'], 'id' => $cs_main['version_id']];
 
-$remote = array('version' => '-', 'published' => '1970-01-01', 'id' => 0);
+$remote = ['version' => '-', 'published' => '1970-01-01', 'id' => 0];
 
 $remote_url_download = 'http://www.clansphere.net/index/files/view/id/12';
 
@@ -36,7 +36,7 @@ else {
     $error = $cs_lang['file_not_read'];
   else {
     $content = explode(' ', $content);
-    $remote = array('version' => $content[0], 'published' => $content[1], 'id' => $content[2]);
+    $remote = ['version' => $content[0], 'published' => $content[1], 'id' => $content[2]];
     settype($remote['id'], 'integer');
   }
 }
@@ -51,4 +51,4 @@ if(empty($error))
 else
   $data['version']['msg'] = $error;
 
-echo cs_subtemplate(__FILE__,$data,'clansphere','version');
+echo cs_subtemplate(__FILE__, $data, 'clansphere', 'version');

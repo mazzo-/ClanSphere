@@ -5,10 +5,10 @@
 $cs_lang = cs_translate('partner');
 require_once('mods/categories/functions.php');
 
-$op_partner = cs_sql_option(__FILE__,'partner');
-$img_filetypes = array('image/pjpeg' => 'jpg','image/jpeg' => 'jpg','image/gif' => 'gif', 'image/png' => 'png');
+$op_partner = cs_sql_option(__FILE__, 'partner');
+$img_filetypes = ['image/pjpeg' => 'jpg','image/jpeg' => 'jpg','image/gif' => 'gif', 'image/png' => 'png'];
 $error = '';
-$data = array();
+$data = [];
 $files = cs_files();
 
 if (!empty($_POST['submit'])) {
@@ -17,7 +17,7 @@ if (!empty($_POST['submit'])) {
   $data['partner']['partner_url'] = empty($_POST['partner_url']) ? '' : $_POST['partner_url'];
   $data['partner']['partner_alt'] = empty($_POST['partner_alt']) ? '' : $_POST['partner_alt'];
   $data['partner']['partner_priority'] = empty($_POST['partner_priority']) ? '' : $_POST['partner_priority'];
-  $categories_id = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('partner',$_POST['categories_name']);
+  $categories_id = empty($_POST['categories_name']) ? $_POST['categories_id'] : cs_categories_create('partner', $_POST['categories_name']);
   
   if(empty($_POST['partner_name'])) { $error .= $cs_lang['no_name'] .  cs_html_br(1); }
   if(empty($_POST['partner_text'])) { $error .= $cs_lang['no_text'] .  cs_html_br(1); }
@@ -122,9 +122,9 @@ if (!empty($_POST['submit'])) {
   $categories_id = '';
 }
 if(empty($_POST['submit']) || !empty($error)) {
-  $data['form']['create'] = cs_url('partner','create');
+  $data['form']['create'] = cs_url('partner', 'create');
   $data['head']['body_text'] = !empty($error) ? $error : $cs_lang['body_text'];
-    $data['categories']['dropdown'] = cs_categories_dropdown('partner',$categories_id);
+    $data['categories']['dropdown'] = cs_categories_dropdown('partner', $categories_id);
   $data['abcode']['smileys'] = cs_abcode_smileys('partner_text');
   $data['abcode']['features'] = cs_abcode_features('partner_text');
 
@@ -161,51 +161,51 @@ if(empty($_POST['submit']) || !empty($error)) {
   $matches_r[2] .= $cs_lang['filetypes'] . $return_types;
   $data['clip']['rimg'] = cs_abcode_clip($matches_r);
   
-echo cs_subtemplate(__FILE__,$data,'partner','create');
+echo cs_subtemplate(__FILE__, $data, 'partner', 'create');
 
 } elseif (!empty($_POST['submit']) && empty($error)) {
 
   
-  $cells = array('partner_name','categories_id', 'partner_url','partner_alt','partner_text','partner_priority');
-  $values = array($_POST['partner_name'],$categories_id, $_POST['partner_url'],$_POST['partner_alt'],$_POST['partner_text'],$_POST['partner_priority']);
-  cs_sql_insert(__FILE__,'partner',$cells,$values);
+  $cells = ['partner_name','categories_id', 'partner_url','partner_alt','partner_text','partner_priority'];
+  $values = [$_POST['partner_name'],$categories_id, $_POST['partner_url'],$_POST['partner_alt'],$_POST['partner_text'],$_POST['partner_priority']];
+  cs_sql_insert(__FILE__, 'partner', $cells, $values);
 
   // upload navlist-image
 
   $where = "partner_name = '" . cs_sql_escape($data['partner']['partner_name']) . "'";
-    $getid = cs_sql_select(__FILE__,'partner','partner_id',$where);
+    $getid = cs_sql_select(__FILE__, 'partner', 'partner_id', $where);
     
   if(!empty($files['partner_nimg']['tmp_name'])) {
     $filename_navimg = 'navbanner-' . $getid['partner_id'] . '.' . $extension_nimg;
-    cs_upload('partner',$filename_navimg,$files['partner_nimg']['tmp_name'],0);
+    cs_upload('partner', $filename_navimg, $files['partner_nimg']['tmp_name'], 0);
 
-    $cells_navimg = array('partner_nimg');
-    $values_navimg = array($filename_navimg);
-    cs_sql_update(__FILE__,'partner',$cells_navimg,$values_navimg,$getid['partner_id']);
+    $cells_navimg = ['partner_nimg'];
+    $values_navimg = [$filename_navimg];
+    cs_sql_update(__FILE__, 'partner', $cells_navimg, $values_navimg, $getid['partner_id']);
   }
     
   if(!empty($files['partner_limg']['tmp_name'])) {
   
     $filename_listimg = 'listbanner-' . $getid['partner_id'] . '.' . $extension_limg;
-    cs_upload('partner',$filename_listimg,$files['partner_limg']['tmp_name'],0);
+    cs_upload('partner', $filename_listimg, $files['partner_limg']['tmp_name'], 0);
 
-    $cells_listimg = array('partner_limg');
-    $values_listimg = array($filename_listimg);
-    cs_sql_update(__FILE__,'partner',$cells_listimg,$values_listimg,$getid['partner_id']);
+    $cells_listimg = ['partner_limg'];
+    $values_listimg = [$filename_listimg];
+    cs_sql_update(__FILE__, 'partner', $cells_listimg, $values_listimg, $getid['partner_id']);
     
   }
   
   if(!empty($files['partner_rimg']['tmp_name'])) {
   
     $filename_rotimg = 'rotbanner-' . $getid['partner_id'] . '.' . $extension_rimg;
-    cs_upload('partner',$filename_rotimg,$files['partner_rimg']['tmp_name'],0);
+    cs_upload('partner', $filename_rotimg, $files['partner_rimg']['tmp_name'], 0);
 
-    $cells_rotimg = array('partner_rimg');
-    $values_rotimg = array($filename_rotimg);
-    cs_sql_update(__FILE__,'partner',$cells_rotimg,$values_rotimg,$getid['partner_id']);
+    $cells_rotimg = ['partner_rimg'];
+    $values_rotimg = [$filename_rotimg];
+    cs_sql_update(__FILE__, 'partner', $cells_rotimg, $values_rotimg, $getid['partner_id']);
     
   }
   cs_ajaxfiles_clear();
   
-  cs_redirect($cs_lang['create_done'],'partner');
+  cs_redirect($cs_lang['create_done'], 'partner');
 }

@@ -16,22 +16,22 @@ $order = $cs_sort[$sort];
 $where = "mail_answered = 1";
 $mail_count = cs_sql_count(__FILE__, 'mail', $where);
 $select = 'mail_id, mail_name, categories_id, mail_subject, mail_time';
-$cs_mail = cs_sql_select(__FILE__,'mail',$select,$where,$order,$start,$account['users_limit']);
+$cs_mail = cs_sql_select(__FILE__, 'mail', $select, $where, $order, $start, $account['users_limit']);
 $mail_loop = count($cs_mail);
 
-$data['head']['pages']  = cs_pages('contact','archive',$mail_count,$start,0,$sort);
-$data['head']['sort_name'] = cs_sort('contact','archive',$start,0,1,$sort);
-$data['head']['sort_subject'] = cs_sort('contact','archive',$start,0,3,$sort);
-$data['head']['sort_date'] = cs_sort('contact','archive',$start,0,5,$sort);
+$data['head']['pages']  = cs_pages('contact', 'archive', $mail_count, $start, 0, $sort);
+$data['head']['sort_name'] = cs_sort('contact', 'archive', $start, 0, 1, $sort);
+$data['head']['sort_subject'] = cs_sort('contact', 'archive', $start, 0, 3, $sort);
+$data['head']['sort_date'] = cs_sort('contact', 'archive', $start, 0, 5, $sort);
 
-$data['mail'] = array();
+$data['mail'] = [];
 for($run=0; $run<$mail_loop; $run++) {
   $data['mail'][$run]['mail_id'] = $cs_mail[$run]['mail_id'];
   $data['mail'][$run]['mail_name'] = cs_secure($cs_mail[$run]['mail_name']);
-  $categories_data = cs_sql_select(__FILE__,'categories','*',"categories_id = '" . $cs_mail[$run]['categories_id'] . "'");
+  $categories_data = cs_sql_select(__FILE__, 'categories', '*', "categories_id = '" . $cs_mail[$run]['categories_id'] . "'");
   $data['mail'][$run]['categories_name'] = $categories_data['categories_name'];
   $data['mail'][$run]['mail_subject'] = cs_secure($cs_mail[$run]['mail_subject']);
-  $data['mail'][$run]['mail_date'] = cs_date('unix',$cs_mail[$run]['mail_time'],1);
+  $data['mail'][$run]['mail_date'] = cs_date('unix', $cs_mail[$run]['mail_time'], 1);
 }
 
-echo cs_subtemplate(__FILE__,$data,'contact','archive');
+echo cs_subtemplate(__FILE__, $data, 'contact', 'archive');

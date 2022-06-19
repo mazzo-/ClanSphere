@@ -6,7 +6,7 @@ $cs_lang = cs_translate('computers');
 
 if(isset($_POST['submit'])) {
   
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -18,9 +18,9 @@ if(isset($_POST['submit'])) {
   
 } else {
   
-  $data = array();
-  $data['com'] = cs_sql_option(__FILE__,'computers');
+  $data = [];
+  $data['com'] = cs_sql_option(__FILE__, 'computers');
 
-  echo cs_subtemplate(__FILE__,$data,'computers','options');
+  echo cs_subtemplate(__FILE__, $data, 'computers', 'options');
 
 }

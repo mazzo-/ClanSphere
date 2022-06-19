@@ -38,9 +38,9 @@ class GameQ_Protocol_breed extends GameQ_Protocol
     {
         // Skip header
         $this->p->skip(5);
-        $this->r->add('servername',  $this->p->readString());
-        $this->r->add('map',         $this->p->readString());
-        $this->r->add('game_type',   $this->p->readString());
+        $this->r->add('servername', $this->p->readString());
+        $this->r->add('map', $this->p->readString());
+        $this->r->add('game_type', $this->p->readString());
         $this->r->add('num_players', $this->p->readString());
         $this->r->add('max_players', $this->p->readString());
     }

@@ -13,7 +13,7 @@ require_once('mods/categories/functions.php');
 $data['if']['preview'] = false;
 
 $select = 'faq_question, faq_answer, categories_id';
-$cs_faq = cs_sql_select(__FILE__,'faq',$select,"faq_id = '" . $faq_id . "'");
+$cs_faq = cs_sql_select(__FILE__, 'faq', $select, "faq_id = '" . $faq_id . "'");
 
 $faq_frage = $cs_faq['faq_question'];
 $faq_antwort = $cs_faq['faq_answer'];
@@ -55,12 +55,12 @@ if(isset($_POST['preview']) AND empty($error)) {
   $data['if']['preview'] = true;
     $data['preview']['question'] = cs_secure($_POST['faq_frage']);
 
-  $data['preview']['answer'] = cs_secure($faq_antwort,1,1,1,1);
+  $data['preview']['answer'] = cs_secure($faq_antwort, 1, 1, 1, 1);
 }
 
 if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
     
-  $data['faq']['cat'] = cs_categories_dropdown('faq',$categories_id);
+  $data['faq']['cat'] = cs_categories_dropdown('faq', $categories_id);
   $data['faq']['frage'] = $faq_frage;
 
   if(empty($cs_main['rte_html'])) {
@@ -72,19 +72,19 @@ if(!empty($error) OR isset($_POST['preview']) OR !isset($_POST['submit'])) {
   } else {
     $data['if']['rte_html'] = TRUE;
     $data['if']['no_rte_html'] = FALSE;
-    $data['faq']['content'] = cs_rte_html('faq_antwort',$faq_antwort);
+    $data['faq']['content'] = cs_rte_html('faq_antwort', $faq_antwort);
   }
 
   $data['faq']['id'] = $faq_id;
   
-  echo cs_subtemplate(__FILE__,$data,'faq','edit');
+  echo cs_subtemplate(__FILE__, $data, 'faq', 'edit');
   
 }
 else {
   
-  $faq_cells = array('faq_question','faq_answer','categories_id');
-  $faq_save = array($faq_frage,$faq_antwort,$categories_id);
-  cs_sql_update(__FILE__,'faq',$faq_cells,$faq_save,$faq_id);
+  $faq_cells = ['faq_question','faq_answer','categories_id'];
+  $faq_save = [$faq_frage,$faq_antwort,$categories_id];
+  cs_sql_update(__FILE__, 'faq', $faq_cells, $faq_save, $faq_id);
     
-  cs_redirect($cs_lang['changes_done'],'faq');
+  cs_redirect($cs_lang['changes_done'], 'faq');
 }

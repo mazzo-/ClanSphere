@@ -3,7 +3,7 @@
 // $Id$
 
 # Overwrite global settings by using the following array
-$cs_main = array('init_sql' => true, 'init_tpl' => false, 'init_mod' => true);
+$cs_main = ['init_sql' => true, 'init_tpl' => false, 'init_mod' => true];
 
 chdir('../../');
 
@@ -22,7 +22,7 @@ $old = substr($term, 0, strlen($term) - strlen($current));
 
 if(!empty($current)) {
 
-  $data = array();
+  $data = [];
   $data['data']['old'] = htmlspecialchars($old);
   $data['data']['target'] = empty($_GET['target']) ? 'users_nick' : $_GET['target'];
 

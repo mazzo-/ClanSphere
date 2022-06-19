@@ -4,13 +4,13 @@
 
 $cs_lang = cs_translate('squads');
 
-$op_squads = cs_sql_option(__FILE__,'squads');
+$op_squads = cs_sql_option(__FILE__, 'squads');
 $label = $op_squads['label'];
 
 if(isset($_POST['submit'])) {
 
   $cs_squads['squads_id'] = $_POST['squads_id'];
-  settype($cs_squads['squads_id'],'integer');
+  settype($cs_squads['squads_id'], 'integer');
   $cs_squads['squads_pwd'] = $_POST['squads_pwd'];
   
   $error = '';
@@ -23,14 +23,14 @@ if(isset($_POST['submit'])) {
   }
   else {
     $where = "squads_id = '" . $cs_squads['squads_id'] . "'";
-    $safe = cs_sql_select(__FILE__,'squads','squads_pwd',$where);
+    $safe = cs_sql_select(__FILE__, 'squads', 'squads_pwd', $where);
     if($safe['squads_pwd'] != $cs_squads['squads_pwd']) {
       $error .= $cs_lang['wrong_pwd'] . cs_html_br(1);
     }
   }
 
   $where = "squads_id = '" . $cs_squads['squads_id'] . "' AND users_id = '" . $account['users_id'] . "'";
-  $search_collision = cs_sql_count(__FILE__,'members',$where);
+  $search_collision = cs_sql_count(__FILE__, 'members', $where);
   if(!empty($search_collision)) {
     $error .= $cs_lang['collision'] . cs_html_br(1);
   }
@@ -53,10 +53,10 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $data['head']['mod'] = $cs_lang[$label.'s'];
   $data['lang']['label'] = $cs_lang[$label];
   
-  $squads_data = cs_sql_select(__FILE__,'squads','squads_name,squads_id',0,'squads_name',0,0);
-  $data['squads']['squad_sel'] = cs_dropdown('squads_id','squads_name',$squads_data,$cs_squads['squads_id']);
+  $squads_data = cs_sql_select(__FILE__, 'squads', 'squads_name,squads_id', 0, 'squads_name', 0, 0);
+  $data['squads']['squad_sel'] = cs_dropdown('squads_id', 'squads_name', $squads_data, $cs_squads['squads_id']);
   
-  echo cs_subtemplate(__FILE__,$data,'squads','join');
+  echo cs_subtemplate(__FILE__, $data, 'squads', 'join');
 
 }
 else {
@@ -70,7 +70,7 @@ else {
   
   $members_cells = array_keys($cs_members);
   $members_save = array_values($cs_members);
-  cs_sql_insert(__FILE__,'members',$members_cells,$members_save);
+  cs_sql_insert(__FILE__, 'members', $members_cells, $members_save);
   
-  cs_redirect($cs_lang['join_done'],'squads','center');
+  cs_redirect($cs_lang['join_done'], 'squads', 'center');
 }

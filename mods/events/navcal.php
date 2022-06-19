@@ -3,11 +3,11 @@
 // $Id$
 
 $cs_lang = cs_translate('events');
-$data = array();
+$data = [];
 
-$op_events = cs_sql_option(__FILE__,'events');
+$op_events = cs_sql_option(__FILE__, 'events');
 
-$events = array();
+$events = [];
 
 $year = !empty($_GET['year']) ? (int) $_GET['year'] : cs_datereal('Y');
 if(1970 > $year) { $year = 1970; } # unixtime start
@@ -16,15 +16,15 @@ $month = !empty($_GET['month']) ? (int) $_GET['month'] : cs_datereal('n');
 $zero = date('m', mktime(0, 0, 0, $month, 1, $year));
 $days = date('t', mktime(0, 0, 0, $month, 1, $year));
 $first = date('w', mktime(0, 0, 0, $month, 1, $year));
-$min = cs_datereal('U',mktime(0, 0, 0, $month, 1, $year), 1);
-$max = cs_datereal('U',mktime(23, 59, 59, $month, $days, $year), 1);
+$min = cs_datereal('U', mktime(0, 0, 0, $month, 1, $year), 1);
+$max = cs_datereal('U', mktime(23, 59, 59, $month, $days, $year), 1);
 
 $like = "users_age LIKE '%-" . $zero . "-%' AND users_hidden NOT LIKE '%users_age%'";
-$birthdays = cs_sql_select(__FILE__,'users','users_age',$like,0,0,0);
+$birthdays = cs_sql_select(__FILE__, 'users', 'users_age', $like, 0, 0, 0);
 
 if(is_array($birthdays)) {
   foreach($birthdays AS $key => $value) {
-    $new_key = (int) substr(strrchr($value['users_age'],'-'),1);
+    $new_key = (int) substr(strrchr($value['users_age'], '-'), 1);
     $events[$new_key] = 0;
   }
 }
@@ -33,15 +33,15 @@ $from = 'events evs INNER JOIN {pre}_categories cat ON evs.categories_id = cat.c
 $select = 'evs.events_time AS events_time';
 $between = "events_time >= '" . $min . "' AND events_time <= '" . $max . "'";
 $between .= " AND cat.categories_access <= " . $account['access_events'];
-$actions = cs_sql_select(__FILE__,$from,$select,$between,0,0,0);
+$actions = cs_sql_select(__FILE__, $from, $select, $between, 0, 0, 0);
 
 if (!empty($op_events['show_wars'])) {
   $between = 'wars_date >= \'' . $min . '\' AND wars_date <= \'' . $max . '\'';
   $cells = 'wars_date AS events_time';
-  $wars = cs_sql_select(__FILE__,'wars',$cells,$between,0,0,0);
+  $wars = cs_sql_select(__FILE__, 'wars', $cells, $between, 0, 0, 0);
 
-  $actions = !is_array($actions) ? array() : $actions;
-  $wars = !is_array($wars) ? array() : $wars;
+  $actions = !is_array($actions) ? [] : $actions;
+  $wars = !is_array($wars) ? [] : $wars;
   $actions = array_merge($actions, $wars);
 }
 
@@ -73,10 +73,10 @@ for($run = 0; $run <= $days-1; $run++) {
     $row = 2;
   }
   
-  if(array_key_exists($count,$events)) {
+  if(array_key_exists($count, $events)) {
     $css = 'calevent';
     $unix = mktime(0, 0, 0, $month, $count, $year);
-    $out = cs_link($count,'events','timer','unix=' . $unix);  
+    $out = cs_link($count, 'events', 'timer', 'unix=' . $unix);  
   } else {
     $css = 'calday';
     $out = $count;  
@@ -111,8 +111,8 @@ $next = $month == 12 ? 'year=' . ($year + 1) . '&amp;month=1' :
   'year=' . $year . '&amp;month=' . ($month + 1);
 $last = $month == 1 ? 'year=' . ($year - 1) . '&amp;month=12' : 
   'year=' . $year . '&amp;month=' . ($month - 1);
-$data['cal1']['bef_month'] = ($year < 1970 OR $year == 1970 AND $month == 1) ? '&lt;' : cs_link('&lt;',$cs_main['mod'],$cs_main['action'],$baseParams . $last);
+$data['cal1']['bef_month'] = ($year < 1970 OR $year == 1970 AND $month == 1) ? '&lt;' : cs_link('&lt;', $cs_main['mod'], $cs_main['action'], $baseParams . $last);
 $data['cal1']['now_month'] = $cs_lang[$nom] . ' ' . $year;
-$data['cal1']['nxt_month'] = ($year > 2037 OR $year == 2037 AND $month == 12) ? '&gt;' : cs_link('&gt;',$cs_main['mod'],$cs_main['action'],$baseParams . $next);
+$data['cal1']['nxt_month'] = ($year > 2037 OR $year == 2037 AND $month == 12) ? '&gt;' : cs_link('&gt;', $cs_main['mod'], $cs_main['action'], $baseParams . $next);
 
-echo cs_subtemplate(__FILE__,$data,'events','navcal');
+echo cs_subtemplate(__FILE__, $data, 'events', 'navcal');

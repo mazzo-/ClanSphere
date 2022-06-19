@@ -7,14 +7,14 @@ $cs_lang = cs_translate('gallery', 1);
 $files_gl = cs_files();
 
 if(!isset($files_gl['picture']))
-  $files_gl['picture'] = array('name' => '', 'size' => '', 'tmp_name' => '');
+  $files_gl['picture'] = ['name' => '', 'size' => '', 'tmp_name' => ''];
 
-$data = array();
+$data = [];
 
 require_once('mods/gallery/functions.php');
 
-$cs_option = cs_sql_option(__FILE__,'gallery');
-$img_filetypes = array('gif','jpg','png');
+$cs_option = cs_sql_option(__FILE__, 'gallery');
+$img_filetypes = ['gif','jpg','png'];
 
 $cs_gallery['usersgallery_name'] = '';
 $cs_gallery['usersgallery_titel'] = '';
@@ -37,7 +37,7 @@ if (file_exists('uploads/usersgallery/pics/' . $cs_gallery['users_id'] . '.' . $
 }
 
 if(isset($_POST['submit'])) {
-  $file_up = isset($_POST['file_up']) ? $_POST['file_up'] : 0;
+  $file_up = $_POST['file_up'] ?? 0;
   if ($file_up == 0) {
     $cs_gallery['usersgallery_name'] = $cs_gallery['users_id'] . '.' . $files_gl['picture']['name'];
   } elseif ($file_up == 1) {
@@ -45,19 +45,19 @@ if(isset($_POST['submit'])) {
   }
   
   $cs_gallery['usersgallery_titel'] = $_POST['gallery_titel'];
-  $cs_gallery['folders_id'] = empty($_POST['folders_name']) ? $_POST['folders_id'] : make_folders_create('usersgallery',$_POST['folders_name'], $account['users_id']);
+  $cs_gallery['folders_id'] = empty($_POST['folders_name']) ? $_POST['folders_id'] : make_folders_create('usersgallery', $_POST['folders_name'], $account['users_id']);
   $cs_gallery['usersgallery_access'] =  $_POST['gallery_access'];
   $cs_gallery['usersgallery_description'] = $_POST['description'];
-  $cs_gallery['usersgallery_status'] =  isset($_POST['gallery_status']) ? $_POST['gallery_status'] : 0;
-  $cs_gallery['usersgallery_vote'] = isset($_POST['gallery_vote']) ? $_POST['gallery_vote'] : 0;
-  $gray = isset($_POST['gray']) ? $_POST['gray'] : 0;
+  $cs_gallery['usersgallery_status'] =  $_POST['gallery_status'] ?? 0;
+  $cs_gallery['usersgallery_vote'] = $_POST['gallery_vote'] ?? 0;
+  $gray = $_POST['gray'] ?? 0;
 
 
   $error = '';
 
   $check_file = $files_gl['picture']['name'];
   $where = "usersgallery_name = '" . cs_sql_escape($check_file) . "'";
-  $pic_check = cs_sql_select(__FILE__,'usersgallery','*',$where,'usersgallery_id DESC',0,0);
+  $pic_check = cs_sql_select(__FILE__, 'usersgallery', '*', $where, 'usersgallery_id DESC', 0, 0);
   $loop_pic_check = count($pic_check);
 
   if(!empty($loop_pic_check))
@@ -88,7 +88,7 @@ if(isset($_POST['submit'])) {
       $error .= sprintf($cs_lang['too_big'], $size) . cs_html_br(1);
     }
     $where = 'users_id = "' . $cs_gallery['users_id'] . '"';
-    $count_user_files = cs_sql_count(__FILE__,'usersgallery',$where);
+    $count_user_files = cs_sql_count(__FILE__, 'usersgallery', $where);
     if($count_user_files >= $cs_option['max_files']) {
       $error .= $cs_lang['too_many_f'] . cs_html_br(1);
     }
@@ -133,13 +133,13 @@ if(!isset($_POST['submit']) OR !empty($error)) {
   $data['data']['infobox'] = cs_abcode_clip($matches);
 
 
-  $data['data']['folders'] = make_folders_select('folders_id',$cs_gallery['folders_id'],$cs_gallery['users_id'],'usersgallery');
+  $data['data']['folders'] = make_folders_select('folders_id', $cs_gallery['folders_id'], $cs_gallery['users_id'], 'usersgallery');
 
   $data['access']['options'] = '';
   $levels = 0;
   while($levels < 6) {
     $cs_gallery['usersgallery_access'] == $levels ? $sel = 1 : $sel = 0;
-    $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels],$levels,$sel);
+    $data['access']['options'] .= cs_html_option($levels . ' - ' . $cs_lang['lev_' . $levels], $levels, $sel);
     $levels++;
   }
 
@@ -147,7 +147,7 @@ if(!isset($_POST['submit']) OR !empty($error)) {
   $levels = 0;
   while($levels < 2) {
     $cs_gallery['usersgallery_status'] == $levels ? $sel = 1 : $sel = 0;
-    $data['status']['options'] .= cs_html_option($cs_lang['show_' . $levels],$levels,$sel);
+    $data['status']['options'] .= cs_html_option($cs_lang['show_' . $levels], $levels, $sel);
     $levels++;
   }
 
@@ -161,13 +161,13 @@ if(!isset($_POST['submit']) OR !empty($error)) {
   $data['data']['usersgallery_titel'] = cs_secure($data['data']['usersgallery_titel']);
   $data['data']['usersgallery_description'] = cs_secure($data['data']['usersgallery_description']);
 
-  echo cs_subtemplate(__FILE__,$data,'usersgallery','users_create');
+  echo cs_subtemplate(__FILE__, $data, 'usersgallery', 'users_create');
 }
 else {
 
   $cells = array_keys($cs_gallery);
   $save = array_values($cs_gallery);
-  cs_sql_insert(__FILE__,'usersgallery',$cells,$save);
+  cs_sql_insert(__FILE__, 'usersgallery', $cells, $save);
 
-  cs_redirect($cs_lang['create_done'],'usersgallery','center');
+  cs_redirect($cs_lang['create_done'], 'usersgallery', 'center');
 }

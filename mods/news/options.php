@@ -6,16 +6,16 @@ $cs_lang = cs_translate('news');
 
 if(isset($_POST['submit'])) {
   
-  $abcode = array();
+  $abcode = [];
   $abcode[] = empty($_POST['features']) ? 0 : 1;
   $abcode[] = empty($_POST['smileys']) ? 0 : 1;
   $abcode[] = empty($_POST['clip']) ? 0 : 1;
   $abcode[] = empty($_POST['html']) ? 0 : 1;
   $abcode[] = empty($_POST['php']) ? 0 : 1;
 
-  $abcode = implode(",",$abcode);
+  $abcode = implode(",", $abcode);
 
-  $save = array();
+  $save = [];
   $save['max_width'] = (int) $_POST['max_width'];
   $save['max_height'] = (int) $_POST['max_height'];
   $save['max_size'] = (int) $_POST['max_size'];
@@ -35,18 +35,18 @@ if(isset($_POST['submit'])) {
 
 }
 
-$data = array();
-$data['op'] = cs_sql_option(__FILE__,'news');
+$data = [];
+$data['op'] = cs_sql_option(__FILE__, 'news');
 
 $data['op']['public_no'] = empty($data['op']['def_public']) ? ' checked="checked"' : '';
 $data['op']['public_yes'] = empty($data['op']['def_public']) ? '' : ' checked="checked"';
 
 /* ABcode*/
-$abcode = explode(",",$data['op']['abcode']);
+$abcode = explode(",", $data['op']['abcode']);
 $data['op']['features'] = empty($abcode[0]) ? '' : 'checked="checked"';
 $data['op']['smileys'] = empty($abcode[1]) ? '' : 'checked="checked"';
 $data['op']['clip'] = empty($abcode[2]) ? '' : 'checked="checked"';
 $data['op']['html'] = empty($abcode[3]) ? '' : 'checked="checked"';
 $data['op']['php'] = empty($abcode[4]) ? '' : 'checked="checked"';
 
-echo cs_subtemplate(__FILE__,$data,'news','options');
+echo cs_subtemplate(__FILE__, $data, 'news', 'options');

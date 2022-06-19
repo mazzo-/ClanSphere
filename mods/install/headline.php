@@ -2,7 +2,7 @@
 
 $cs_lang = cs_translate('install');
 
-$step = array();
+$step = [];
 
 $step['500'] = 'error';
 $step['list'] = 'language_choose';

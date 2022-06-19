@@ -4,15 +4,15 @@
 
 $cs_lang = cs_translate('contact');
 
-$data = array();
+$data = [];
 $error = 0;
 $message = '';
 
-$id = isset($_POST['id']) ? $_POST['id'] : $_GET['id'];
-settype($id,'integer');
+$id = $_POST['id'] ?? $_GET['id'];
+settype($id, 'integer');
 
-$cs_answer_user = cs_sql_select(__FILE__,'users','users_email, users_name, users_surname',"users_id = '" . $account['users_id'] . "'");
-$cs_answer_mail = cs_sql_select(__FILE__,'mail','mail_name, mail_email, mail_time, mail_message',"mail_id = '" . $id . "'");
+$cs_answer_user = cs_sql_select(__FILE__, 'users', 'users_email, users_name, users_surname', "users_id = '" . $account['users_id'] . "'");
+$cs_answer_mail = cs_sql_select(__FILE__, 'mail', 'mail_name, mail_email, mail_time, mail_message', "mail_id = '" . $id . "'");
 
 $cs_contact = cs_sql_option(__FILE__, 'contact');
 if(empty($cs_answer_user['users_email'])){
@@ -71,13 +71,13 @@ else {
   $data['if']['done'] = TRUE;
   
   $message = $mail['message'];
-  $message .= "\n\n\n\n". sprintf($cs_lang['in_response'],cs_date('unix',$cs_answer_mail['mail_time'])) . "\n";
+  $message .= "\n\n\n\n". sprintf($cs_lang['in_response'], cs_date('unix', $cs_answer_mail['mail_time'])) . "\n";
   $message .= cs_secure($cs_answer_mail['mail_message']);
-  cs_mail($cs_answer_mail['mail_email'],$mail['subject'],$message,$from);
+  cs_mail($cs_answer_mail['mail_email'], $mail['subject'], $message, $from);
   
-  $cells = array('mail_answered', 'mail_answertime', 'mail_answer', 'mail_answeruser');
-  $save = array(1, cs_time(), $mail['message'], $account['users_id']);
-  cs_sql_update(__FILE__,'mail',$cells,$save,$id);
+  $cells = ['mail_answered', 'mail_answertime', 'mail_answer', 'mail_answeruser'];
+  $save = [1, cs_time(), $mail['message'], $account['users_id']];
+  cs_sql_update(__FILE__, 'mail', $cells, $save, $id);
   cs_cache_delete('count_mail_unread');
 }
 
@@ -85,4 +85,4 @@ $data['mail']['mail_name'] = cs_secure($cs_answer_mail['mail_name']);
 $data['mail']['users_name'] = cs_secure($cs_answer_user['users_name']);
 $data['mail']['users_surname'] = cs_secure($cs_answer_user['users_surname']);
 
-echo cs_subtemplate(__FILE__,$data,'contact','answer');
+echo cs_subtemplate(__FILE__, $data, 'contact', 'answer');

@@ -6,17 +6,17 @@ $cs_lang = cs_translate('wars');
 $cs_post = cs_post('id');
 $cs_get = cs_get('id');
 $files = cs_files();
-$data = array();
+$data = [];
 
 $cs_wars_id = empty($cs_get['id']) ? 0 : $cs_get['id'];
 if (!empty($cs_post['id']))  $cs_wars_id = $cs_post['id'];
 
-$op_wars = cs_sql_option(__FILE__,'wars');
-$img_filetypes = array('gif','jpg','png');
+$op_wars = cs_sql_option(__FILE__, 'wars');
+$img_filetypes = ['gif','jpg','png'];
 
-$war = cs_sql_select(__FILE__,'wars','wars_pictures',"wars_id = '" . $cs_wars_id . "'");
+$war = cs_sql_select(__FILE__, 'wars', 'wars_pictures', "wars_id = '" . $cs_wars_id . "'");
 $war_string = $war['wars_pictures'];
-$war_pics = empty($war_string) ? array() : explode("\n",$war_string);
+$war_pics = empty($war_string) ? [] : explode("\n", $war_string);
 $war_next = count($war_pics) + 1;
 
 $error = '';
@@ -27,11 +27,11 @@ if(!empty($_GET['delete'])) {
   cs_unlink('wars', 'thumb-' . $war_pics[$target]);
   $war_pics[$target] = FALSE;
   $war_pics = array_filter($war_pics);
-  $war_string = implode("\n",$war_pics);
-  $cells = array('wars_pictures');
-  $content = array($war_string);
-  cs_sql_update(__FILE__,'wars',$cells,$content,$cs_wars_id);
-  cs_redirect($cs_lang['remove_done'],'wars','picture','id=' . $cs_wars_id);
+  $war_string = implode("\n", $war_pics);
+  $cells = ['wars_pictures'];
+  $content = [$war_string];
+  cs_sql_update(__FILE__, 'wars', $cells, $content, $cs_wars_id);
+  cs_redirect($cs_lang['remove_done'], 'wars', 'picture', 'id=' . $cs_wars_id);
 }
 elseif(isset($_POST['submit'])) {
   
@@ -61,11 +61,11 @@ elseif(isset($_POST['submit'])) {
     if(cs_resample($files['picture']['tmp_name'], 'uploads/wars/' . $thumb_name, 80, 200) 
     AND cs_upload('wars', $picture_name, $files['picture']['tmp_name'])) {
 
-      $cells = array('wars_pictures');
-      $content = empty($war_string) ? array($target) : array($war_string . "\n" . $target);
-      cs_sql_update(__FILE__,'wars',$cells,$content,$cs_wars_id);
+      $cells = ['wars_pictures'];
+      $content = empty($war_string) ? [$target] : [$war_string . "\n" . $target];
+      cs_sql_update(__FILE__, 'wars', $cells, $content, $cs_wars_id);
         
-    cs_redirect($cs_lang['success'],'wars','picture','id=' . $cs_wars_id);
+    cs_redirect($cs_lang['success'], 'wars', 'picture', 'id=' . $cs_wars_id);
     }
     else {
         $error .= $cs_lang['up_error'];
@@ -103,12 +103,12 @@ if(!empty($error) OR !isset($_POST['submit'])) {
   $run = 0;
     foreach($war_pics AS $pic) {
       $link = cs_html_img('uploads/wars/thumb-' . $pic);
-      $data['pictures'][$run]['view_link'] = cs_html_link('uploads/wars/picture-' . $pic,$link) . ' ';
+      $data['pictures'][$run]['view_link'] = cs_html_link('uploads/wars/picture-' . $pic, $link) . ' ';
       $set = 'id=' . $cs_wars_id . '&amp;delete=' . ($run + 1);
-      $data['pictures'][$run]['remove_link'] = cs_link($cs_lang['remove'],'wars','picture',$set);
+      $data['pictures'][$run]['remove_link'] = cs_link($cs_lang['remove'], 'wars', 'picture', $set);
       $run++;
     }
   }
 
-  echo cs_subtemplate(__FILE__,$data,'wars','picture');
+  echo cs_subtemplate(__FILE__, $data, 'wars', 'picture');
 }
