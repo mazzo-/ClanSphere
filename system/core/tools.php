@@ -357,8 +357,8 @@ function cs_mimetype ($file) {
 }
 
 // Sends a private message
-function cs_message($users_id = 0, $messages_subject, $messages_text, $users_id_to) {
-
+function cs_message($users_id, $messages_subject, $messages_text, $users_id_to) {
+  $users_id = 0;
   $messages_cells = ['users_id','messages_time','messages_subject','messages_text','users_id_to','messages_show_receiver'];
   $messages_save = [$users_id,cs_time(),$messages_subject,$messages_text,$users_id_to,1];
 
