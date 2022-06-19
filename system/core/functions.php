@@ -203,7 +203,7 @@ function cs_init($predefined) {
   global $account, $com_lang, $cs_db, $cs_logs, $cs_main, $cs_micro, $cs_template;
 
   $cs_micro = explode(' ', microtime()); # starting parsetime
-  $cs_logs = ['php_errors' => '', 'errors' => '', 'sql' => '', 'queries' => 0, 'warnings' => 1, 'dir' => 'uploads/logs'];
+  $cs_logs = array('php_errors' => '', 'errors' => '', 'sql' => array(), 'queries' => 0, 'warnings' => 1, 'dir' => 'uploads/logs');
   $cs_main['cellspacing'] = 1;
   $cs_main['def_lang'] = empty($cs_main['def_lang']) ? 'English' : $cs_main['def_lang'];
   $cs_main['def_theme'] = empty($cs_main['def_theme']) ? 'base' : $cs_main['def_theme'];
